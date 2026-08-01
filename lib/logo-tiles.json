@@ -1,0 +1,13 @@
+{
+  "openai": "#000000",
+  "nvidia": "#86b737",
+  "google": "#f9f9fb",
+  "microsoft": "#ffffff",
+  "meta": "#ffffff",
+  "aws": "#000000",
+  "mistral": "#f4f3ef",
+  "coinbase": "#fcfdfd",
+  "circle": "#d0e6fc",
+  "snyk": "#3d0aaa",
+  "gmi": "#3c7ee5"
+}

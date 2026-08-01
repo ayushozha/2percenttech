@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
-"""Subset the four faces to only the glyphs each page uses, bake ./logos,
-and inline everything as data URIs. Builds two pages into docs/, the
-deployable site root (GitHub Pages serves it directly):
+"""Build the sponsorship prospectus as a single self-contained file:
 
-    sponsor.html -> docs/sponsor.built.html   (sponsorship prospectus)
-    home.html    -> docs/index.html           (site homepage)
+    sponsor.html -> public/sponsor.built.html
+
+Fonts are subset to the glyphs the page uses and inlined with the logos as
+data URIs, so the output survives being emailed around and printed to PDF.
+The Next.js site serves it at /sponsor.built.html. The homepage itself is
+the Next.js app (app/, components/, lib/) — see tools/prepare_assets.py
+for its fonts and logo assets.
 """
 import base64, html as htmlmod, io, json, re, sys
 from pathlib import Path
@@ -13,8 +16,8 @@ from fontTools.ttLib import TTFont
 from PIL import Image, ImageChops
 
 HERE = Path(__file__).parent
-OUT_DIR = HERE / "docs"
-PAGES = [("sponsor.html", "sponsor.built.html"), ("home.html", "index.html")]
+OUT_DIR = HERE / "public"
+PAGES = [("sponsor.html", "sponsor.built.html")]
 
 LOGO_DIR = HERE / "logos"
 RASTER = {".png", ".jpg", ".jpeg", ".webp", ".gif", ".bmp", ".tif", ".tiff"}
