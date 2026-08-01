@@ -1,0 +1,732 @@
+<title>2% Tech Hackathon @ Stanford — Sponsorship</title>
+
+<style>
+@font-face{font-family:"Anton";src:url(__ANTON__) format("woff2");font-weight:400;font-style:normal;font-display:block}
+@font-face{font-family:"PlexS";src:url(__PLEX400__) format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"PlexS";src:url(__PLEX600__) format("woff2");font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:"ZCOOL";src:url(__ZCOOL__) format("woff2");font-weight:400;font-style:normal;font-display:swap}
+
+:root{
+  --paper:#FBFAF6; --ink:#14141A; --yellow:#FFD100; --accent-text:#6E5200;
+  --grey:#6E6C62; --rule:#DCD8CB; --stamp:#C0301B; --block:#F3F0E6;
+  --disp:"Anton","Haettenschweiler","Arial Narrow",sans-serif;
+  --zh:"ZCOOL","PingFang SC","Hiragino Sans GB",sans-serif;
+  --body:"PlexS","PingFang SC","Hiragino Sans GB",system-ui,sans-serif;
+  --step:clamp(1rem,.85rem + .6vw,1.0625rem);
+}
+@media (prefers-color-scheme:dark){
+  :root{--paper:#0B0B0C;--ink:#F3F1E9;--accent-text:#FFD100;--grey:#9A978B;--rule:#2B2B27;--stamp:#FF6347;--block:#151515}
+}
+:root[data-theme="dark"]{--paper:#0B0B0C;--ink:#F3F1E9;--accent-text:#FFD100;--grey:#9A978B;--rule:#2B2B27;--stamp:#FF6347;--block:#151515}
+:root[data-theme="light"]{--paper:#FBFAF6;--ink:#14141A;--accent-text:#6E5200;--grey:#6E6C62;--rule:#DCD8CB;--stamp:#C0301B;--block:#F3F0E6}
+
+*{box-sizing:border-box;border-radius:0}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:var(--step);line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:0 clamp(1.1rem,4vw,2.5rem)}
+.prose{max-width:64ch}
+h1,h2,h3{text-wrap:balance;margin:0}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--yellow);outline-offset:2px}
+
+/* language toggle */
+[data-lang="zh"] .en{display:none!important}
+[data-lang="en"] .zh{display:none!important}
+.zh{font-family:var(--body)}
+h1 .zh,h2 .zh,.tier-name .zh,.stat-n .zh{font-family:var(--zh)}
+
+/* ---- draft banner ---- */
+#draft{background:var(--yellow);color:#14141A;font-size:.8rem;font-weight:600;letter-spacing:.02em}
+#draft .wrap{display:flex;gap:1rem;align-items:center;justify-content:space-between;padding-block:.6rem;flex-wrap:wrap}
+#draft button{font:inherit;background:#14141A;color:var(--yellow);border:0;padding:.3rem .7rem;cursor:pointer}
+
+/* ---- header ---- */
+header.top{border-bottom:2px solid var(--ink);position:sticky;top:0;background:var(--paper);z-index:20}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding-block:.7rem}
+.mark{font-family:var(--disp);font-size:1.6rem;letter-spacing:.01em;line-height:1;text-decoration:none}
+.tools{display:flex;gap:.5rem;align-items:center}
+.tools button{font-family:var(--body);font-size:.75rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;background:transparent;color:var(--ink);border:2px solid var(--ink);padding:.4rem .7rem;cursor:pointer}
+.tools button:hover{background:var(--ink);color:var(--paper)}
+
+/* ---- hero ---- */
+.hero{padding:clamp(2.5rem,7vw,5rem) 0 0}
+.eyebrow{font-size:.72rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--accent-text);margin:0 0 1.4rem}
+.poster{background:var(--yellow);color:#14141A;padding:clamp(1.5rem,4vw,2.6rem);border:2px solid #14141A}
+.poster h1{font-family:var(--disp);font-weight:400;text-transform:uppercase;line-height:.86;letter-spacing:.005em;
+  font-size:clamp(3rem,12.5vw,8.5rem);margin:0}
+.poster h1 span{display:block}
+.poster .sub{font-family:var(--disp);font-size:clamp(1.1rem,3.4vw,2.1rem);text-transform:uppercase;letter-spacing:.03em;margin-top:.5rem;line-height:1}
+.metabar{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));border:2px solid var(--ink);border-top:0}
+.metabar div{padding:.9rem 1rem;border-right:2px solid var(--ink)}
+.metabar div:last-child{border-right:0}
+.metabar dt{font-size:.68rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--grey);margin:0 0 .3rem}
+.metabar dd{margin:0;font-weight:600;font-size:.95rem;line-height:1.35}
+.cta-row{display:flex;gap:.8rem;flex-wrap:wrap;margin-top:1.6rem}
+.btn{display:inline-block;font-weight:600;font-size:.85rem;letter-spacing:.08em;text-transform:uppercase;padding:.85rem 1.5rem;border:2px solid var(--ink);text-decoration:none;cursor:pointer;font-family:var(--body)}
+.btn-a{background:var(--ink);color:var(--paper)}
+.btn-a:hover{background:var(--yellow);color:#14141A}
+.btn-b{background:transparent;color:var(--ink)}
+.btn-b:hover{background:var(--ink);color:var(--paper)}
+
+/* ---- sections ---- */
+section{padding:clamp(3rem,8vw,5.5rem) 0;border-top:2px solid var(--ink)}
+section:first-of-type{border-top:0}
+.label{display:inline-block;background:var(--yellow);color:#14141A;font-size:.7rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;padding:.35rem .7rem;margin-bottom:1.3rem}
+h2{font-family:var(--disp);font-weight:400;text-transform:uppercase;line-height:.95;letter-spacing:.01em;font-size:clamp(1.9rem,5.2vw,3.2rem);margin-bottom:1rem}
+h2 .zh{font-size:.8em}
+.lead{font-size:clamp(1.05rem,1rem + .4vw,1.2rem);color:var(--ink);margin:0 0 1.6rem}
+p{margin:0 0 1rem}
+.muted{color:var(--grey)}
+
+/* placeholder marker */
+.tbd{background:var(--yellow);color:#14141A;font-weight:600;padding:0 .3em;border-bottom:2px dashed #14141A;white-space:nowrap}
+@media (prefers-color-scheme:dark){.tbd{background:transparent;color:var(--yellow);border-bottom-color:var(--yellow)}}
+:root[data-theme="dark"] .tbd{background:transparent;color:var(--yellow);border-bottom-color:var(--yellow)}
+:root[data-theme="light"] .tbd{background:var(--yellow);color:#14141A;border-bottom-color:#14141A}
+
+/* stats */
+.statcap{display:flex;align-items:baseline;gap:.6rem;font-size:.7rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--grey);margin:0 0 .6rem}
+.statcap::after{content:"";flex:1;height:2px;background:var(--rule)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:0;border:2px solid var(--ink);margin-bottom:1rem}
+.stats > div{padding:1.2rem;border-right:2px solid var(--ink)}
+.stats > div:last-child{border-right:0}
+.stat-n{font-family:var(--disp);font-size:clamp(2rem,5vw,3rem);line-height:1;font-variant-numeric:tabular-nums;display:block}
+.stat-l{font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--grey);margin-top:.45rem;display:block}
+
+/* company cards */
+.cos{margin-top:1.3rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(228px,1fr));border:2px solid var(--ink);border-right:0;border-bottom:0}
+.co{position:relative;border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);padding:1.1rem;display:flex;flex-direction:column;gap:.7rem;background:var(--paper)}
+.co:hover{background:var(--yellow);color:#14141A}
+.co:hover .co-desc,.co:hover .co-go{color:#14141A}
+.co-name{font-family:var(--disp);font-size:1.3rem;text-transform:uppercase;line-height:1;letter-spacing:.01em}
+.co-logo{background:#fff;border:2px solid var(--ink);aspect-ratio:16/7;display:grid;place-items:center;padding:.55rem;overflow:hidden}
+.co-logo img{max-width:100%;max-height:100%;object-fit:contain;display:block}
+.co-logo.empty{background:transparent;border-style:dashed;font-size:.66rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--grey);text-align:center;line-height:1.4;padding:.5rem}
+.co:hover .co-logo.empty{color:#5A4400;border-color:#14141A}
+.co-desc{font-size:.83rem;line-height:1.5;color:var(--grey);margin:0}
+.co-go{margin-top:auto;font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;color:var(--accent-text);display:flex;justify-content:space-between;gap:.5rem;align-items:baseline}
+.co-go::after{content:"";position:absolute;inset:0}
+.co-go .arw{font-family:var(--disp);font-size:.95rem}
+
+/* lineup */
+.lineup{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:0;border:2px solid var(--ink);border-right:0;border-bottom:0}
+.person{border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);padding:1.1rem;min-height:132px;display:flex;flex-direction:column;gap:.35rem}
+.person .slot{font-size:.68rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--grey)}
+.person .nm{font-family:var(--disp);font-size:1.35rem;text-transform:uppercase;line-height:1.05}
+.person .rl{font-size:.83rem;color:var(--grey);line-height:1.4}
+
+/* run of show */
+.run{border:2px solid var(--ink);border-bottom:0}
+.phase{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;background:var(--ink);color:var(--paper);padding:.5rem 1rem;font-size:.7rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase}
+.phase em{font-style:normal;opacity:.6;letter-spacing:.06em}
+.pt{display:inline-block;background:#14141A;color:var(--yellow);font-size:.62rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:.15rem .45rem;margin-left:.5rem;vertical-align:.1em}
+.slot-row{display:grid;grid-template-columns:minmax(120px,150px) 1fr;border-bottom:2px solid var(--ink)}
+.slot-row > div{padding:.85rem 1rem}
+.slot-row .t{font-weight:600;font-variant-numeric:tabular-nums;border-right:2px solid var(--ink);font-size:.88rem}
+.slot-row.sp{background:var(--yellow);color:#14141A}
+.slot-row.sp .t{border-right-color:#14141A}
+.slot-row .who{display:block;font-size:.74rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-top:.25rem;opacity:.75}
+
+/* exclusive tier — sits above the ladder because it buys the whole event */
+.excl{border:2px solid var(--ink);background:var(--yellow);color:#14141A;margin-bottom:0;display:grid;grid-template-columns:1fr;border-bottom:0}
+.excl-head{padding:1.5rem;border-bottom:2px solid #14141A}
+.excl-head .kicker{font-size:.7rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#5A4400;margin-bottom:.6rem}
+.excl-head h3{font-family:var(--disp);font-weight:400;text-transform:uppercase;line-height:.92;font-size:clamp(2rem,6vw,3.6rem);margin:0}
+.excl-head .zh{font-family:var(--zh)}
+.excl-head p{margin:.8rem 0 0;max-width:60ch;font-size:.95rem}
+.excl-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr))}
+.excl-grid > div{padding:1.1rem 1.5rem;border-right:2px solid #14141A;border-bottom:2px solid #14141A}
+.excl-grid > div:last-child{border-right:0}
+.excl-grid dt{font-size:.68rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#5A4400;margin-bottom:.35rem}
+.excl-grid dd{margin:0;font-size:.9rem;font-weight:600;line-height:1.45}
+
+/* tiers */
+.tiers{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:0;border:2px solid var(--ink);border-right:0;border-bottom:0;margin-bottom:2.5rem}
+.tier{border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);padding:1.3rem;display:flex;flex-direction:column;gap:.7rem}
+.tier.feature{background:var(--yellow);color:#14141A}
+.tier-name{font-family:var(--disp);font-size:1.9rem;text-transform:uppercase;line-height:1}
+.tier-seats{font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--grey)}
+.tier.feature .tier-seats{color:#5A4400}
+.tier-price{font-family:var(--disp);font-size:1.6rem;font-variant-numeric:tabular-nums;line-height:1}
+.tier ul{margin:.2rem 0 0;padding-left:1.05rem;font-size:.9rem;line-height:1.5}
+.tier li{margin-bottom:.35rem}
+
+.tablewrap{overflow-x:auto;border:2px solid var(--ink)}
+table{border-collapse:collapse;width:100%;min-width:660px;font-size:.88rem}
+th,td{padding:.7rem .85rem;text-align:left;border-bottom:1px solid var(--rule);vertical-align:top}
+thead th{background:var(--ink);color:var(--paper);font-family:var(--disp);font-weight:400;font-size:1rem;text-transform:uppercase;letter-spacing:.03em;position:sticky;top:0}
+tbody th{font-weight:600;width:32%}
+td{text-align:center;font-variant-numeric:tabular-nums}
+tbody tr:last-child th,tbody tr:last-child td{border-bottom:0}
+.yes{font-weight:600}
+.no{color:var(--grey)}
+
+/* prizes */
+.prizes{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:0;border:2px solid var(--ink);border-right:0;border-bottom:0}
+.prize{border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);padding:1.2rem}
+.prize h3{font-family:var(--disp);font-size:1.3rem;text-transform:uppercase;margin-bottom:.4rem;line-height:1.05}
+.prize p{font-size:.88rem;margin:0;color:var(--grey)}
+
+/* timeline */
+.tl{list-style:none;margin:0;padding:0;border-top:2px solid var(--ink)}
+.tl li{display:grid;grid-template-columns:minmax(84px,110px) 1fr;gap:1rem;padding:.75rem 0;border-bottom:1px solid var(--rule)}
+.tl .d{font-weight:600;font-variant-numeric:tabular-nums;font-size:.88rem}
+.tl li.next{background:var(--yellow);color:#14141A;padding-inline:.7rem;border-bottom-color:#14141A}
+
+/* lineup — progressive disclosure for the long tail */
+.more{display:block}
+.more > summary{border:2px solid var(--ink);border-top:0;padding:.85rem 1rem;font-size:.74rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:1rem;color:var(--grey)}
+.more > summary::-webkit-details-marker{display:none}
+.more > summary::after{content:"+";font-family:var(--disp);font-size:1.15rem;line-height:1;color:var(--accent-text)}
+.more[open] > summary::after{content:"–"}
+.more > summary:hover{background:var(--yellow);color:#14141A}
+.more > summary:hover::after{color:#14141A}
+.lineup-more,.cos-more{border-top:0;margin-top:0}
+
+/* faq */
+.faq{border-top:2px solid var(--ink)}
+details{border-bottom:1px solid var(--rule);padding:.95rem 0}
+summary{cursor:pointer;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:1rem;align-items:baseline}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font-family:var(--disp);font-size:1.3rem;line-height:1;color:var(--accent-text)}
+details[open] summary::after{content:"–"}
+details p{margin:.8rem 0 0;color:var(--grey);max-width:64ch}
+
+/* cta */
+.endcta{background:var(--ink);color:var(--paper);padding:clamp(2.5rem,7vw,4.5rem) 0;border-top:2px solid var(--ink)}
+.endcta h2{color:var(--paper)}
+.endcta .label{background:var(--yellow);color:#14141A}
+.endcta a.btn{border-color:var(--paper);color:var(--paper)}
+.endcta a.btn:hover{background:var(--yellow);color:#14141A;border-color:var(--yellow)}
+.contact{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1.4rem;margin-top:2rem;font-size:.92rem}
+.contact dt{font-size:.7rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;opacity:.6;margin-bottom:.3rem}
+.contact dd{margin:0;font-weight:600}
+
+footer.btm{padding:2rem 0;font-size:.8rem;color:var(--grey)}
+footer.btm .wrap{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+
+@media (max-width:620px){
+  .metabar div{border-right:0;border-bottom:2px solid var(--ink)}
+  .metabar div:last-child{border-bottom:0}
+  .stats > div{border-right:0;border-bottom:2px solid var(--ink)}
+  .stats > div:last-child{border-bottom:0}
+  .slot-row{grid-template-columns:1fr}
+  .slot-row .t{border-right:0;border-bottom:1px solid var(--rule)}
+}
+@media (prefers-reduced-motion:no-preference){
+  .poster h1 span{animation:rise .5s cubic-bezier(.2,.7,.3,1) backwards}
+  .poster h1 span:nth-child(2){animation-delay:.07s}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}}
+}
+@media print{
+  :root{--paper:#fff;--ink:#000;--grey:#444;--rule:#bbb;--accent-text:#000}
+  #draft,header.top,.tools,.no-print{display:none!important}
+  body{font-size:10.5pt}
+  section{padding:1.1rem 0;break-inside:avoid}
+  .tier,.person,.prize,details{break-inside:avoid}
+  .more > summary{display:none}
+  .lineup-more,.cos-more{border-top:2px solid #000}
+  .endcta{background:#fff;color:#000;border-top:2px solid #000}
+  .endcta h2{color:#000}
+  .endcta a.btn{color:#000;border-color:#000}
+  a[href^="http"]::after{content:" (" attr(href) ")";font-size:8pt;color:#555}
+}
+</style>
+
+<div id="page" data-lang="zh">
+
+<div id="draft">
+  <div class="wrap">
+    <span><span class="zh">草稿 — 黄色高亮处为待你确认的信息，确认前请勿外发。</span><span class="en">DRAFT — highlighted fields are unconfirmed. Do not send externally yet.</span></span>
+    <button type="button" onclick="document.getElementById('draft').remove()"><span class="zh">确认无误，移除此条</span><span class="en">Confirmed — remove</span></button>
+  </div>
+</div>
+
+<header class="top">
+  <div class="wrap">
+    <a href="#top" class="mark">2%</a>
+    <div class="tools">
+      <button type="button" id="langbtn">EN</button>
+      <button type="button" onclick="window.print()"><span class="zh">存成 PDF</span><span class="en">Save PDF</span></button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+<div class="wrap hero">
+  <p class="eyebrow"><span class="zh">2% TECH · 赞助方案</span><span class="en">2% Tech · Sponsorship Prospectus</span></p>
+  <div class="poster">
+    <h1><span>Hackathon</span><span>@ Stanford</span></h1>
+    <div class="sub">2% Tech · August 2026</div>
+  </div>
+  <dl class="metabar">
+    <div><dt><span class="zh">日期</span><span class="en">Date</span></dt><dd><span class="tbd">8月底 · 待定</span></dd></div>
+    <div><dt><span class="zh">时间</span><span class="en">Time</span></dt><dd>09:00 – 18:30</dd></div>
+    <div><dt><span class="zh">地点</span><span class="en">Venue</span></dt><dd>Stanford University</dd></div>
+    <div><dt><span class="zh">形式</span><span class="en">Format</span></dt><dd><span class="zh">单日黑客松</span><span class="en">One-day hackathon</span></dd></div>
+  </dl>
+  <div class="cta-row">
+    <a class="btn btn-a" href="#tiers"><span class="zh">查看档位</span><span class="en">See the tiers</span></a>
+    <a class="btn btn-b" href="#contact"><span class="zh">约 15 分钟聊聊</span><span class="en">Book 15 minutes</span></a>
+  </div>
+</div>
+
+<section class="wrap">
+  <span class="label"><span class="zh">这场活动</span><span class="en">The pitch</span></span>
+  <h2><span class="zh">一天，一个房间，湾区最难约到的那批人</span><span class="en">One day. One room. The people you can't get a meeting with.</span></h2>
+  <div class="prose">
+    <p class="lead"><span class="zh">2% Tech 在湾区做高质量 AI 社区活动，把创始人、工程师、研究员、投资人和大厂技术决策者放进同一个房间。这一场在斯坦福，单日制，早九点到晚六点半。</span><span class="en">2% Tech runs high-signal AI community events across the Bay Area, putting founders, engineers, researchers, investors and enterprise builders in the same room. This one is at Stanford — one day, 09:00 to 18:30.</span></p>
+    <p><span class="zh">赞助这场活动不是买一个 logo 位。你买到的是六个小时里，你的工程师和一屋子正在选型的 builder 面对面——他们当天就要决定用谁的模型、谁的云、谁的 API 把东西跑起来。</span><span class="en">Sponsoring this isn't buying a logo slot. You're buying six hours in which your engineers sit face to face with a room of builders who are choosing — that day — whose model, whose cloud, whose API they ship on.</span></p>
+  </div>
+</section>
+
+<section class="wrap">
+  <span class="label"><span class="zh">谁在场</span><span class="en">The room</span></span>
+  <h2><span class="zh">谁在场</span><span class="en">Who's in the room</span></h2>
+  <p class="statcap"><span class="zh">2% Tech 社区累计</span><span class="en">Across the 2% Tech network to date</span></p>
+  <div class="stats">
+    <div><span class="stat-n" data-count="10000" data-suffix="+">10,000+</span><span class="stat-l"><span class="zh">参与过的 Hacker</span><span class="en">Hackers reached</span></span></div>
+    <div><span class="stat-n" data-count="200" data-suffix="+">200+</span><span class="stat-l"><span class="zh">评委与导师</span><span class="en">Judges &amp; mentors</span></span></div>
+    <div><span class="stat-n" data-count="50" data-suffix="+">50+</span><span class="stat-l"><span class="zh">到场公司</span><span class="en">Companies</span></span></div>
+  </div>
+  <p class="muted" style="font-size:.85rem;margin-bottom:2.2rem"><span class="zh">以上为 2% Tech 历次活动累计数字，非单场规模。<strong>本场为斯坦福单日制，预计参赛规模 <span class="tbd">待定</span>。</strong></span><span class="en">Figures above are cumulative across all 2% Tech events, not a single event's headcount. <strong>This one is a single day at Stanford — expected size <span class="tbd">TBC</span>.</strong></span></p>
+  <div class="prose">
+    <p><span class="zh">往期 2% Tech 活动中出现过的公司（每场不同）：</span><span class="en">Companies represented at past 2% Tech events (varies by event):</span></p>
+  </div>
+
+  <div class="cos" id="cos"></div>
+
+  <details class="more" id="cos-more-wrap" hidden>
+    <summary><span class="zh">展开其余 <span class="n"></span> 家</span><span class="en">View the other <span class="n"></span></span></summary>
+    <div class="cos cos-more" id="cos-more"></div>
+  </details>
+
+  <p class="muted" style="font-size:.82rem;margin-top:1rem"><span class="zh">以上为往期到场公司名录，非本场确认参与方，亦不代表其对本场活动的赞助或背书。本场阵容确认后替换。</span><span class="en">Above is the historical attendance roster. These companies are not confirmed participants in this event and this does not imply sponsorship or endorsement. To be replaced once this event's lineup is locked.</span></p>
+</section>
+
+<section class="wrap">
+  <span class="label"><span class="zh">转化路径</span><span class="en">The funnel</span></span>
+  <h2><span class="zh">你的产品这一天怎么被用起来</span><span class="en">How your product gets used that day</span></h2>
+  <p class="lead prose"><span class="zh">黄色是赞助方直接参与的节点。这不是 logo 版位图，是一条从「领到 key」到「跑出项目」的路径。当天流程为拟定版。</span><span class="en">Highlighted rows are where sponsors take part. This isn't a logo placement map — it's the path from handing out a key to shipping a project on it. Day schedule is a draft.</span></p>
+  <div class="run">
+    <div class="phase"><span><span class="zh">赛前</span><span class="en">Before</span></span><em><span class="zh">两周</span><span class="en">two weeks out</span></em></div>
+    <div class="slot-row sp"><div class="t">T-14</div><div><span class="zh">报名开放 · 你的赛题与产品介绍进报名页 · 参赛者提前领取 credits</span><span class="en">Registration opens · your challenge and product brief go on the signup page · participants get credits early</span></div></div>
+    <div class="slot-row sp"><div class="t">T-3</div><div><span class="zh">线上 onboarding</span><span class="en">Online onboarding</span><span class="who"><span class="zh">加购项 · 由你的 DevRel 主讲，我们负责组织与拉人</span><span class="en">Add-on · your DevRel teaches it, we organise and fill the room</span></span></div></div>
+
+    <div class="phase"><span><span class="zh">当天</span><span class="en">Event day</span></span><em>09:00 – 18:30 · Stanford</em></div>
+    <div class="slot-row"><div class="t">09:00</div><div><span class="zh">签到与早餐</span><span class="en">Check-in &amp; breakfast</span></div></div>
+    <div class="slot-row sp"><div class="t">09:30</div><div><span class="zh">开场：怎么用你的产品</span><span class="en">Opening: how to build on your product</span><span class="who"><span class="zh">冠名方 · 讲文档，不讲愿景</span><span class="en">Title sponsor · docs, not vision</span></span></div></div>
+    <div class="slot-row sp"><div class="t">10:00</div><div><span class="zh">动手接入 · 现场激活<span class="pt"><span class="zh">转化点</span><span class="en">conversion</span></span></span><span class="en">Hands-on integration · keys activated in the room</span><span class="who"><span class="zh">冠名 + 产品档 · 每家 5 分钟演示后直接开做</span><span class="en">Title + Build-on · 5-min demo each, then straight into it</span></span></div></div>
+    <div class="slot-row"><div class="t">10:40</div><div><span class="zh">赛题说明与组队</span><span class="en">Challenges &amp; team forming</span></div></div>
+    <div class="slot-row sp"><div class="t">11:00 – 16:00</div><div><span class="zh">编码冲刺 · DevRel 全天坐诊<span class="pt"><span class="zh">留存点</span><span class="en">retention</span></span></span><span class="en">Hacking sprint · your DevRel on call all day</span><span class="who"><span class="zh">冠名 + 产品档 · 派驻你自己的工程师解集成阻塞</span><span class="en">Title + Build-on · your own engineers unblock integrations</span></span></div></div>
+    <div class="slot-row"><div class="t">16:00</div><div><span class="zh">提交截止 · 提交表自报所用工具与 repo 链接</span><span class="en">Submissions close · teams declare tools used and repo links</span></div></div>
+    <div class="slot-row sp"><div class="t">16:30</div><div><span class="zh">Demo 与评审 · 项目跑在你的产品上</span><span class="en">Demos &amp; judging · projects running on your stack</span><span class="who"><span class="zh">冠名 + 产品档 · 评委席</span><span class="en">Title + Build-on · judge seats</span></span></div></div>
+    <div class="slot-row sp"><div class="t">17:45</div><div><span class="zh">颁奖 · 冠名奖由设奖方上台颁发</span><span class="en">Awards · prize sponsors present on stage</span></div></div>
+    <div class="slot-row sp"><div class="t"><span class="zh">全天</span><span class="en">All day</span></div><div><span class="zh">全程直播 · 赞助方在直播间标题、画面角标与开场口播中露出</span><span class="en">Livestreamed throughout · sponsors in the stream title, on-screen bug and opening mention</span></div></div>
+
+    <div class="phase"><span><span class="zh">赛后</span><span class="en">After</span></span><em><span class="zh">全部来自表单导出</span><span class="en">all exported from forms</span></em></div>
+    <div class="slot-row sp"><div class="t">T+</div><div><span class="zh">Recap 邮件与公开页面：到场画像、项目清单与 repo 链接、直播回放、opt-in 名单</span><span class="en">Recap email and public page: attendee mix, project list with repo links, stream replay, opt-in contacts</span></div></div>
+    <div class="slot-row sp"><div class="t">T+</div><div><span class="zh">社媒精彩片段发布，赞助方在其中露出</span><span class="en">Highlight clips published to social, sponsors featured</span></div></div>
+  </div>
+</section>
+
+<section class="wrap" id="tiers">
+  <span class="label"><span class="zh">档位</span><span class="en">Tiers</span></span>
+  <h2><span class="zh">按「有多少人真的用起来」分档</span><span class="en">Priced by how much real usage you get</span></h2>
+  <p class="lead prose"><span class="zh">黑客松能卖的、别的赞助形式给不了的东西只有一样：把「基于你的产品构建」写进参赛规则。所以档位不按 logo 大小分，按使用保障和排他性分。</span><span class="en">There's one thing a hackathon can sell that no other format can: writing "build on this product" into the rules. So the ladder is graded by usage guarantee and exclusivity, not logo size.</span></p>
+
+  <div class="excl">
+    <div class="excl-head">
+      <div class="kicker"><span class="zh">最高档 · 买断整场</span><span class="en">Top tier · the whole event</span></div>
+      <h3><span class="zh">独家专场</span><span class="en">Exclusive Build</span></h3>
+      <p><span class="zh">不是「最大的 logo」，是这场黑客松为你而办。主题、赛题、日期跟着你的产品发布节奏走，全场不出现任何其他品牌。对一个刚发新 SDK 的团队来说，这等于让一屋子开发者在同一天集中压测你的新 API，并留下一批可直接发布的 demo。</span><span class="en">Not "the biggest logo" — the entire hackathon is built for you. Theme, challenges and date follow your launch calendar, and no other brand appears anywhere. For a team that just shipped an SDK, this is a room of developers stress-testing your new API in a single day, and a set of demos you can publish afterwards.</span></p>
+    </div>
+    <div class="excl-grid">
+      <div><dt><span class="zh">使用保障</span><span class="en">Usage guarantee</span></dt><dd><span class="zh">100% — 使用你的产品是参赛门槛</span><span class="en">100% — building on it is the entry requirement</span></dd></div>
+      <div><dt><span class="zh">排他性</span><span class="en">Exclusivity</span></dt><dd><span class="zh">全品类排他，全场唯一品牌</span><span class="en">Full category lockout, sole brand</span></dd></div>
+      <div><dt><span class="zh">日期与主题</span><span class="en">Date &amp; theme</span></dt><dd><span class="zh">对齐你的发布节奏</span><span class="en">Set around your launch</span></dd></div>
+      <div><dt><span class="zh">席位</span><span class="en">Availability</span></dt><dd><span class="zh">每场仅此一家</span><span class="en">One per event</span></dd></div>
+    </div>
+  </div>
+
+  <div class="tiers">
+    <div class="tier feature">
+      <span class="tier-name"><span class="zh">冠名</span><span class="en">Title</span></span>
+      <span class="tier-seats"><span class="zh">仅 1 席</span><span class="en">1 seat only</span></span>
+      <ul>
+        <li><span class="zh"><strong>同品类竞品不得入场</strong></span><span class="en"><strong>Direct competitors locked out</strong></span></li>
+        <li><span class="zh">活动名称带你的品牌</span><span class="en">Your brand in the event name</span></li>
+        <li><span class="zh">主赛题由你出，该题强制使用你的产品</span><span class="en">You set the main challenge; it requires your product</span></li>
+        <li><span class="zh">开场讲「怎么用」+ 主奖冠名</span><span class="en">Opening how-to slot + grand prize naming</span></li>
+        <li><span class="zh">DevRel 全天坐诊 + 评委席</span><span class="en">DevRel office hours + judge seat</span></li>
+        <li><span class="zh">直播与 recap 切片指定版位</span><span class="en">Named slots in the stream and recap clips</span></li>
+      </ul>
+    </div>
+    <div class="tier">
+      <span class="tier-name"><span class="zh">产品档</span><span class="en">Build-on</span></span>
+      <span class="tier-seats"><span class="zh">3–4 席</span><span class="en">3–4 seats</span></span>
+      <ul>
+        <li><span class="zh">独立赛道，赛道内强制使用 + 奖金激励</span><span class="en">Your own track — required inside it, cash-backed</span></li>
+        <li><span class="zh">同品类最多 2 家</span><span class="en">Max 2 companies per category</span></li>
+        <li><span class="zh">5 分钟演示后全场直接开做</span><span class="en">5-min demo, then the room starts building</span></li>
+        <li><span class="zh">你的工程师现场坐诊解集成阻塞</span><span class="en">Your engineers on site unblocking integrations</span></li>
+        <li><span class="zh">credits 随报名邮件提前分发</span><span class="en">Credits distributed with signup emails</span></li>
+      </ul>
+    </div>
+    <div class="tier">
+      <span class="tier-name"><span class="zh">社区</span><span class="en">Community</span></span>
+      <span class="tier-seats"><span class="zh">若干席</span><span class="en">Several</span></span>
+      <ul>
+        <li><span class="zh">官网、物料与直播露出</span><span class="en">Logo on site, collateral and stream</span></li>
+        <li><span class="zh">出现在活动 recap 与社媒切片中</span><span class="en">Featured in the recap and social clips</span></li>
+        <li><span class="zh">团队入场名额</span><span class="en">Team passes</span></li>
+        <li><span class="zh">无使用绑定，无排他</span><span class="en">No usage tie-in, no exclusivity</span></li>
+      </ul>
+    </div>
+    <div class="tier">
+      <span class="tier-name"><span class="zh">实物</span><span class="en">In-kind</span></span>
+      <span class="tier-seats"><span class="zh">名额不限</span><span class="en">Open</span></span>
+      <ul>
+        <li><span class="zh">算力 / API credits / 工具授权</span><span class="en">Compute, API credits, tool licenses</span></li>
+        <li><span class="zh">奖金或奖品池</span><span class="en">Cash or prize pool</span></li>
+        <li><span class="zh">餐饮与场地支持</span><span class="en">Catering or venue support</span></li>
+        <li><span class="zh">按折算价值映射到上述档位</span><span class="en">Mapped to a tier by assessed value</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="tablewrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col"><span class="zh">权益</span><span class="en">What you get</span></th>
+          <th scope="col"><span class="zh">独家</span><span class="en">Exclusive</span></th>
+          <th scope="col"><span class="zh">冠名</span><span class="en">Title</span></th>
+          <th scope="col"><span class="zh">产品档</span><span class="en">Build-on</span></th>
+          <th scope="col"><span class="zh">社区</span><span class="en">Community</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><th scope="row"><span class="zh">使用保障</span><span class="en">Usage guarantee</span></th><td class="yes"><span class="zh">100%<br>参赛门槛</span><span class="en">100%<br>entry rule</span></td><td class="yes"><span class="zh">主赛题强制</span><span class="en">Main challenge</span></td><td class="yes"><span class="zh">赛道内强制</span><span class="en">Within your track</span></td><td class="no">—</td></tr>
+        <tr><th scope="row"><span class="zh">排他性</span><span class="en">Exclusivity</span></th><td class="yes"><span class="zh">全品类<br>全场唯一</span><span class="en">Full<br>sole brand</span></td><td class="yes"><span class="zh">同品类竞品<br>不得入场</span><span class="en">Competitors<br>locked out</span></td><td class="yes"><span class="zh">同品类<br>最多 2 家</span><span class="en">Max 2<br>per category</span></td><td class="no">—</td></tr>
+        <tr><th scope="row"><span class="zh">席位数</span><span class="en">Seats</span></th><td>1</td><td>1</td><td>3–4</td><td class="no"><span class="zh">若干</span><span class="en">Several</span></td></tr>
+        <tr><th scope="row"><span class="zh">赛题设计</span><span class="en">You write the challenge</span></th><td class="yes"><span class="zh">全部赛题</span><span class="en">All of them</span></td><td class="yes"><span class="zh">主赛题</span><span class="en">The main one</span></td><td class="yes"><span class="zh">你的赛道</span><span class="en">Your track</span></td><td class="no">—</td></tr>
+        <tr><th scope="row"><span class="zh">舞台时长</span><span class="en">Stage time</span></th><td class="yes"><span class="zh">全场</span><span class="en">Throughout</span></td><td class="yes">10 min</td><td class="yes">5 min</td><td class="no">—</td></tr>
+        <tr><th scope="row"><span class="zh">DevRel 现场坐诊</span><span class="en">DevRel office hours</span></th><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="no">—</td></tr>
+        <tr><th scope="row"><span class="zh">credits 提前分发</span><span class="en">Credits sent before the event</span></th><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="no">—</td></tr>
+        <tr><th scope="row"><span class="zh">评委席</span><span class="en">Judge seats</span></th><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="no">—</td></tr>
+        <tr><th scope="row"><span class="zh">冠名奖项</span><span class="en">Named prize</span></th><td class="yes"><span class="zh">全部</span><span class="en">All</span></td><td class="yes"><span class="zh">主奖</span><span class="en">Grand</span></td><td class="yes"><span class="zh">赛道奖</span><span class="en">Track</span></td><td class="yes"><span class="zh">可选</span><span class="en">Optional</span></td></tr>
+        <tr><th scope="row"><span class="zh">直播露出</span><span class="en">Livestream presence</span></th><td class="yes"><span class="zh">冠名直播间</span><span class="en">Stream named for you</span></td><td class="yes"><span class="zh">标题 + 角标 + 口播</span><span class="en">Title, bug, mention</span></td><td class="yes"><span class="zh">角标</span><span class="en">On-screen bug</span></td><td class="yes"><span class="zh">出现</span><span class="en">Featured</span></td></tr>
+        <tr><th scope="row"><span class="zh">社媒切片露出</span><span class="en">Social highlight clips</span></th><td class="yes"><span class="zh">指定版位</span><span class="en">Named slots</span></td><td class="yes"><span class="zh">指定版位</span><span class="en">Named slots</span></td><td class="yes"><span class="zh">出现</span><span class="en">Featured</span></td><td class="yes"><span class="zh">出现</span><span class="en">Featured</span></td></tr>
+        <tr><th scope="row"><span class="zh">官网与物料 logo</span><span class="en">Logo on site &amp; collateral</span></th><td class="yes"><span class="zh">全场唯一</span><span class="en">Sole</span></td><td class="yes"><span class="zh">首位</span><span class="en">Lead</span></td><td class="yes">✓</td><td class="yes">✓</td></tr>
+        <tr><th scope="row"><span class="zh">项目清单与 repo 链接</span><span class="en">Project list with repo links</span></th><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="no">—</td></tr>
+        <tr><th scope="row"><span class="zh">opt-in 名单</span><span class="en">Opt-in contact list</span></th><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="no">—</td></tr>
+        <tr><th scope="row"><span class="zh">团队入场名额</span><span class="en">Team passes</span></th><td class="tbd">—</td><td class="tbd">—</td><td class="tbd">—</td><td class="tbd">—</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="muted" style="font-size:.82rem;margin-top:1.1rem"><span class="zh">价格不在此页，我们当面谈——不同档位与加购组合差别很大。参赛规则以最终活动章程为准。加购项：赛前线上 onboarding、résumé book、额外赛道。</span><span class="en">Pricing isn't on this page — we'd rather talk it through, since tier and add-on combinations vary a lot. Competition rules are set in the final event charter. Add-ons: pre-event online onboarding, résumé book, extra tracks.</span></p>
+</section>
+
+<section class="wrap">
+  <span class="label"><span class="zh">赛后</span><span class="en">Afterwards</span></span>
+  <h2><span class="zh">你会拿到什么</span><span class="en">What you actually get back</span></h2>
+  <p class="lead prose"><span class="zh">一封 recap 邮件加一个公开页面，内容全部来自报名表与提交表的导出。我们不做定制报告——那是 agency 的活，我们是社区。</span><span class="en">A recap email and a public page, all of it exported straight from the signup and submission forms. We don't produce bespoke reports — that's agency work, and we're a community.</span></p>
+  <div class="prizes">
+    <div class="prize"><h3><span class="zh">到场画像</span><span class="en">Who showed up</span></h3><p><span class="zh">人数与职位、公司、阶段构成。</span><span class="en">Headcount plus the mix of roles, companies and stages.</span></p></div>
+    <div class="prize"><h3><span class="zh">项目清单</span><span class="en">Project list</span></h3><p><span class="zh">全部提交项目，含 repo 与 demo 链接，各队自报用了哪些赞助方工具。</span><span class="en">Every submission with repo and demo links, and each team's own declaration of which sponsor tools they used.</span></p></div>
+    <div class="prize"><h3><span class="zh">直播与切片</span><span class="en">Stream &amp; clips</span></h3><p><span class="zh">全场直播回放，以及发布到社媒的精彩片段链接。</span><span class="en">The full stream replay, plus links to the highlight clips published on social.</span></p></div>
+    <div class="prize"><h3><span class="zh">opt-in 名单</span><span class="en">Opt-in contacts</span></h3><p><span class="zh">报名时明确勾选同意被赞助方联系的参会者名单。</span><span class="en">Attendees who explicitly ticked the box agreeing to be contacted by sponsors.</span></p></div>
+  </div>
+</section>
+
+<section class="wrap">
+  <span class="label"><span class="zh">奖项</span><span class="en">Prizes</span></span>
+  <h2><span class="zh">冠名奖项怎么运作</span><span class="en">How named prizes work</span></h2>
+  <p class="lead prose"><span class="zh">奖项以你的产品命名，由你的人上台颁发，获奖项目当天就是用你的东西搭的。奖金与额度由设奖方自定。</span><span class="en">The prize carries your product's name, your team presents it on stage, and the winning project was built on your stack that day. Amounts are set by the sponsor.</span></p>
+  <div class="prizes">
+    <div class="prize"><h3><span class="zh">主奖</span><span class="en">Grand prize</span></h3><p><span class="zh">冠名方专属，全场最高奖。</span><span class="en">Title sponsor only. Top award of the event.</span></p></div>
+    <div class="prize"><h3><span class="zh">最佳 [你的产品] 应用</span><span class="en">Best use of [your product]</span></h3><p><span class="zh">产品档可设，奖金由设奖方自定。示例结构：一等 $500 / 二等 $300 / 三等 $100。</span><span class="en">Available to Build-on sponsors, funded at your discretion. Example structure: 1st $500 / 2nd $300 / 3rd $100.</span></p></div>
+    <div class="prize"><h3><span class="zh">额度类奖励</span><span class="en">Credits award</span></h3><p><span class="zh">以算力或 API 额度发放，示例：$1,000 credits。</span><span class="en">Paid in compute or API credits. Example: $1,000 in credits.</span></p></div>
+    <div class="prize"><h3><span class="zh">特别奖</span><span class="en">Special prize</span></h3><p><span class="zh">实物赞助方可设，如工位、设备、社群权益。</span><span class="en">For in-kind sponsors: desks, hardware, community perks.</span></p></div>
+  </div>
+</section>
+
+<section class="wrap">
+  <span class="label"><span class="zh">过往记录</span><span class="en">Track record</span></span>
+  <h2><span class="zh">我们的办活动节奏</span><span class="en">We run these constantly</span></h2>
+  <p class="lead prose"><span class="zh">2026 年 7 月至 8 月，2% Tech 的活动排期：</span><span class="en">2% Tech event cadence, July–August 2026:</span></p>
+  <ul class="tl">
+    <li><span class="d">7/8</span><span><span class="zh">社区活动</span><span class="en">Community event</span></span></li>
+    <li><span class="d">7/11</span><span><span class="zh">AI Agents 专场</span><span class="en">AI Agents event</span></span></li>
+    <li><span class="d">7/13</span><span><span class="zh">社区 Meetup</span><span class="en">Community meetup</span></span></li>
+    <li><span class="d">7/23</span><span><span class="zh">Workshop · 旧金山</span><span class="en">Workshop · San Francisco</span></span></li>
+    <li><span class="d">7/24</span><span><span class="zh">Workshop · 旧金山</span><span class="en">Workshop · San Francisco</span></span></li>
+    <li><span class="d">7/29</span><span><span class="zh">Research Lab Demo</span><span class="en">Research Lab demo</span></span></li>
+    <li><span class="d">8/10</span><span><span class="zh">Physical AI × AI Infrastructure · AWS Builder Loft</span><span class="en">Physical AI × AI Infrastructure · AWS Builder Loft</span></span></li>
+    <li class="next"><span class="d"><span class="tbd">8月底</span></span><span><strong><span class="zh">本场 · 斯坦福黑客松</span><span class="en">This event · Hackathon @ Stanford</span></strong></span></li>
+  </ul>
+  <p class="muted" style="margin-top:1.4rem;font-size:.9rem"><span class="zh">常用场地：AWS Builder Loft（旧金山，AWS 官方技术社区场地）、Frontier Tower（旧金山前沿 AI 与深科技聚集地）、以及斯坦福、伯克利与 Palo Alto / Menlo Park 一带的 VC 办公室生态。</span><span class="en">Regular venues: AWS Builder Loft (San Francisco, AWS's official venue for technical communities), Frontier Tower (SF hub for frontier AI and deep-tech), plus the Stanford, Berkeley and Palo Alto / Menlo Park VC ecosystem.</span></p>
+</section>
+
+<section class="wrap">
+  <span class="label"><span class="zh">阵容</span><span class="en">Lineup</span></span>
+  <h2><span class="zh">坐在评审席上的是这批人</span><span class="en">The people who sit on the judging table</span></h2>
+  <p class="lead prose"><span class="zh">以下为近期合作活动的评委与导师班底。<strong>本场阵容确认中</strong>，确认后替换为本场名单。</span><span class="en">Below is the judging and mentoring bench from recent events across our network. <strong>This event's lineup is being confirmed</strong> and will replace it once locked.</span></p>
+  <div class="lineup">
+    <div class="person"><span class="slot"><span class="zh">评委</span><span class="en">Judge</span></span><span class="nm">Vince Kohli</span><span class="rl">Strategic Advisor @ Google DeepMind</span></div>
+    <div class="person"><span class="slot"><span class="zh">评委</span><span class="en">Judge</span></span><span class="nm">Dhruvil Darji</span><span class="rl">Senior Software Engineer @ NVIDIA</span></div>
+    <div class="person"><span class="slot"><span class="zh">评委</span><span class="en">Judge</span></span><span class="nm">Apurva Jain</span><span class="rl">Software Engineer @ Meta</span></div>
+    <div class="person"><span class="slot"><span class="zh">评委</span><span class="en">Judge</span></span><span class="nm">Ann Cai</span><span class="rl">Product Designer @ Microsoft</span></div>
+    <div class="person"><span class="slot"><span class="zh">评委</span><span class="en">Judge</span></span><span class="nm">Gunjan Ramateke</span><span class="rl">Strategic Partnerships Development Manager @ Amazon</span></div>
+    <div class="person"><span class="slot"><span class="zh">评委</span><span class="en">Judge</span></span><span class="nm">Gary Qi</span><span class="rl">DevRel @ TRAE (ByteDance)</span></div>
+    <div class="person"><span class="slot"><span class="zh">评委</span><span class="en">Judge</span></span><span class="nm">Anna Zakowska</span><span class="rl">Investor &amp; Managing Partner @ Dragons and Angels Fund</span></div>
+    <div class="person"><span class="slot"><span class="zh">评委</span><span class="en">Judge</span></span><span class="nm">Colin Lowenberg</span><span class="rl">DevRel @ Nebius</span></div>
+    <div class="person"><span class="slot"><span class="zh">评委</span><span class="en">Judge</span></span><span class="nm">Mariane Bekker</span><span class="rl">Head of Developer Relationships @ You.com</span></div>
+    <div class="person"><span class="slot"><span class="zh">评委</span><span class="en">Judge</span></span><span class="nm">Shouvik Sharma</span><span class="rl">Software Engineer @ Chime</span></div>
+    <div class="person"><span class="slot"><span class="zh">评委</span><span class="en">Judge</span></span><span class="nm">Katherine Brough</span><span class="rl">Founder @ NuPath AI</span></div>
+    <div class="person"><span class="slot"><span class="zh">主办</span><span class="en">Host</span></span><span class="nm">Chelsey Huang</span><span class="rl">Co-Founder @ Finchip AI</span></div>
+  </div>
+
+  <details class="more">
+    <summary><span class="zh">展开其余 17 位评委、主办与志愿者</span><span class="en">View the other 17 judges, hosts and volunteers</span></summary>
+    <div class="lineup lineup-more">
+      <div class="person"><span class="slot"><span class="zh">评委</span><span class="en">Judge</span></span><span class="nm">Tony Chwang</span><span class="rl">Co-Founder @ InsForge</span></div>
+      <div class="person"><span class="slot"><span class="zh">评委</span><span class="en">Judge</span></span><span class="nm">Madison Lee</span><span class="rl">Founding Partnerships Lead @ You.com</span></div>
+      <div class="person"><span class="slot"><span class="zh">评委</span><span class="en">Judge</span></span><span class="nm">Amina Ebrahim</span><span class="rl">Chief Operating Officer @ Growing Pies</span></div>
+      <div class="person"><span class="slot"><span class="zh">评委</span><span class="en">Judge</span></span><span class="nm">Gary Yang</span><span class="rl">Founding Partner @ Finchip AI</span></div>
+      <div class="person"><span class="slot"><span class="zh">评委</span><span class="en">Judge</span></span><span class="nm">Abhi Vasanth</span><span class="rl">Senior Data Engineer @ Pacific Gas and Electric Company</span></div>
+      <div class="person"><span class="slot"><span class="zh">评委</span><span class="en">Judge</span></span><span class="nm">Mahek Pervez</span><span class="rl">Tech Content Creator @ Instagram</span></div>
+      <div class="person"><span class="slot"><span class="zh">评委</span><span class="en">Judge</span></span><span class="nm">Amitabh Das</span><span class="rl">Founder @ Agent OS</span></div>
+      <div class="person"><span class="slot"><span class="zh">评委</span><span class="en">Judge</span></span><span class="nm">Wei Dou</span><span class="rl">Software Developer @ InsForge</span></div>
+      <div class="person"><span class="slot"><span class="zh">评委</span><span class="en">Judge</span></span><span class="nm">Can Lyu</span><span class="rl">Software Developer @ InsForge</span></div>
+      <div class="person"><span class="slot"><span class="zh">评委</span><span class="en">Judge</span></span><span class="nm">Ayush Ojha</span><span class="rl">Software Engineer @ HiJenny</span></div>
+      <div class="person"><span class="slot"><span class="zh">评委</span><span class="en">Judge</span></span><span class="nm">Kolliakal Rupesh</span><span class="rl">Applied AI Engineer @ WayLine</span></div>
+      <div class="person"><span class="slot"><span class="zh">评委</span><span class="en">Judge</span></span><span class="nm">Merve Isler</span><span class="rl">Ecosystem Builder @ AI Builders</span></div>
+      <div class="person"><span class="slot"><span class="zh">评委</span><span class="en">Judge</span></span><span class="nm">Anya Ozmen</span><span class="rl">Founder @ Gameer</span></div>
+      <div class="person"><span class="slot"><span class="zh">主办</span><span class="en">Host</span></span><span class="nm">Saurabh Khire</span><span class="rl">Founder @ Crewbase Collective</span></div>
+      <div class="person"><span class="slot"><span class="zh">主办</span><span class="en">Host</span></span><span class="nm">Coco Wang</span><span class="rl">GTM @ Finchip AI</span></div>
+      <div class="person"><span class="slot"><span class="zh">主办</span><span class="en">Host</span></span><span class="nm">Aviral Bharadwaj</span><span class="rl">Founder @ Devnovate</span></div>
+      <div class="person"><span class="slot"><span class="zh">志愿者</span><span class="en">Volunteer</span></span><span class="nm">Wendy Wang</span><span class="rl">Computer Teaching Assistant @ Wellesley College</span></div>
+    </div>
+  </details>
+
+  <p class="muted" style="font-size:.82rem;margin-top:1rem"><span class="zh">名单取自近期合作场次的实际评委、主办与志愿者阵容，共 29 位，非本场已确认出席人员。本场名单确认后更新。</span><span class="en">The full roster of 29 judges, hosts and volunteers from recent partner events. Not a confirmed attendance list for this event; it will be updated once this event's lineup is set.</span></p>
+</section>
+
+<section class="wrap">
+  <span class="label">FAQ</span>
+  <h2><span class="zh">常见问题</span><span class="en">Questions we always get</span></h2>
+  <div class="faq">
+    <details><summary><span class="zh">截止时间是什么时候？</span><span class="en">What's the deadline?</span></summary><p><span class="zh">主视觉与印刷物料需在活动前两周定稿，logo 与冠名信息须在此之前确认。确切日期：<span class="tbd">待定</span></span><span class="en">Key art and printed collateral lock two weeks before the event; logos and naming must be confirmed by then. Exact date: <span class="tbd">TBC</span></span></p></details>
+    <details><summary><span class="zh">可以只出算力或奖品，不出现金吗？</span><span class="en">Can we sponsor in credits or prizes instead of cash?</span></summary><p><span class="zh">可以。实物赞助按折算价值对应到相应档位权益，算力、API credits、工具授权、餐饮、奖品都收。</span><span class="en">Yes. In-kind support is assessed by value and mapped to the equivalent tier. Compute, API credits, tool licenses, catering and prizes all work.</span></p></details>
+    <details><summary><span class="zh">能拿到参会者名单吗？</span><span class="en">Do we get the attendee list?</span></summary><p><span class="zh">独家、冠名与产品档拿到 opt-in 名单，即报名时明确勾选同意被赞助方联系的那部分参会者。我们不提供全量名单，任何档位都不提供。</span><span class="en">Exclusive, Title and Build-on sponsors receive the opt-in list — attendees who ticked the box agreeing to be contacted. We don't hand over the full list, at any tier.</span></p></details>
+    <details><summary><span class="zh">我们可以自己出赛题吗？</span><span class="en">Can we set our own challenge?</span></summary><p><span class="zh">可以，产品档及以上都能出题。你定题目和评判标准，我们把它写进参赛规则——这正是你花的钱买到的东西：不是希望有人用你的产品，是规则要求他们用。</span><span class="en">Yes — Build-on and above. You write the brief and the judging criteria, and we put it in the rules. That's the thing you're actually paying for: not hoping someone uses your product, but a rule that requires it.</span></p></details>
+    <details><summary><span class="zh">价格为什么不写在页面上？</span><span class="en">Why isn't pricing on this page?</span></summary><p><span class="zh">档位和加购的组合差别很大，同一档对不同公司的价值也不一样——直接报一个数字对双方都不划算。约 15 分钟，我们按你想要的结果算给你听。付款方式与开票在这一步一并确认。</span><span class="en">Tier and add-on combinations vary a lot, and the same tier is worth very different things to different companies — a single posted number serves neither of us. Give us 15 minutes and we'll price it against the outcome you're after. Payment terms and invoicing get settled in the same conversation.</span></p></details>
+    <details><summary><span class="zh">排他性具体怎么算？</span><span class="en">How does exclusivity actually work?</span></summary><p><span class="zh">按品类划分，写进合同。独家专场全品类排他，全场不出现任何其他品牌；冠名档锁住同品类竞品，本场不得以任何档位进入；产品档同品类最多 2 家；社区档不排他。品类边界在签约前双方书面确认，避免事后扯皮。</span><span class="en">By category, written into the contract. Exclusive Build locks out every other brand entirely; Title locks out direct competitors from entering at any tier; Build-on caps a category at two companies; Community carries no exclusivity. We agree the category boundary in writing before signing, so there's nothing to argue about later.</span></p></details>
+    <details><summary><span class="zh">活动之后有什么？</span><span class="en">What happens after the event?</span></summary><p><span class="zh">活动全程有摄制，剪辑成片会在我们的社媒渠道发布，赞助方在片中露出。往期活动的现场素材可按需提供。</span><span class="en">The event is filmed and edited into content published on our channels, with sponsors featured. Footage from past events is available on request.</span></p></details>
+  </div>
+</section>
+
+</main>
+
+<div class="endcta" id="contact">
+  <div class="wrap">
+    <span class="label"><span class="zh">下一步</span><span class="en">Next step</span></span>
+    <h2><span class="zh">冠名档一旦卖出，你的竞品就进不来了</span><span class="en">Once Title is taken, your competitor can't get in</span></h2>
+    <p class="lead prose" style="opacity:.85"><span class="zh">价格我们当面谈。15 分钟，告诉我们你今年的指标是什么，我们按结果倒推该买哪一档。</span><span class="en">We talk pricing in person. Give us 15 minutes, tell us what you're measured on this year, and we'll work backwards to the tier that gets you there.</span></p>
+    <div class="cta-row">
+      <a class="btn btn-b" href="#"><span class="zh">约 15 分钟</span><span class="en">Book 15 minutes</span></a>
+    </div>
+    <dl class="contact">
+      <div><dt><span class="zh">邮箱</span><span class="en">Email</span></dt><dd class="tbd">sponsors@ —</dd></div>
+      <div><dt><span class="zh">约 call</span><span class="en">Calendar</span></dt><dd class="tbd">calendly / luma —</dd></div>
+      <div><dt><span class="zh">主办</span><span class="en">Organizer</span></dt><dd>2% Tech</dd></div>
+    </dl>
+  </div>
+</div>
+
+<footer class="btm">
+  <div class="wrap">
+    <span>© 2026 2% Tech</span>
+    <span><span class="zh">斯坦福 · 2026 年 8 月</span><span class="en">Stanford · August 2026</span></span>
+  </div>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  var page=document.getElementById('page'),btn=document.getElementById('langbtn');
+  btn.addEventListener('click',function(){
+    var zh=page.getAttribute('data-lang')==='zh';
+    page.setAttribute('data-lang',zh?'en':'zh');
+    btn.textContent=zh?'中文':'EN';
+  });
+})();
+
+/* ---- expand every <details> before printing --------------------------
+   A collapsed <details> isn't rendered at all, so the long tail of the
+   lineup and the FAQ answers would silently vanish from the PDF that
+   sponsors circulate internally. Reopen state is restored afterwards.
+--------------------------------------------------------------------- */
+(function(){
+  var reopened=[];
+  function expand(){
+    reopened=[].slice.call(document.querySelectorAll("details:not([open])"));
+    reopened.forEach(function(d){ d.open=true; });
+  }
+  function restore(){
+    reopened.forEach(function(d){ d.open=false; });
+    reopened=[];
+  }
+  window.addEventListener("beforeprint",expand);
+  window.addEventListener("afterprint",restore);
+  if(window.matchMedia){
+    var mq=window.matchMedia("print");
+    var onChange=function(e){ e.matches?expand():restore(); };
+    if(mq.addEventListener) mq.addEventListener("change",onChange);
+    else if(mq.addListener) mq.addListener(onChange);
+  }
+})();
+
+/* ---- stat count-up ---------------------------------------------------
+   The final figures are already in the HTML, so print, no-JS and
+   reduced-motion all render the real numbers. This only overrides them
+   to animate once, the first time the block scrolls into view.
+--------------------------------------------------------------------- */
+(function(){
+  var els=[].slice.call(document.querySelectorAll(".stat-n[data-count]"));
+  if(!els.length) return;
+
+  var still=!window.requestAnimationFrame||!window.IntersectionObserver||
+            (window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  if(still) return;
+
+  function run(el,delay){
+    var target=+el.getAttribute("data-count"),
+        suffix=el.getAttribute("data-suffix")||"",
+        dur=1500, t0=null;
+    el.textContent="0"+suffix;
+    function step(ts){
+      if(t0===null) t0=ts;
+      var p=Math.min((ts-t0)/dur,1),
+          eased=1-Math.pow(1-p,3);
+      el.textContent=Math.round(target*eased).toLocaleString("en-US")+suffix;
+      if(p<1) requestAnimationFrame(step);
+    }
+    setTimeout(function(){ requestAnimationFrame(step); },delay);
+  }
+
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(!e.isIntersecting) return;
+      io.unobserve(e.target);
+      run(e.target,els.indexOf(e.target)*140);
+    });
+  },{threshold:.45});
+
+  els.forEach(function(el){ io.observe(el); });
+})();
+
+/* ---- company cards ---------------------------------------------------
+   Logos live in ./logos and are inlined at build time; see build.py.
+   To point one at an external image instead, set `logo` on that entry.
+--------------------------------------------------------------------- */
+/* `more:1` sends an entry into the collapsed half of the wall. Order here
+   is the order on the page, so the heaviest brands lead. */
+var COMPANIES=[
+ {id:"openai",name:"OpenAI",url:"https://openai.com",logo:"",
+  zh:"通用人工智能研究与部署，GPT 系列模型及其 API 的开发方。",
+  en:"Researches and ships general-purpose AI, including the GPT model family and its API."},
+ {id:"nvidia",name:"NVIDIA",url:"https://www.nvidia.com",logo:"",
+  zh:"AI 训练与推理的底层算力供应方，GPU 与 CUDA 生态。",
+  en:"Supplies the GPUs and CUDA stack that most AI training and inference runs on."},
+ {id:"google",name:"Google",url:"https://ai.google",logo:"",
+  zh:"搜索、云服务与 Gemini 模型系列。",
+  en:"Search, cloud, and the Gemini model family."},
+ {id:"microsoft",name:"Microsoft",url:"https://www.microsoft.com",logo:"",
+  zh:"Azure 云平台与 Copilot 产品线。",
+  en:"The Azure cloud platform and the Copilot product line."},
+ {id:"meta",name:"Meta",url:"https://ai.meta.com",logo:"",
+  zh:"Llama 开放权重模型系列的发布方。",
+  en:"Publishes the Llama family of open-weight models."},
+ {id:"aws",name:"AWS",url:"https://aws.amazon.com",logo:"",
+  zh:"全球最大云服务商，覆盖算力、存储与托管模型推理。也是我们常用场地 Builder Loft 的方。",
+  en:"The largest cloud provider — compute, storage and managed model inference. Also hosts our Builder Loft venue."},
+
+ {id:"mistral",name:"Mistral AI",url:"https://mistral.ai",logo:"",
+  zh:"欧洲前沿模型公司，提供开放权重模型与托管推理平台。",
+  en:"European frontier lab shipping open-weight models and a hosted inference platform."},
+ {id:"coinbase",name:"Coinbase",url:"https://www.coinbase.com",logo:"",
+  zh:"加密货币交易所与链上开发者基础设施。",
+  en:"Crypto exchange and onchain developer infrastructure."},
+ {id:"circle",name:"Circle",url:"https://www.circle.com",logo:"",
+  zh:"USDC 稳定币发行方与支付基础设施。",
+  en:"Issuer of USDC and the stablecoin payment infrastructure around it."},
+ {id:"snyk",name:"Snyk",url:"https://snyk.io",logo:"",
+  zh:"面向开发者的安全平台，覆盖代码、依赖与容器。",
+  en:"Developer-first security across code, dependencies and containers."},
+ {id:"gmi",name:"GMI Cloud",url:"https://www.gmicloud.ai",logo:"",
+  zh:"GPU 云平台，为 AI 训练与推理提供算力。",
+  en:"GPU cloud providing compute for AI training and inference."}
+];
+
+(function(){
+  /* both filled at build time from ./logos — see build.py.
+     TILES holds each logo's own background colour, sampled from the source
+     image, so a black mark and a green one each sit on their own field
+     instead of being punched onto one shared white block. */
+  var BAKED=/*__BAKED__*/{}, TILES=/*__TILES__*/{};
+
+  var grid=document.getElementById("cos"), gridMore=document.getElementById("cos-more");
+
+  function host(u){ try{ return new URL(u).hostname.replace(/^www\./,""); }catch(e){ return u; } }
+
+  COMPANIES.forEach(function(c){
+    var src=BAKED[c.id]||c.logo;
+    var card=document.createElement("div");
+    card.className="co";
+    card.innerHTML=
+      '<span class="co-name"></span>'+
+      '<div class="co-logo"></div>'+
+      '<p class="co-desc"><span class="zh"></span><span class="en"></span></p>'+
+      '<a class="co-go" target="_blank" rel="noopener noreferrer">'+
+        '<span class="dom"></span><span class="arw" aria-hidden="true">&rarr;</span></a>';
+
+    card.querySelector(".co-name").textContent=c.name;
+    card.querySelector(".co-desc .zh").textContent=c.zh;
+    card.querySelector(".co-desc .en").textContent=c.en;
+
+    var box=card.querySelector(".co-logo");
+    if(src){
+      box.style.background=TILES[c.id]||"#fff";
+      var img=new Image();
+      img.src=src; img.alt=c.name+" logo"; img.loading="lazy";
+      box.appendChild(img);
+    }else{
+      box.className="co-logo empty";
+      box.innerHTML='<span class="zh">Logo 待补</span><span class="en">Logo pending</span>';
+    }
+
+    var a=card.querySelector(".co-go");
+    a.href=c.url;
+    a.querySelector(".dom").textContent=host(c.url);
+    a.setAttribute("aria-label",c.name+" — "+host(c.url));
+
+    (c.more?gridMore:grid).appendChild(card);
+  });
+
+  /* The overflow block only exists once something has been put in it,
+     so adding `more:1` to an entry is the only step needed later. */
+  var wrap=document.getElementById("cos-more-wrap"),
+      extra=COMPANIES.filter(function(c){ return c.more; }).length;
+  if(extra){
+    wrap.hidden=false;
+    [].forEach.call(wrap.querySelectorAll("summary .n"),function(el){
+      el.textContent=extra;
+    });
+  }
+})();
+</script>

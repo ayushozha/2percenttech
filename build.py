@@ -1,0 +1,149 @@
+#!/usr/bin/env python3
+"""Subset the four faces to only the glyphs the page uses, then inline as data URIs."""
+import base64, html as htmlmod, io, re, sys
+from pathlib import Path
+from fontTools.subset import Subsetter, Options
+from fontTools.ttLib import TTFont
+
+HERE = Path(__file__).parent
+SRC = HERE / "sponsor.html"
+OUT = HERE / "sponsor.built.html"
+
+html = SRC.read_text(encoding="utf-8")
+
+# Strip only <style> — <script> must stay, because the company cards render
+# their Chinese copy from JS string literals. Dropping it here silently
+# subsets those glyphs away and the cards fall back to a system font.
+body = re.sub(r"<style.*?</style>", " ", html, flags=re.S)
+text = htmlmod.unescape(re.sub(r"<[^>]+>", " ", body))
+
+chars = set(text)
+chars |= set("+-–—·✓×%$/()[].,:;!?'\"@#&0123456789→←")
+chars |= set("abcdefghijklmnopqrstuvwxyz")
+chars |= set("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+chars = {c for c in chars if c.isprintable() and not c.isspace()}
+
+latin = {c for c in chars if ord(c) < 0x2500}
+cjk = {c for c in chars if ord(c) >= 0x2E80}
+
+def subset(path, keep, name):
+    font = TTFont(str(path))
+    opts = Options()
+    opts.flavor = "woff2"
+    opts.desubroutinize = True
+    opts.layout_features = ["kern", "liga", "calt", "ccmp", "locl"]
+    opts.notdef_outline = True
+    opts.drop_tables += ["DSIG"]
+    s = Subsetter(options=opts)
+    s.populate(text="".join(sorted(keep)))
+    s.subset(font)
+    buf = io.BytesIO()
+    font.flavor = "woff2"
+    font.save(buf)
+    raw = buf.getvalue()
+    print(f"  {name:10s} {path.stat().st_size/1024:9.1f} KB -> {len(raw)/1024:7.1f} KB  ({len(keep)} glyphs)")
+    return "data:font/woff2;base64," + base64.b64encode(raw).decode("ascii")
+
+print("subsetting:")
+subs = {
+    "__ANTON__":   subset(HERE / "Anton.ttf",    latin,        "Anton"),
+    "__PLEX400__": subset(HERE / "Plex400.ttf",  latin,        "Plex 400"),
+    "__PLEX600__": subset(HERE / "Plex600.ttf",  latin,        "Plex 600"),
+    "__ZCOOL__":   subset(HERE / "ZCOOL.ttf",    cjk | latin,  "ZCOOL"),
+}
+
+for token, uri in subs.items():
+    if token not in html:
+        sys.exit(f"token {token} not found in html")
+    html = html.replace(token, uri)
+
+# ---- logos -------------------------------------------------------------
+# Drop files into ./logos. Filenames are matched loosely against the company
+# id and name (case, spaces and punctuation are ignored), so "mistral AI.png"
+# and "Openai.png" both land correctly. ALIASES covers outright misspellings.
+#
+# Sources are usually screenshots with an opaque background rather than clean
+# transparent marks, so each image is trimmed to its content, its background
+# colour is sampled and handed to the page as the tile colour, and the result
+# is downscaled to what the ~180px tile actually needs.
+import json
+from PIL import Image, ImageChops
+
+LOGO_DIR = HERE / "logos"
+RASTER = {".png", ".jpg", ".jpeg", ".webp", ".gif", ".bmp", ".tif", ".tiff"}
+ALIASES = {"nvdia": "nvidia"}          # typo in the supplied filename
+TILE_W, TILE_H = 460, 200              # 2x the rendered tile, contained
+
+def norm(s):
+    return re.sub(r"[^a-z0-9]", "", s.lower())
+
+def bg_of(im):
+    """Most common colour around the border — the background these were cut from."""
+    w, h = im.size
+    edge = [im.getpixel(p) for p in
+            [(0, 0), (w - 1, 0), (0, h - 1), (w - 1, h - 1),
+             (w // 2, 0), (w // 2, h - 1), (0, h // 2), (w - 1, h // 2)]]
+    return max(set(edge), key=edge.count)
+
+def trim(im, bg, tol=18):
+    solid = Image.new("RGB", im.size, bg)
+    diff = ImageChops.difference(im, solid).convert("L").point(lambda v: 255 if v > tol else 0)
+    box = diff.getbbox()
+    if not box:
+        return im
+    pad = 4
+    return im.crop((max(box[0] - pad, 0), max(box[1] - pad, 0),
+                    min(box[2] + pad, im.width), min(box[3] + pad, im.height)))
+
+def encode(im):
+    """Smallest of WebP / PNG, since flat marks and gradients favour different codecs."""
+    out = []
+    for fmt, kw in (("WEBP", {"quality": 90, "method": 6}), ("PNG", {"optimize": True})):
+        buf = io.BytesIO()
+        im.save(buf, fmt, **kw)
+        out.append((len(buf.getvalue()), fmt.lower(), buf.getvalue()))
+    n, fmt, data = min(out)
+    return f"data:image/{fmt};base64," + base64.b64encode(data).decode("ascii"), n, fmt
+
+names = dict(re.findall(r'\{id:"([^"]+)",name:"([^"]+)"', html))
+ids = list(names)
+
+index = {}
+if LOGO_DIR.is_dir():
+    for p in sorted(LOGO_DIR.iterdir()):
+        if p.suffix.lower() in RASTER:
+            key = norm(p.stem)
+            index.setdefault(ALIASES.get(key, key), p)
+
+baked, tiles, missing = {}, {}, []
+print("\nlogos:")
+for cid in ids:
+    hit = index.get(norm(cid)) or index.get(norm(names[cid]))
+    if not hit:                                    # last resort: prefix match
+        hit = next((p for k, p in index.items() if k.startswith(norm(cid))), None)
+    if not hit:
+        missing.append(cid)
+        continue
+
+    im = Image.open(hit).convert("RGB")
+    before = hit.stat().st_size
+    bg = bg_of(im)
+    im = trim(im, bg)
+    im.thumbnail((TILE_W, TILE_H), Image.LANCZOS)
+    uri, size, fmt = encode(im)
+
+    baked[cid] = uri
+    tiles[cid] = "#%02x%02x%02x" % bg
+    print(f"  {cid:10s} {hit.name:16s} {before/1024:7.1f} -> {size/1024:5.1f} KB "
+          f"{fmt:4s} {im.width}x{im.height:<4d} tile {tiles[cid]}")
+
+if missing:
+    print("  pending: " + ", ".join(missing))
+print(f"  {sum(len(v) for v in baked.values())/1024:.0f} KB of logo data inlined")
+
+html = html.replace("/*__BAKED__*/{}", json.dumps(baked))
+html = html.replace("/*__TILES__*/{}", json.dumps(tiles))
+
+OUT.write_text(html, encoding="utf-8")
+print(f"\nwrote {OUT.name}  {OUT.stat().st_size/1024:.0f} KB total"
+      f"  ({len(baked)}/{len(ids)} logos)")
