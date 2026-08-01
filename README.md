@@ -1,7 +1,12 @@
-# 2% Tech — Sponsor Page
+# 2% Tech — Site
 
-Sponsorship prospectus for the 2% Tech one-day hackathon at Stanford (August 2026).
-Bilingual (中文 / EN), self-contained, print-friendly.
+Two pages, both bilingual (中文 / EN) and self-contained:
+
+- **Homepage** (`home.html` → `index.html`) — who 2% Tech is: track record pulled
+  from the [Luma profile](https://luma.com/user/usr-imLXdlHS1TlvX7X), the company
+  wall, the sponsor target list, and upcoming events.
+- **Sponsorship prospectus** (`sponsor.html` → `sponsor.built.html`) — the pitch for
+  the one-day hackathon at Stanford (August 2026). Print-friendly.
 
 **Status: draft.** Several fields are unconfirmed and are marked in the page with a
 yellow highlight (`class="tbd"`). See [Unfinished](#unfinished) before sending it anywhere.
@@ -10,18 +15,19 @@ yellow highlight (`class="tbd"`). See [Unfinished](#unfinished) before sending i
 
 ## Two ways to use this
 
-**Just need a page to host?** Take `sponsor.built.html` and drop it in. It's a single
-344 KB file with fonts, logos and scripts all inlined — no build step, no external
-requests, no dependencies. It works opened straight from disk.
+**Just need pages to host?** Take `index.html` (homepage) and `sponsor.built.html`
+(prospectus) and drop them in. Each is a single file with fonts, logos and scripts
+all inlined — no build step, no external requests, no dependencies. They work opened
+straight from disk.
 
-**Merging into the main site?** Work from `sponsor.html`. The structure, styles and copy
-all live there; `sponsor.built.html` is generated output and should never be edited by
-hand — it gets overwritten on every build.
+**Editing?** Work from `home.html` and `sponsor.html`. The structure, styles and copy
+all live there; `index.html` and `sponsor.built.html` are generated output and should
+never be edited by hand — they get overwritten on every build.
 
 ## Build
 
 ```bash
-python3 build.py     # sponsor.html -> sponsor.built.html
+python3 build.py     # sponsor.html -> sponsor.built.html, home.html -> index.html
 ```
 
 Requires `fonttools`, `brotli` and `Pillow`:
@@ -38,8 +44,9 @@ The build does three things:
 2. **Processes `logos/`** — trims each image to its content, samples its background
    colour, downscales it to what the tile actually renders at, and picks whichever of
    WebP or PNG comes out smaller. 1.2 MB of source art becomes ~80 KB.
-3. **Substitutes** everything into the `/*__BAKED__*/` style placeholders in
-   `sponsor.html` and writes `sponsor.built.html`.
+3. **Substitutes** everything into the `/*__BAKED__*/` style placeholders and writes
+   the built file. Both pages go through the same pipeline; fonts are subset per page,
+   so the homepage (fewer glyphs) comes out smaller.
 
 Everything is inlined because the page has to survive being emailed around as a single
 file and printed to PDF, and because the host it was first published on blocks external
@@ -49,8 +56,10 @@ requests via CSP.
 
 | Path | What it is |
 |---|---|
-| `sponsor.html` | Source. Edit this. Fonts load from local `.ttf` files; logos use `/*__BAKED__*/` placeholders resolved at build time. |
-| `sponsor.built.html` | Generated. Deployable single file. Do not edit. |
+| `home.html` | Homepage source. Edit this. Fonts load from local `.ttf` files; logos use `/*__BAKED__*/` placeholders resolved at build time. |
+| `index.html` | Generated homepage. Deployable single file. Do not edit. |
+| `sponsor.html` | Prospectus source. Edit this. Same conventions as `home.html`. |
+| `sponsor.built.html` | Generated prospectus. Deployable single file. Do not edit. |
 | `build.py` | The build described above. |
 | `logos/` | Company logo source images, one per company id. |
 | `*.ttf` | Font sources (see [Fonts](#fonts)). |
@@ -59,8 +68,9 @@ requests via CSP.
 
 ### Companies
 
-The wall under "Who's in the room" renders from the `COMPANIES` array near the bottom of
-`sponsor.html`:
+The walls on both pages render from the `COMPANIES` array near the bottom of each
+source file (`sponsor.html` carries per-company descriptions; `home.html` is logos
+only — keep the `id`s in sync so both pages share the same art):
 
 ```js
 {id:"openai", name:"OpenAI", url:"https://openai.com", logo:"",
@@ -118,7 +128,16 @@ inlined, never served as standalone font files.
 
 ## Unfinished
 
-Highlighted in yellow on the page:
+On the homepage (`home.html`), highlighted in yellow:
+
+- **Stanford hackathon date** — "late August", exact day not set. No Luma event page
+  exists for it yet either; once it does, link the timeline row to it.
+- **Contact email and WeChat** in the closing CTA.
+- **The "Saved seats" target list** (Alibaba Cloud, Tencent Cloud, TRAE/ByteDance,
+  DeepSeek, Moonshot, Zhipu, MiniMax, Anthropic) is a starting suggestion — confirm
+  or edit it before publishing. It is labelled as a target list, not as sponsors.
+
+On the prospectus, highlighted in yellow:
 
 - **Event date** — "late August", exact day not set.
 - **Expected headcount** for this event. (The 10,000 / 200 / 50 figures above it are
