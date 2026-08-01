@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Subset the four faces to only the glyphs each page uses, bake ./logos,
-and inline everything as data URIs. Builds two pages:
+and inline everything as data URIs. Builds two pages into docs/, the
+deployable site root (GitHub Pages serves it directly):
 
-    sponsor.html -> sponsor.built.html   (sponsorship prospectus)
-    home.html    -> index.html           (site homepage)
+    sponsor.html -> docs/sponsor.built.html   (sponsorship prospectus)
+    home.html    -> docs/index.html           (site homepage)
 """
 import base64, html as htmlmod, io, json, re, sys
 from pathlib import Path
@@ -12,6 +13,7 @@ from fontTools.ttLib import TTFont
 from PIL import Image, ImageChops
 
 HERE = Path(__file__).parent
+OUT_DIR = HERE / "docs"
 PAGES = [("sponsor.html", "sponsor.built.html"), ("home.html", "index.html")]
 
 LOGO_DIR = HERE / "logos"
@@ -166,6 +168,7 @@ def build(src, out, index):
           f"  ({len(baked)}/{len(ids)} logos)")
 
 
+OUT_DIR.mkdir(exist_ok=True)
 index = logo_index()
 for src, out in PAGES:
-    build(HERE / src, HERE / out, index)
+    build(HERE / src, OUT_DIR / out, index)

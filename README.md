@@ -2,11 +2,13 @@
 
 Two pages, both bilingual (中文 / EN) and self-contained:
 
-- **Homepage** (`home.html` → `index.html`) — who 2% Tech is: track record pulled
-  from the [Luma profile](https://luma.com/user/usr-imLXdlHS1TlvX7X), the company
-  wall, the sponsor target list, and upcoming events.
-- **Sponsorship prospectus** (`sponsor.html` → `sponsor.built.html`) — the pitch for
-  the one-day hackathon at Stanford (August 2026). Print-friendly.
+- **Homepage** (`home.html` → `docs/index.html`) — who 2% Tech is: track record
+  pulled from the [Luma profile](https://luma.com/user/usr-imLXdlHS1TlvX7X), the
+  company wall, the sponsor target list, and upcoming events.
+- **Sponsorship prospectus** (`sponsor.html` → `docs/sponsor.built.html`) — the pitch
+  for the one-day hackathon at Stanford (August 2026). Print-friendly.
+
+`docs/` is the deployable site root — point GitHub Pages (or any static host) at it.
 
 **Status: draft.** Several fields are unconfirmed and are marked in the page with a
 yellow highlight (`class="tbd"`). See [Unfinished](#unfinished) before sending it anywhere.
@@ -15,19 +17,19 @@ yellow highlight (`class="tbd"`). See [Unfinished](#unfinished) before sending i
 
 ## Two ways to use this
 
-**Just need pages to host?** Take `index.html` (homepage) and `sponsor.built.html`
-(prospectus) and drop them in. Each is a single file with fonts, logos and scripts
-all inlined — no build step, no external requests, no dependencies. They work opened
-straight from disk.
+**Just need pages to host?** Serve the `docs/` folder — `docs/index.html` (homepage)
+and `docs/sponsor.built.html` (prospectus). Each is a single file with fonts, logos
+and scripts all inlined — no build step, no external requests, no dependencies. They
+work opened straight from disk.
 
 **Editing?** Work from `home.html` and `sponsor.html`. The structure, styles and copy
-all live there; `index.html` and `sponsor.built.html` are generated output and should
-never be edited by hand — they get overwritten on every build.
+all live there; everything in `docs/` is generated output and should never be edited
+by hand — it gets overwritten on every build.
 
 ## Build
 
 ```bash
-python3 build.py     # sponsor.html -> sponsor.built.html, home.html -> index.html
+python3 build.py     # sponsor.html -> docs/sponsor.built.html, home.html -> docs/index.html
 ```
 
 Requires `fonttools`, `brotli` and `Pillow`:
@@ -57,9 +59,9 @@ requests via CSP.
 | Path | What it is |
 |---|---|
 | `home.html` | Homepage source. Edit this. Fonts load from local `.ttf` files; logos use `/*__BAKED__*/` placeholders resolved at build time. |
-| `index.html` | Generated homepage. Deployable single file. Do not edit. |
 | `sponsor.html` | Prospectus source. Edit this. Same conventions as `home.html`. |
-| `sponsor.built.html` | Generated prospectus. Deployable single file. Do not edit. |
+| `docs/index.html` | Generated homepage. Deployable single file. Do not edit. |
+| `docs/sponsor.built.html` | Generated prospectus. Deployable single file. Do not edit. |
 | `build.py` | The build described above. |
 | `logos/` | Company logo source images, one per company id. |
 | `*.ttf` | Font sources (see [Fonts](#fonts)). |
