@@ -62,7 +62,7 @@ export const PAST: EventRow[] = [
   { date: '7/13', name: 'Bay Builders Hackathon', registered: 535 },
   { date: '7/11', name: 'AI Agents in Real-World Business + Demo Day', registered: 456 },
   { date: '6/28', name: 'Wizard Hackathon', registered: 428 },
-  { date: '25/1/31', name: 'AI for Good Pitch Night + Networking', registered: 330 },
+  { date: '1/31/25', name: 'AI for Good Pitch Night + Networking', registered: 330 },
   { date: '7/24', name: 'Prompt to Production: Secure Code & Agent Skills Workshop', registered: 231 },
   { date: '7/25', name: 'Build your AI Organization Workshop', registered: 228 },
   { date: '7/20', name: 'Design & Deploy Workshop', registered: 182 },

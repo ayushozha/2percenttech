@@ -131,10 +131,10 @@ export default function Home() {
           <p className="statcap"><B zh="接下来" en="Upcoming" /></p>
           <ul className="tl">
             {UPCOMING.slice(0, 2).map((e) => (
-              <li key={e.date}>
+              <li key={`${e.date}-${e.name}`}>
                 <span className="d">{e.date}</span>
                 <span>
-                  <a href={e.url} {...ext}>{e.name}</a>
+                  {e.url ? <a href={e.url} {...ext}>{e.name}</a> : e.name}
                   {e.note && <> <span className="n"><B zh={e.note.zh} en={e.note.en} /></span></>}
                 </span>
               </li>
@@ -154,10 +154,10 @@ export default function Home() {
               </span>
             </li>
             {UPCOMING.slice(2).map((e) => (
-              <li key={e.date}>
+              <li key={`${e.date}-${e.name}`}>
                 <span className="d">{e.date}</span>
                 <span>
-                  <a href={e.url} {...ext}>{e.name}</a>
+                  {e.url ? <a href={e.url} {...ext}>{e.name}</a> : e.name}
                   {e.note && <> <span className="n"><B zh={e.note.zh} en={e.note.en} /></span></>}
                 </span>
               </li>
