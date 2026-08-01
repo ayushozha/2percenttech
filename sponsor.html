@@ -1,10 +1,17 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>2% Tech Hackathon @ Stanford — Sponsorship</title>
 
 <style>
-@font-face{font-family:"Anton";src:url(__ANTON__) format("woff2");font-weight:400;font-style:normal;font-display:block}
-@font-face{font-family:"PlexS";src:url(__PLEX400__) format("woff2");font-weight:400;font-style:normal;font-display:swap}
-@font-face{font-family:"PlexS";src:url(__PLEX600__) format("woff2");font-weight:600;font-style:normal;font-display:swap}
-@font-face{font-family:"ZCOOL";src:url(__ZCOOL__) format("woff2");font-weight:400;font-style:normal;font-display:swap}
+/* Source uses local TTFs so the page works without a build step.
+   build.py swaps these for subset WOFF2 data URIs in sponsor.built.html. */
+@font-face{font-family:"Anton";src:url("Anton.ttf") format("truetype");font-weight:400;font-style:normal;font-display:block}
+@font-face{font-family:"PlexS";src:url("Plex400.ttf") format("truetype");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"PlexS";src:url("Plex600.ttf") format("truetype");font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:"ZCOOL";src:url("ZCOOL.ttf") format("truetype");font-weight:400;font-style:normal;font-display:swap}
 
 :root{
   --paper:#FBFAF6; --ink:#14141A; --yellow:#FFD100; --accent-text:#6E5200;
@@ -231,6 +238,8 @@ footer.btm .wrap{display:flex;justify-content:space-between;gap:1rem;flex-wrap:w
   a[href^="http"]::after{content:" (" attr(href) ")";font-size:8pt;color:#555}
 }
 </style>
+</head>
+<body>
 
 <div id="page" data-lang="zh">
 
@@ -730,3 +739,5 @@ var COMPANIES=[
   }
 })();
 </script>
+</body>
+</html>

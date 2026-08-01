@@ -49,7 +49,7 @@ requests via CSP.
 
 | Path | What it is |
 |---|---|
-| `sponsor.html` | Source. Edit this. Contains `__ANTON__` / `/*__BAKED__*/` placeholders that only resolve at build time. |
+| `sponsor.html` | Source. Edit this. Fonts load from local `.ttf` files; logos use `/*__BAKED__*/` placeholders resolved at build time. |
 | `sponsor.built.html` | Generated. Deployable single file. Do not edit. |
 | `build.py` | The build described above. |
 | `logos/` | Company logo source images, one per company id. |

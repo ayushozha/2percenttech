@@ -45,17 +45,20 @@ def subset(path, keep, name):
     return "data:font/woff2;base64," + base64.b64encode(raw).decode("ascii")
 
 print("subsetting:")
-subs = {
-    "__ANTON__":   subset(HERE / "Anton.ttf",    latin,        "Anton"),
-    "__PLEX400__": subset(HERE / "Plex400.ttf",  latin,        "Plex 400"),
-    "__PLEX600__": subset(HERE / "Plex600.ttf",  latin,        "Plex 600"),
-    "__ZCOOL__":   subset(HERE / "ZCOOL.ttf",    cjk | latin,  "ZCOOL"),
-}
-
-for token, uri in subs.items():
-    if token not in html:
-        sys.exit(f"token {token} not found in html")
-    html = html.replace(token, uri)
+# Source HTML references local TTFs so it works unbuilt. Replace each
+# with a quoted subset WOFF2 data URI for the single-file deploy build.
+font_faces = [
+    ("Anton.ttf",   latin,        "Anton"),
+    ("Plex400.ttf", latin,        "Plex 400"),
+    ("Plex600.ttf", latin,        "Plex 600"),
+    ("ZCOOL.ttf",   cjk | latin,  "ZCOOL"),
+]
+for filename, keep, name in font_faces:
+    uri = subset(HERE / filename, keep, name)
+    needle = f'url("{filename}") format("truetype")'
+    if needle not in html:
+        sys.exit(f"font src {needle} not found in html")
+    html = html.replace(needle, f'url("{uri}") format("woff2")', 1)
 
 # ---- logos -------------------------------------------------------------
 # Drop files into ./logos. Filenames are matched loosely against the company
@@ -145,5 +148,7 @@ html = html.replace("/*__BAKED__*/{}", json.dumps(baked))
 html = html.replace("/*__TILES__*/{}", json.dumps(tiles))
 
 OUT.write_text(html, encoding="utf-8")
+# Local `python -m http.server` serves index.html at `/`.
+(HERE / "index.html").write_text(html, encoding="utf-8")
 print(f"\nwrote {OUT.name}  {OUT.stat().st_size/1024:.0f} KB total"
       f"  ({len(baked)}/{len(ids)} logos)")
