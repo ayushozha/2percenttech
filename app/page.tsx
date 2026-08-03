@@ -170,7 +170,7 @@ export default function Home() {
               <li key={`${e.date}-${e.name}`}>
                 <span className="d">{e.date}</span>
                 <span>
-                  {e.name}{' '}
+                  {e.url ? <a href={e.url} {...ext}>{e.name}</a> : e.name}{' '}
                   <span className="n">
                     <B zh={`· ${e.registered!.toLocaleString('en-US')} 人报名`} en={`· ${e.registered!.toLocaleString('en-US')} registered`} />
                   </span>

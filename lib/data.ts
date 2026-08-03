@@ -58,14 +58,14 @@ export const UPCOMING: EventRow[] = [
 ];
 
 export const PAST: EventRow[] = [
-  { date: '6/5', name: 'Agentic AI Hackathon — SF', registered: 1144 },
-  { date: '7/13', name: 'Bay Builders Hackathon', registered: 535 },
-  { date: '7/11', name: 'AI Agents in Real-World Business + Demo Day', registered: 456 },
-  { date: '6/28', name: 'Wizard Hackathon', registered: 428 },
-  { date: '1/31/25', name: 'AI for Good Pitch Night + Networking', registered: 330 },
-  { date: '7/24', name: 'Prompt to Production: Secure Code & Agent Skills Workshop', registered: 231 },
-  { date: '7/25', name: 'Build your AI Organization Workshop', registered: 228 },
-  { date: '7/20', name: 'Design & Deploy Workshop', registered: 182 },
+  { date: '6/5', name: 'Agentic AI Hackathon — SF', url: 'https://luma.com/zemh10km', registered: 1144 },
+  { date: '7/13', name: 'Bay Builders Hackathon', url: 'https://luma.com/9zhqvqc7', registered: 535 },
+  { date: '7/11', name: 'AI Agents in Real-World Business + Demo Day', url: 'https://luma.com/ai-agents-are-moving-beyond-chat-interfa', registered: 456 },
+  { date: '6/28', name: 'Wizard Hackathon', url: 'https://luma.com/nyixzul3', registered: 428 },
+  { date: '1/31/25', name: 'AI for Good Pitch Night + Networking', url: 'https://luma.com/u27y941o', registered: 330 },
+  { date: '7/24', name: 'Prompt to Production: Secure Code & Agent Skills Workshop', url: 'https://luma.com/w60dlf9f', registered: 231 },
+  { date: '7/25', name: 'Build your AI Organization Workshop', url: 'https://luma.com/guides-g0nw', registered: 228 },
+  { date: '7/20', name: 'Design & Deploy Workshop', url: 'https://luma.com/vs5ybrec', registered: 182 },
 ];
 
 export const STATS = [

@@ -1,12 +1,17 @@
 'use client';
 
-import { useState, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import B from './B';
 
 /** Owns the zh/en state. All bilingual copy is server-rendered as paired
     spans; this only flips the data-lang attribute that CSS keys off. */
 export default function LangShell({ children }: { children: ReactNode }) {
-  const [lang, setLang] = useState<'zh' | 'en'>('zh');
+  const [lang, setLang] = useState<'zh' | 'en'>('en');
+
+  useEffect(() => {
+    document.documentElement.lang = lang === 'zh' ? 'zh-Hans' : 'en';
+  }, [lang]);
+
   return (
     <div id="page" data-lang={lang}>
       <header className="top">
@@ -15,7 +20,7 @@ export default function LangShell({ children }: { children: ReactNode }) {
           <div className="tools">
             <button
               type="button"
-              aria-label="切换语言 / Switch language"
+              aria-label="Switch language / 切换语言"
               onClick={() => setLang(lang === 'zh' ? 'en' : 'zh')}
             >
               {lang === 'zh' ? 'EN' : '中文'}
