@@ -18,6 +18,7 @@ PAGES = [("sponsor.html", "sponsor.built.html"), ("home.html", "index.html")]
 
 LOGO_DIR = HERE / "logos"
 RASTER = {".png", ".jpg", ".jpeg", ".webp", ".gif", ".bmp", ".tif", ".tiff"}
+VECTOR = {".svg"}                      # inlined as-is, no processing needed
 ALIASES = {"nvdia": "nvidia"}          # typo in the supplied filename
 TILE_W, TILE_H = 460, 200              # 2x the rendered tile, contained
 
@@ -87,8 +88,10 @@ def encode(im):
 def logo_index():
     index = {}
     if LOGO_DIR.is_dir():
-        for p in sorted(LOGO_DIR.iterdir()):
-            if p.suffix.lower() in RASTER:
+        # vectors first, so an .svg wins over a .png of the same company
+        for p in sorted(LOGO_DIR.iterdir(),
+                        key=lambda q: (q.suffix.lower() not in VECTOR, q.name)):
+            if p.suffix.lower() in RASTER | VECTOR:
                 key = norm(p.stem)
                 index.setdefault(ALIASES.get(key, key), p)
     return index
@@ -144,7 +147,22 @@ def build(src, out, index):
             missing.append(cid)
             continue
 
-        im = Image.open(hit).convert("RGB")
+        if hit.suffix.lower() in VECTOR:
+            raw = hit.read_bytes()
+            baked[cid] = "data:image/svg+xml;base64," + base64.b64encode(raw).decode("ascii")
+            tiles[cid] = "#ffffff"
+            print(f"  {cid:10s} {hit.name:16s} {len(raw)/1024:7.1f} -> {len(raw)/1024:5.1f} KB "
+                  f"svg  vector      tile {tiles[cid]}")
+            continue
+
+        im = Image.open(hit)
+        if im.mode in ("RGBA", "LA", "P"):
+            # Dropping alpha with a plain convert() leaves whatever RGB happened to
+            # sit under the transparent pixels, which is usually black. Composite
+            # onto white instead — that is what the logo tile expects underneath.
+            im = im.convert("RGBA")
+            im = Image.alpha_composite(Image.new("RGBA", im.size, "white"), im)
+        im = im.convert("RGB")
         before = hit.stat().st_size
         bg = bg_of(im)
         im = trim(im, bg)
