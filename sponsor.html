@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-Hans">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -241,7 +241,7 @@ footer.btm .wrap{display:flex;justify-content:space-between;gap:1rem;flex-wrap:w
 </head>
 <body>
 
-<div id="page" data-lang="zh">
+<div id="page" data-lang="en">
 
 <div id="draft">
   <div class="wrap">
@@ -254,7 +254,7 @@ footer.btm .wrap{display:flex;justify-content:space-between;gap:1rem;flex-wrap:w
   <div class="wrap">
     <a href="#top" class="mark">2%</a>
     <div class="tools">
-      <button type="button" id="langbtn">EN</button>
+      <button type="button" id="langbtn" aria-label="Switch language / 切换语言">中文</button>
       <button type="button" onclick="window.print()"><span class="zh">存成 PDF</span><span class="en">Save PDF</span></button>
     </div>
   </div>
@@ -269,7 +269,7 @@ footer.btm .wrap{display:flex;justify-content:space-between;gap:1rem;flex-wrap:w
     <div class="sub">2% Tech · August 2026</div>
   </div>
   <dl class="metabar">
-    <div><dt><span class="zh">日期</span><span class="en">Date</span></dt><dd><span class="tbd">8月底 · 待定</span></dd></div>
+    <div><dt><span class="zh">日期</span><span class="en">Date</span></dt><dd><span class="tbd"><span class="zh">8月底 · 待定</span><span class="en">Late Aug · TBC</span></span></dd></div>
     <div><dt><span class="zh">时间</span><span class="en">Time</span></dt><dd>09:00 – 18:30</dd></div>
     <div><dt><span class="zh">地点</span><span class="en">Venue</span></dt><dd>Stanford University</dd></div>
     <div><dt><span class="zh">形式</span><span class="en">Format</span></dt><dd><span class="zh">单日黑客松</span><span class="en">One-day hackathon</span></dd></div>
@@ -474,7 +474,7 @@ footer.btm .wrap{display:flex;justify-content:space-between;gap:1rem;flex-wrap:w
     <li><span class="d">7/24</span><span><span class="zh">Workshop · 旧金山</span><span class="en">Workshop · San Francisco</span></span></li>
     <li><span class="d">7/29</span><span><span class="zh">Research Lab Demo</span><span class="en">Research Lab demo</span></span></li>
     <li><span class="d">8/10</span><span><span class="zh">Physical AI × AI Infrastructure · AWS Builder Loft</span><span class="en">Physical AI × AI Infrastructure · AWS Builder Loft</span></span></li>
-    <li class="next"><span class="d"><span class="tbd">8月底</span></span><span><strong><span class="zh">本场 · 斯坦福黑客松</span><span class="en">This event · Hackathon @ Stanford</span></strong></span></li>
+    <li class="next"><span class="d"><span class="tbd"><span class="zh">8月底</span><span class="en">Late Aug</span></span></span><span><strong><span class="zh">本场 · 斯坦福黑客松</span><span class="en">This event · Hackathon @ Stanford</span></strong></span></li>
   </ul>
   <p class="muted" style="margin-top:1.4rem;font-size:.9rem"><span class="zh">常用场地：AWS Builder Loft（旧金山，AWS 官方技术社区场地）、Frontier Tower（旧金山前沿 AI 与深科技聚集地）、以及斯坦福、伯克利与 Palo Alto / Menlo Park 一带的 VC 办公室生态。</span><span class="en">Regular venues: AWS Builder Loft (San Francisco, AWS's official venue for technical communities), Frontier Tower (SF hub for frontier AI and deep-tech), plus the Stanford, Berkeley and Palo Alto / Menlo Park VC ecosystem.</span></p>
 </section>
@@ -567,11 +567,15 @@ footer.btm .wrap{display:flex;justify-content:space-between;gap:1rem;flex-wrap:w
 
 <script>
 (function(){
+  /* English is the default; the button always names the language you'd get
+     by pressing it. Keep <html lang> in step so screen readers and
+     translation tools don't announce the page in the wrong language. */
   var page=document.getElementById('page'),btn=document.getElementById('langbtn');
   btn.addEventListener('click',function(){
-    var zh=page.getAttribute('data-lang')==='zh';
-    page.setAttribute('data-lang',zh?'en':'zh');
-    btn.textContent=zh?'中文':'EN';
+    var next=page.getAttribute('data-lang')==='zh'?'en':'zh';
+    page.setAttribute('data-lang',next);
+    document.documentElement.lang=next==='zh'?'zh-Hans':'en';
+    btn.textContent=next==='zh'?'EN':'中文';
   });
 })();
 
