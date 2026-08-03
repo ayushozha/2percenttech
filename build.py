@@ -6,7 +6,13 @@ deployable site root (GitHub Pages serves it directly):
     sponsor.html -> docs/sponsor.built.html   (sponsorship prospectus)
     home.html    -> docs/index.html           (site homepage)
 """
-import base64, html as htmlmod, io, json, re, sys
+import base64, html as htmlmod, io, json, os, re, sys
+
+# fontTools stamps head.modified with the current time, so an unchanged source
+# produced a different subset on every run and docs/ churned on every rebuild.
+# fontTools honours SOURCE_DATE_EPOCH for exactly this; pin it so the build is
+# reproducible and a diff in docs/ always means the content actually changed.
+os.environ.setdefault("SOURCE_DATE_EPOCH", "1735689600")  # 2025-01-01T00:00:00Z
 from pathlib import Path
 from fontTools.subset import Subsetter, Options
 from fontTools.ttLib import TTFont
