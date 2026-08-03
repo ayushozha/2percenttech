@@ -83,6 +83,12 @@ only — keep the `id`s in sync so both pages share the same art):
   `nvidia.svg`, whatever. Matching ignores case, spaces and punctuation, so
   `Openai.png` and `mistral AI.png` both work. Outright misspellings go in the
   `ALIASES` map in `build.py` (there's one there now for a file named `NVDIA.png`).
+- **Prefer SVG.** Vectors are inlined untouched — no trimming, no downscaling, sharp at
+  any size, and usually a fraction of the weight (Google, Mistral and Snyk together come
+  to 4.3 KB). If both an `.svg` and a raster of the same company are present, the vector
+  wins, so dropping an `.svg` beside an old `.png` is enough to upgrade it.
+- Raster sources with transparency are composited onto white before processing, since
+  that's what the tile sits on.
 - Add `more:1` to an entry to move it behind the "view more" toggle. The toggle counts
   its own contents and hides itself entirely when empty, so nothing else needs changing.
 
