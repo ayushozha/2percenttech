@@ -4,11 +4,11 @@ import LangShell from '@/components/LangShell';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: '2% Tech — 湾区 AI 黑客松与开发者社区 · Bay Area AI Hackathons',
+  title: '2% Tech — Bay Area AI Hackathons & Developer Community',
   description:
-    '2% Tech runs high-signal AI hackathons, workshops and demo days across the SF Bay Area. 24 events, 5,700+ registrations since January 2025. 湾区高质量 AI 黑客松与开发者社区。',
+    '2% Tech runs high-signal AI hackathons, workshops and demo days across the SF Bay Area. 24 events, 5,700+ registrations since January 2025.',
   openGraph: {
-    title: '2% Tech — Bay Area AI Hackathons 湾区 AI 黑客松',
+    title: '2% Tech — Bay Area AI Hackathons',
     description: '24 events · 5,700+ registrations since Jan 2025. Next stop: Hackathon @ Stanford.',
     type: 'website',
   },
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="zh-Hans">
+    <html lang="en">
       <body>
         <LangShell>{children}</LangShell>
       </body>
