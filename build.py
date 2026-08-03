@@ -99,6 +99,33 @@ def logo_index():
 
 # ---- page build ----------------------------------------------------------
 
+def document(fragment):
+    """Wrap a page fragment in a real HTML document.
+
+    The sources are authored as fragments so they can also be published to a
+    host that supplies its own <head>. Served straight off nginx there is no
+    such wrapper, and without a declared charset the browser falls back to a
+    legacy encoding and renders every Chinese character as mojibake — the
+    file is valid UTF-8, nothing signals it. The viewport tag matters just as
+    much: without it phones lay the page out at desktop width.
+    """
+    title = "2% Tech"
+    m = re.search(r"<title>(.*?)</title>", fragment, re.S)
+    if m:
+        title = m.group(1).strip()
+        fragment = fragment.replace(m.group(0), "", 1)
+    return (
+        "<!doctype html>\n"
+        '<html lang="en">\n<head>\n'
+        '<meta charset="utf-8">\n'
+        '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
+        f"<title>{title}</title>\n"
+        "</head>\n<body>\n"
+        f"{fragment.lstrip()}\n"
+        "</body>\n</html>\n"
+    )
+
+
 def build(src, out, index):
     html = src.read_text(encoding="utf-8")
     print(f"\n== {src.name} -> {out.name} ==")
@@ -181,7 +208,7 @@ def build(src, out, index):
     html = html.replace("/*__BAKED__*/{}", json.dumps(baked))
     html = html.replace("/*__TILES__*/{}", json.dumps(tiles))
 
-    out.write_text(html, encoding="utf-8")
+    out.write_text(document(html), encoding="utf-8")
     print(f"wrote {out.name}  {out.stat().st_size/1024:.0f} KB total"
           f"  ({len(baked)}/{len(ids)} logos)")
 
