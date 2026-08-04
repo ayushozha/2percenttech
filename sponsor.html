@@ -178,6 +178,15 @@ p{margin:0 0 1rem}
 .more > summary:hover::after{color:#14141A}
 .lineup-more,.cos-more{border-top:0;margin-top:0}
 
+/* gallery */
+.gal{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));border:2px solid var(--ink);border-right:0;border-bottom:0}
+.gal figure{margin:0;border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);aspect-ratio:4/3;overflow:hidden;background:var(--block)}
+.gal img{width:100%;height:100%;object-fit:cover;display:block}
+@media (prefers-reduced-motion:no-preference){
+  .gal img{transition:transform .45s cubic-bezier(.2,.7,.3,1)}
+  .gal figure:hover img{transform:scale(1.05)}
+}
+
 /* faq */
 .faq{border-top:2px solid var(--ink)}
 details{border-bottom:1px solid var(--rule);padding:.95rem 0}
@@ -221,6 +230,9 @@ footer.btm .wrap{display:flex;justify-content:space-between;gap:1rem;flex-wrap:w
   .pkg,.person,.prize,details{break-inside:avoid}
   .more > summary{display:none}
   .lineup-more,.cos-more{border-top:2px solid #000}
+  /* nine photos eat a whole sheet; six still carries the point */
+  .gal{grid-template-columns:repeat(3,1fr)}
+  .gal figure:nth-child(n+7){display:none}
   .endcta{background:#fff;color:#000;border-top:2px solid #000}
   .endcta h2{color:#000}
   .endcta a.btn{color:#000;border-color:#000}
@@ -519,6 +531,13 @@ footer.btm .wrap{display:flex;justify-content:space-between;gap:1rem;flex-wrap:w
 </section>
 
 <section class="wrap">
+  <span class="label"><span class="zh">现场</span><span class="en">On the ground</span></span>
+  <h2><span class="zh">房间实际长什么样</span><span class="en">What the room actually looks like</span></h2>
+  <p class="lead prose"><span class="zh">往期活动现场，摄于 AWS Builder Loft、Frontier Tower 及湾区其他场地。</span><span class="en">From past events at AWS Builder Loft, Frontier Tower and other Bay Area venues.</span></p>
+  <div class="gal" id="gal"></div>
+</section>
+
+<section class="wrap">
   <span class="label">FAQ</span>
   <h2><span class="zh">常见问题</span><span class="en">Questions we always get</span></h2>
   <div class="faq">
@@ -631,6 +650,27 @@ footer.btm .wrap{display:flex;justify-content:space-between;gap:1rem;flex-wrap:w
   },{threshold:.45});
 
   els.forEach(function(el){ io.observe(el); });
+})();
+
+/* ---- gallery ---------------------------------------------------------
+   Filled at build time from ./photos. Rendering from JS rather than markup
+   keeps nine base64 blobs out of the source file, where they'd bury every
+   real edit under a wall of unreadable diff.
+--------------------------------------------------------------------- */
+(function(){
+  var PHOTOS=/*__PHOTOS__*/[], grid=document.getElementById("gal");
+  if(!grid) return;
+  if(!PHOTOS.length){ grid.closest("section").hidden=true; return; }
+  PHOTOS.forEach(function(src,i){
+    var fig=document.createElement("figure"),
+        img=new Image();
+    img.src=src;
+    img.alt="2% Tech event photo "+(i+1);
+    img.loading=i<3?"eager":"lazy";
+    img.decoding="async";
+    fig.appendChild(img);
+    grid.appendChild(fig);
+  });
 })();
 
 /* ---- company cards ---------------------------------------------------
