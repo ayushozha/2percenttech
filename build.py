@@ -24,7 +24,7 @@ PAGES = [("sponsor.html", "sponsor.built.html"), ("home.html", "index.html")]
 
 LOGO_DIR = HERE / "logos"
 PHOTO_DIR = HERE / "photos"
-PHOTO_W, PHOTO_H, PHOTO_Q = 480, 360, 70
+PHOTO_W, PHOTO_H, PHOTO_Q = 460, 345, 68
 RASTER = {".png", ".jpg", ".jpeg", ".webp", ".gif", ".bmp", ".tif", ".tiff"}
 VECTOR = {".svg"}                      # inlined as-is, no processing needed
 ALIASES = {"nvdia": "nvidia"}          # typo in the supplied filename
