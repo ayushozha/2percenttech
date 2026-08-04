@@ -16,13 +16,15 @@ os.environ.setdefault("SOURCE_DATE_EPOCH", "1735689600")  # 2025-01-01T00:00:00Z
 from pathlib import Path
 from fontTools.subset import Subsetter, Options
 from fontTools.ttLib import TTFont
-from PIL import Image, ImageChops
+from PIL import Image, ImageChops, ImageOps
 
 HERE = Path(__file__).parent
 OUT_DIR = HERE / "docs"
 PAGES = [("sponsor.html", "sponsor.built.html"), ("home.html", "index.html")]
 
 LOGO_DIR = HERE / "logos"
+PHOTO_DIR = HERE / "photos"
+PHOTO_W, PHOTO_H, PHOTO_Q = 480, 360, 70
 RASTER = {".png", ".jpg", ".jpeg", ".webp", ".gif", ".bmp", ".tif", ".tiff"}
 VECTOR = {".svg"}                      # inlined as-is, no processing needed
 ALIASES = {"nvdia": "nvidia"}          # typo in the supplied filename
@@ -213,6 +215,27 @@ def build(src, out, index):
 
     html = html.replace("/*__BAKED__*/{}", json.dumps(baked))
     html = html.replace("/*__TILES__*/{}", json.dumps(tiles))
+
+    # ---- gallery photos --------------------------------------------------
+    # Files in ./photos, in filename order. Cropped to the tile's 4:3 and
+    # sized for a 2x render of it — the grid caps out around 240 CSS px, so
+    # anything larger is weight the reader pays for and never sees. These
+    # dominate the page: nine roughly double it, so keep the count deliberate.
+    photos = []
+    if PHOTO_DIR.is_dir() and "/*__PHOTOS__*/[]" in html:
+        print("photos:")
+        for ph in sorted(PHOTO_DIR.iterdir()):
+            if ph.suffix.lower() not in RASTER:
+                continue
+            im = ImageOps.exif_transpose(Image.open(ph)).convert("RGB")
+            im = ImageOps.fit(im, (PHOTO_W, PHOTO_H), Image.LANCZOS)
+            buf = io.BytesIO()
+            im.save(buf, "WEBP", quality=PHOTO_Q, method=6)
+            data = buf.getvalue()
+            photos.append("data:image/webp;base64," + base64.b64encode(data).decode("ascii"))
+            print(f"  {ph.name:10s} {ph.stat().st_size/1024:7.1f} -> {len(data)/1024:5.1f} KB")
+        print(f"  {sum(len(v) for v in photos)/1024:.0f} KB of photo data inlined")
+    html = html.replace("/*__PHOTOS__*/[]", json.dumps(photos))
 
     out.write_text(document(html), encoding="utf-8")
     print(f"wrote {out.name}  {out.stat().st_size/1024:.0f} KB total"
