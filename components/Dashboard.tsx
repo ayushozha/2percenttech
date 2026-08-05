@@ -10,14 +10,15 @@ import { UPCOMING, type Bi } from '@/lib/data';
 import {
   averageScore,
   cycleQueryStatus,
-  listQueries,
+  listLeads,
   listSubmissions,
   listUsers,
   setScore as persistScore,
   signOut,
   submitProject,
 } from '@/lib/store';
-import type { HostRequest, QueryStatus, Role, Session, Submission, User } from '@/lib/types';
+import { PACKAGES } from '@/lib/sponsor-data';
+import { BUDGET_BANDS, SPONSOR_GOALS, type Lead, type QueryStatus, type Role, type Session, type Submission, type User } from '@/lib/types';
 
 /* ---- tabs --------------------------------------------------------------
    Which tabs a role sees. The prototype hardcoded `const role = 'admin'`,
@@ -29,7 +30,7 @@ type TabId = 'overview' | 'queries' | 'users' | 'events' | 'judging' | 'myhack';
 
 const TAB_LABELS: Record<TabId, Bi> = {
   overview: { zh: '总览', en: 'Overview' },
-  queries: { zh: '赞助咨询', en: 'Sponsor queries' },
+  queries: { zh: '咨询与申请', en: 'Enquiries' },
   users: { zh: '用户', en: 'Users' },
   events: { zh: '活动', en: 'Events' },
   judging: { zh: '评审队列', en: 'Judging' },
@@ -108,7 +109,7 @@ export default function Dashboard() {
   const { lang } = useLang();
 
   const [tab, setTab] = useState<TabId | null>(null);
-  const [queries, setQueries] = useState<HostRequest[]>([]);
+  const [queries, setQueries] = useState<Lead[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [subs, setSubs] = useState<Submission[]>([]);
 
@@ -129,7 +130,7 @@ export default function Dashboard() {
   useEffect(() => {
     if (!session) return;
     let live = true;
-    Promise.all([listQueries(), listUsers(), listSubmissions()]).then(([q, u, s]) => {
+    Promise.all([listLeads(), listUsers(), listSubmissions()]).then(([q, u, s]) => {
       if (!live) return;
       setQueries(q);
       setUsers(u);
@@ -240,16 +241,92 @@ export default function Dashboard() {
 
 /* ---- panels ------------------------------------------------------------ */
 
-function QueryRow({ q, onCycle }: { q: HostRequest; onCycle: (id: string) => void }) {
+const KIND_LABEL: Record<Lead['kind'], Bi> = {
+  host: { zh: '办活动', en: 'Host' },
+  sponsor: { zh: '赞助', en: 'Sponsor' },
+};
+
+/** Resolve stored ids back to display names, so a renamed label doesn't
+    orphan historical leads. */
+const nameFor = (ids: string[] | undefined, table: { id: string; zh: string; en: string }[]) =>
+  (ids ?? []).map((id) => table.find((t) => t.id === id) ?? { id, zh: id, en: id });
+
+function QueryRow({ q, onCycle }: { q: Lead; onCycle: (id: string) => void }) {
+  const isSponsor = q.kind === 'sponsor';
+
+  const pkgs = (q.packages ?? []).map((id) => {
+    const p = PACKAGES.find((x) => x.id === id);
+    return p ? p.name : { zh: '还不确定', en: 'Not sure yet' };
+  });
+  const goals = nameFor(q.goals, SPONSOR_GOALS);
+  const band = BUDGET_BANDS.find((b) => b.id === q.budget);
+
   return (
-    <div className="row">
-      <div style={{ flex: '1 1 220px', minWidth: 0 }}>
-        <span style={{ display: 'block', fontWeight: 600, fontSize: 14.5, overflowWrap: 'anywhere' }}>{q.email}</span>
-        <span className="small" style={{ display: 'block', marginTop: 2, fontSize: 12.5 }}>
-          {picksLabel(q.picks)}
-        </span>
+    <div className="row" style={{ alignItems: 'flex-start' }}>
+      <div style={{ flex: '1 1 240px', minWidth: 0 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+          <span
+            className="badge"
+            style={{
+              fontSize: 10,
+              padding: '3px 9px',
+              background: isSponsor ? 'oklch(0.93 0.06 300)' : 'rgba(23,22,28,.07)',
+              color: isSponsor ? 'oklch(0.35 0.12 300)' : 'var(--ink-4)',
+            }}
+          >
+            {bi(KIND_LABEL[q.kind])}
+          </span>
+          <span style={{ fontWeight: 600, fontSize: 14.5, overflowWrap: 'anywhere' }}>
+            {isSponsor && q.company ? q.company : q.email}
+          </span>
+        </div>
+
+        {isSponsor ? (
+          <>
+            <span className="small" style={{ display: 'block', marginTop: 3, fontSize: 12.5, overflowWrap: 'anywhere' }}>
+              {q.contact ? `${q.contact} · ` : ''}
+              {q.email}
+            </span>
+            <span className="small" style={{ display: 'block', marginTop: 3, fontSize: 12.5 }}>
+              {pkgs.map((p, i) => (
+                <span key={i}>
+                  {i > 0 && ' + '}
+                  <B zh={p.zh} en={p.en} />
+                </span>
+              ))}
+              {band && (
+                <>
+                  {' · '}
+                  <B zh={band.zh} en={band.en} />
+                </>
+              )}
+            </span>
+            {goals.length > 0 && (
+              <span className="fine" style={{ display: 'block', marginTop: 3 }}>
+                {goals.map((g, i) => (
+                  <span key={g.id}>
+                    {i > 0 && ' · '}
+                    <B zh={g.zh} en={g.en} />
+                  </span>
+                ))}
+              </span>
+            )}
+            {q.message && (
+              <span className="fine" style={{ display: 'block', marginTop: 5, fontStyle: 'italic', lineHeight: 1.45 }}>
+                “{q.message}”
+              </span>
+            )}
+          </>
+        ) : (
+          <span className="small" style={{ display: 'block', marginTop: 3, fontSize: 12.5 }}>
+            {picksLabel(q.picks ?? [])}
+          </span>
+        )}
       </div>
-      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11.5, color: 'var(--ink-6)' }}>{shortDate(q.ts)}</span>
+
+      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11.5, color: 'var(--ink-6)', paddingTop: 3 }}>
+        {shortDate(q.ts)}
+      </span>
       <button
         type="button"
         className={`badge badge-${q.status}`}
@@ -268,14 +345,14 @@ function Overview({
   subs,
   onCycle,
 }: {
-  queries: HostRequest[];
+  queries: Lead[];
   users: User[];
   subs: Submission[];
   onCycle: (id: string) => void;
 }) {
   const cards: { n: string; l: Bi }[] = [
     { n: String(users.length), l: { zh: '用户', en: 'Users' } },
-    { n: String(queries.length), l: { zh: '赞助咨询', en: 'Sponsor queries' } },
+    { n: String(queries.length), l: { zh: '咨询与申请', en: 'Enquiries' } },
     { n: String(subs.length), l: { zh: '参赛项目', en: 'Hackathon entries' } },
     { n: String(UPCOMING.length), l: { zh: '即将举行', en: 'Upcoming events' } },
   ];
@@ -296,7 +373,7 @@ function Overview({
       </div>
 
       <h2 className="h-sub" style={{ marginBottom: 14 }}>
-        <B zh="最新赞助咨询" en="Latest sponsor queries" />
+        <B zh="最新咨询" en="Latest enquiries" />
       </h2>
       <div className="stack">
         {queries.slice(0, 3).map((q) => (
@@ -312,13 +389,13 @@ function Overview({
   );
 }
 
-function Queries({ queries, onCycle }: { queries: HostRequest[]; onCycle: (id: string) => void }) {
+function Queries({ queries, onCycle }: { queries: Lead[]; onCycle: (id: string) => void }) {
   const fresh = queries.filter((q) => q.status === 'new').length;
   return (
     <>
       <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 16, marginBottom: 14, flexWrap: 'wrap' }}>
         <h2 className="h-sub">
-          <B zh="赞助咨询" en="Sponsor queries" />
+          <B zh="咨询与申请" en="Enquiries" />
         </h2>
         <span style={{ fontSize: 13, color: 'var(--ink-5)' }}>
           <B zh={`${fresh} 条新 / 共 ${queries.length} 条`} en={`${fresh} new of ${queries.length}`} />
@@ -336,8 +413,8 @@ function Queries({ queries, onCycle }: { queries: HostRequest[]; onCycle: (id: s
       </div>
       <p className="fine" style={{ marginTop: 14, fontSize: 12.5 }}>
         <B
-          zh="咨询由落地页表单实时写入。点击状态标签可在 新 → 已联系 → 已关闭 之间切换。"
-          en="Queries land here live from the landing-page form. Click a status chip to move it new → contacted → closed."
+          zh="「办活动」来自落地页表单，「赞助」来自 /sponsor/apply，两者实时写入同一个收件箱。点击状态标签可在 新 → 已联系 → 已关闭 之间切换。"
+          en="Host requests come from the landing-page form and sponsor applications from /sponsor/apply — both land in this one inbox. Click a status chip to move it new → contacted → closed."
         />
       </p>
     </>

@@ -16,15 +16,18 @@
    next.config.mjs, move the role checks server-side, and hash the passwords.
    ========================================================================= */
 
-import type { HostRequest, QueryStatus, Session, Submission, User } from './types';
+import type { Lead, QueryStatus, Session, Submission, User } from './types';
 import { QUERY_STATUSES } from './types';
 
 const K = {
   users: '2pct-users',
   session: '2pct-session',
-  requests: '2pct-host-requests',
+  leads: '2pct-leads',
   submissions: '2pct-submissions',
 } as const;
+
+/** Pre-`kind` key. Entries there were all host requests; migrated on first read. */
+const LEGACY_REQUESTS_KEY = '2pct-host-requests';
 
 /* ---- raw localStorage helpers ------------------------------------------
    All reads are defensive: storage can be disabled (private mode, embedded
@@ -104,10 +107,50 @@ const SEED_SUBMISSIONS: Submission[] = [
   },
 ];
 
-const SEED_REQUESTS: HostRequest[] = [
-  { id: 'q1', email: 'devrel@vectorbase.ai', picks: ['workshop', 'hackathon'], ts: '2026-08-01T18:20:00Z', status: 'new' },
-  { id: 'q2', email: 'events@cloudpeak.io', picks: ['keynote'], ts: '2026-07-28T02:11:00Z', status: 'contacted' },
-  { id: 'q3', email: 'maya@agentforge.dev', picks: ['panel', 'workshop'], ts: '2026-07-21T21:47:00Z', status: 'new' },
+const SEED_LEADS: Lead[] = [
+  {
+    id: 'q1',
+    kind: 'host',
+    email: 'devrel@vectorbase.ai',
+    picks: ['workshop', 'hackathon'],
+    ts: '2026-08-01T18:20:00Z',
+    status: 'new',
+  },
+  { id: 'q2', kind: 'host', email: 'events@cloudpeak.io', picks: ['keynote'], ts: '2026-07-28T02:11:00Z', status: 'contacted' },
+  {
+    id: 'q3',
+    kind: 'host',
+    email: 'maya@agentforge.dev',
+    picks: ['panel', 'workshop'],
+    ts: '2026-07-21T21:47:00Z',
+    status: 'new',
+  },
+  {
+    id: 'q4',
+    kind: 'sponsor',
+    email: 'partnerships@northstar.ai',
+    company: 'Northstar AI',
+    contact: 'Priya Raman',
+    packages: ['exclusive'],
+    goals: ['adoption', 'feedback'],
+    budget: '50-100',
+    message: 'Want our inference API in front of builders before the Q4 launch.',
+    ts: '2026-08-02T16:05:00Z',
+    status: 'new',
+  },
+  {
+    id: 'q5',
+    kind: 'sponsor',
+    email: 'community@ridgeline.dev',
+    company: 'Ridgeline',
+    contact: 'Tom Okafor',
+    packages: ['cohosted', 'unsure'],
+    goals: ['awareness', 'hiring'],
+    budget: 'under25',
+    message: '',
+    ts: '2026-07-30T09:40:00Z',
+    status: 'contacted',
+  },
 ];
 
 let seeded = false;
@@ -128,7 +171,27 @@ export function seed(): void {
   if (changed) write(K.users, users);
 
   if (!read<Submission[]>(K.submissions, []).length) write(K.submissions, SEED_SUBMISSIONS);
-  if (!read<HostRequest[]>(K.requests, []).length) write(K.requests, SEED_REQUESTS);
+
+  // Migrate anything written before leads gained a `kind`, then seed only if
+  // there is still nothing — so a browser with real enquiries keeps them.
+  if (!read<Lead[]>(K.leads, []).length) {
+    const legacy = read<Partial<Lead>[]>(LEGACY_REQUESTS_KEY, []);
+    if (legacy.length) {
+      write(
+        K.leads,
+        legacy.map((q, i) => ({
+          id: q.id ?? `legacy-${i}`,
+          kind: 'host' as const,
+          email: q.email ?? '',
+          picks: q.picks ?? [],
+          ts: q.ts ?? '',
+          status: (q.status ?? 'new') as QueryStatus,
+        })),
+      );
+    } else {
+      write(K.leads, SEED_LEADS);
+    }
+  }
 }
 
 /* ---- session ----------------------------------------------------------- */
@@ -193,39 +256,71 @@ export async function listUsers(): Promise<User[]> {
   return read<User[]>(K.users, []);
 }
 
-/* ---- sponsor queries --------------------------------------------------- */
+/* ---- leads (host requests + sponsor applications) ---------------------- */
 
+/** From the landing page: "what do you want to host?" */
 export async function createHostRequest(email: string, picks: string[]): Promise<void> {
   seed();
-  const all = read<HostRequest[]>(K.requests, []);
+  const all = read<Lead[]>(K.leads, []);
   all.push({
     id: `r-${Date.now()}`,
+    kind: 'host',
     email: email.trim().toLowerCase(),
     picks,
     ts: new Date().toISOString(),
     status: 'new',
   });
-  write(K.requests, all);
+  write(K.leads, all);
 }
 
-/** Newest first. */
-export async function listQueries(): Promise<HostRequest[]> {
+export type SponsorApplication = {
+  company: string;
+  contact: string;
+  email: string;
+  packages: string[];
+  goals: string[];
+  budget: string;
+  message: string;
+};
+
+/** From /sponsor/apply. */
+export async function createSponsorApplication(app: SponsorApplication): Promise<void> {
   seed();
-  return read<HostRequest[]>(K.requests, [])
+  const all = read<Lead[]>(K.leads, []);
+  all.push({
+    id: `s-${Date.now()}`,
+    kind: 'sponsor',
+    email: app.email.trim().toLowerCase(),
+    company: app.company.trim(),
+    contact: app.contact.trim(),
+    packages: app.packages,
+    goals: app.goals,
+    budget: app.budget,
+    message: app.message.trim(),
+    ts: new Date().toISOString(),
+    status: 'new',
+  });
+  write(K.leads, all);
+}
+
+/** Newest first. Both kinds — the dashboard filters if it wants one. */
+export async function listLeads(): Promise<Lead[]> {
+  seed();
+  return read<Lead[]>(K.leads, [])
     .slice()
     .sort((a, b) => (b.ts || '').localeCompare(a.ts || ''));
 }
 
 /** Advances new → contacted → closed → new. Returns the updated list. */
-export async function cycleQueryStatus(id: string): Promise<HostRequest[]> {
-  const all = read<HostRequest[]>(K.requests, []);
+export async function cycleQueryStatus(id: string): Promise<Lead[]> {
+  const all = read<Lead[]>(K.leads, []);
   const row = all.find((q) => q.id === id);
   if (row) {
     const i = QUERY_STATUSES.indexOf(row.status ?? 'new');
     row.status = QUERY_STATUSES[(i + 1) % QUERY_STATUSES.length] as QueryStatus;
-    write(K.requests, all);
+    write(K.leads, all);
   }
-  return listQueries();
+  return listLeads();
 }
 
 /* ---- hackathon submissions --------------------------------------------- */

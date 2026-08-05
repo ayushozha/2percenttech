@@ -382,6 +382,32 @@ img {
   gap: 10px;
 }
 
+/* Form + reference column on /sponsor/apply. Collapses before the sidebar
+   gets too narrow to read, and the sticky is dropped once stacked so the
+   reference cards don't hover over the form on a phone. */
+.apply-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+  gap: 48px;
+  align-items: start;
+}
+.apply-aside {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  position: sticky;
+  top: 88px;
+}
+@media (max-width: 900px) {
+  .apply-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .apply-aside {
+    position: static;
+  }
+}
+
 /* ---- nav / footer ------------------------------------------------------ */
 
 .nav {

@@ -6,6 +6,7 @@ A Next.js app, bilingual (中文 / EN) throughout, exported to static files.
 |---|---|
 | `/` | Landing page — who 2% Tech is, the track record from the [Luma profile](https://luma.com/user/usr-imLXdlHS1TlvX7X), the company wall, the sponsor target list, the calendar, and the "what do you want to host?" form. |
 | `/sponsor` | Sponsorship prospectus for the one-day hackathon at Stanford (August 2026). Print-friendly. |
+| `/sponsor/apply` | The sponsorship request form — package, goals, budget band. Accepts `?package=<id>` to arrive pre-ticked. |
 | `/signin`, `/signup` | Backstage account — demo auth, see [Auth](#auth-is-a-demo). |
 | `/dashboard` | Backstage — events, sponsor queries, users, judging queue, hackathon entry. Role-driven. |
 
@@ -63,9 +64,38 @@ Seeded demo accounts, password `demo2026`: `admin@`, `organizer@`, `judge@`,
 | `lib/data.ts` | Landing + shared content: companies, seats, events, stats, photos. |
 | `lib/sponsor-data.ts` | Prospectus content: packages, funnel, lineup, prizes, FAQ. |
 | `lib/store.ts` | The persistence seam described above. |
+| `lib/types.ts` | Roles, lead shapes, and the sponsor goal / budget-band vocabularies. |
 | `logos/`, `photos/` | Source art. Not served directly. |
 | `public/` | Generated art (`npm run prepare-assets`) plus `mark.svg`. |
 | `tools/prepare_assets.py` | Processes `logos/` and `photos/` into `public/`. |
+
+## Inbound enquiries
+
+Two forms feed one inbox — the **Enquiries** tab in the dashboard, visible to
+`admin` and `organizer`:
+
+| Form | Lead `kind` | Captures |
+|---|---|---|
+| Landing page, "what do you want to host?" | `host` | email + event formats |
+| `/sponsor/apply` | `sponsor` | company, contact, package(s), goals, budget band, message |
+
+They're one `Lead` type with a discriminator rather than two lists, because
+they're the same pipeline to whoever works it: one status cycle
+(new → contacted → closed), one sort, one place to look.
+
+Only `company`, `contact`, `email` and at least one package are required on the
+sponsorship form — goals, budget and message are optional, since every extra
+required field costs completions. `"Not sure yet"` is a valid package answer.
+
+Package ids (`cohosted`, `exclusive`, `flagship`) are stored on the lead, so
+**don't rename them** — historical leads resolve their labels through those ids.
+Each package card on the prospectus deep-links to
+`/sponsor/apply?package=<id>`, which arrives with that package ticked.
+
+Leads written before the `kind` field existed (storage key
+`2pct-host-requests`) are migrated to `2pct-leads` on first read and tagged
+`host`. The migration only runs when the new key is empty, so it can't clobber
+newer data.
 
 ## Editing
 

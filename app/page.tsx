@@ -258,7 +258,7 @@ export default function Landing() {
             ))}
 
             <a
-              href="#top"
+              href="/sponsor/apply"
               style={{
                 border: '1.5px solid var(--ink)',
                 borderRadius: 16,
@@ -444,11 +444,14 @@ export default function Landing() {
           </p>
 
           <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', marginTop: 26 }}>
-            <a href="#top" className="btn btn-dark">
-              <B zh="发起申请 ↑" en="Start your request ↑" />
+            <a href="/sponsor/apply" className="btn btn-dark">
+              <B zh="申请赞助 →" en="Apply to sponsor →" />
             </a>
             <a href="/sponsor" className="btn btn-ghost">
               <B zh="看赞助方案" en="Read the prospectus" />
+            </a>
+            <a href="#top" className="btn btn-ghost">
+              <B zh="我想办活动 ↑" en="I want to host ↑" />
             </a>
           </div>
 

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import B from '@/components/B';
 import SiteNav from '@/components/SiteNav';
 import SiteFooter from '@/components/SiteFooter';
@@ -104,11 +105,11 @@ export default function Sponsor() {
           </div>
 
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: 30 }}>
-            <a href="#tiers" className="btn btn-dark">
+            <Link href="/sponsor/apply" className="btn btn-dark">
+              <B zh="申请赞助 →" en="Apply to sponsor →" />
+            </Link>
+            <a href="#tiers" className="btn btn-ghost">
               <B zh="查看合作套餐" en="See the packages" />
-            </a>
-            <a href="#contact" className="btn btn-ghost">
-              <B zh="约 15 分钟聊聊" en="Book 15 minutes" />
             </a>
           </div>
         </div>
@@ -353,6 +354,14 @@ export default function Sponsor() {
                 <span className="mono-label" style={{ display: 'block', marginTop: 18, fontSize: 10 }}>
                   {bi(p.format)}
                 </span>
+                {/* Deep-links with this package already ticked on the form. */}
+                <Link
+                  href={`/sponsor/apply?package=${p.id}`}
+                  className={`btn btn-sm ${p.feature ? 'btn-dark' : 'btn-ghost'}`}
+                  style={{ marginTop: 14, width: '100%' }}
+                >
+                  <B zh="申请这个套餐 →" en="Apply for this →" />
+                </Link>
               </div>
             ))}
           </div>
@@ -651,6 +660,12 @@ export default function Sponsor() {
               en="We talk pricing in person. Give us 15 minutes, tell us what you're measured on this year, and we'll work backwards to the package that gets you there."
             />
           </p>
+
+          <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', marginTop: 26 }}>
+            <Link href="/sponsor/apply" className="btn btn-dark">
+              <B zh="申请赞助 →" en="Apply to sponsor →" />
+            </Link>
+          </div>
 
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '14px 36px', justifyContent: 'center', marginTop: 30, fontSize: 13.5 }}>
             <span>

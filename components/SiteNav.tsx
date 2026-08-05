@@ -40,7 +40,12 @@ export default function SiteNav({ variant = 'landing' }: { variant?: 'landing' |
               <B zh="存成 PDF" en="Save PDF" />
             </button>
           )}
-          <Link href="/signin" className="btn btn-dark btn-sm">
+          {/* The primary action everywhere on the public site is "apply to
+              sponsor"; signing in is for the people who already work here. */}
+          <Link href="/sponsor/apply" className="btn btn-dark btn-sm">
+            <B zh="申请赞助" en="Sponsor us" />
+          </Link>
+          <Link href="/signin" className="btn btn-ghost btn-sm">
             <B zh="登录" en="Sign in" />
           </Link>
           <a className="btn btn-ghost btn-sm" href={LUMA_PROFILE} target="_blank" rel="noopener noreferrer">

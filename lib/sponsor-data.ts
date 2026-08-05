@@ -141,6 +141,8 @@ export const FUNNEL: { phase: Bi; sub: Bi | string; rows: FunnelRow[] }[] = [
 /* ---- packages ---------------------------------------------------------- */
 
 export type Package = {
+  /** Stable id — referenced by sponsor applications, so don't rename these. */
+  id: string;
   name: Bi;
   for: Bi;
   items: Bi[];
@@ -151,6 +153,7 @@ export type Package = {
 
 export const PACKAGES: Package[] = [
   {
+    id: 'cohosted',
     name: { zh: '联合主办', en: 'Co-Hosted Hackathon' },
     for: { zh: '适合希望加入一场更大规模社区活动的品牌', en: 'Best for brands joining a larger community event' },
     items: [
@@ -165,6 +168,7 @@ export const PACKAGES: Package[] = [
     format: { zh: '共享形式', en: 'Shared format' },
   },
   {
+    id: 'exclusive',
     name: { zh: '品牌独家专场', en: 'Exclusive Brand Hackathon' },
     for: { zh: '适合在湾区办一场专属于你的单品牌黑客松', en: 'Best for a dedicated one-brand hackathon in the Bay Area' },
     feature: true,
@@ -183,6 +187,7 @@ export const PACKAGES: Package[] = [
     format: { zh: '专属形式', en: 'Dedicated format' },
   },
   {
+    id: 'flagship',
     name: { zh: '旗舰专场 + 内容', en: 'Flagship Hackathon + Media' },
     for: { zh: '适合同时要活动、曝光与内容的品牌', en: 'Best for brands that want event + visibility + content' },
     items: [

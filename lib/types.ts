@@ -24,14 +24,54 @@ export type QueryStatus = 'new' | 'contacted' | 'closed';
 
 export const QUERY_STATUSES: QueryStatus[] = ['new', 'contacted', 'closed'];
 
-/** A "want to host" enquiry submitted from the landing page form. */
-export type HostRequest = {
+/** Inbound enquiries. Both kinds share one inbox and one status workflow —
+    they are the same pipeline to whoever works it — so they're one type with
+    a discriminator rather than two parallel lists.
+
+    `host`   — "I want to run an event with you", from the landing page form.
+    `sponsor` — "I want to sponsor one", from /sponsor/apply. */
+export type LeadKind = 'host' | 'sponsor';
+
+export type Lead = {
   id: string;
+  kind: LeadKind;
   email: string;
-  picks: string[];
   ts: string;
   status: QueryStatus;
+
+  /** host: which event formats they're after */
+  picks?: string[];
+
+  /** sponsor: who is asking */
+  company?: string;
+  contact?: string;
+  /** sponsor: package ids from PACKAGES, or 'unsure' */
+  packages?: string[];
+  /** sponsor: what they're measured on */
+  goals?: string[];
+  budget?: string;
+  message?: string;
 };
+
+/** What a sponsor is trying to get out of it. Drives the brief we come back
+    with, so it's a first-class field rather than free text. */
+export const SPONSOR_GOALS: { id: string; zh: string; en: string }[] = [
+  { id: 'adoption', zh: '开发者采用', en: 'Developer adoption' },
+  { id: 'awareness', zh: '品牌认知', en: 'Brand awareness' },
+  { id: 'feedback', zh: '产品反馈', en: 'Product feedback' },
+  { id: 'hiring', zh: '招聘', en: 'Hiring' },
+  { id: 'pipeline', zh: '商机管线', en: 'Sales pipeline' },
+];
+
+/** Bands rather than a number: it sets expectations without asking anyone to
+    commit to a figure before a conversation. */
+export const BUDGET_BANDS: { id: string; zh: string; en: string }[] = [
+  { id: 'exploring', zh: '还在了解', en: 'Just exploring' },
+  { id: 'under25', zh: '$25K 以下', en: 'Under $25K' },
+  { id: '25-50', zh: '$25K–50K', en: '$25K–50K' },
+  { id: '50-100', zh: '$50K–100K', en: '$50K–100K' },
+  { id: 'over100', zh: '$100K 以上', en: '$100K+' },
+];
 
 export type Submission = {
   id: string;
