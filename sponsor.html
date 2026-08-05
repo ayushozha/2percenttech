@@ -180,12 +180,25 @@ p{margin:0 0 1rem}
 
 /* gallery */
 .gal{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));border:2px solid var(--ink);border-right:0;border-bottom:0}
-.gal figure{margin:0;border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);aspect-ratio:4/3;overflow:hidden;background:var(--block)}
+.gal .cell{margin:0;padding:0;border:0;border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);aspect-ratio:4/3;overflow:hidden;background:var(--block);cursor:zoom-in;display:block;position:relative}
 .gal img{width:100%;height:100%;object-fit:cover;display:block}
 @media (prefers-reduced-motion:no-preference){
   .gal img{transition:transform .45s cubic-bezier(.2,.7,.3,1)}
-  .gal figure:hover img{transform:scale(1.05)}
+  .gal .cell:hover img{transform:scale(1.05)}
 }
+
+/* lightbox */
+.lb{position:fixed;inset:0;z-index:100;background:rgba(10,10,11,.95);display:grid;place-items:center;padding:clamp(1rem,4vw,2.5rem)}
+.lb[hidden]{display:none}
+.lb-inner{display:flex;flex-direction:column;gap:.75rem;max-width:min(720px,100%);width:100%}
+.lb img{width:100%;height:auto;max-height:76vh;object-fit:contain;display:block;border:2px solid var(--yellow);background:#000}
+.lb-bar{display:flex;justify-content:space-between;align-items:center;gap:1rem}
+.lb-count{color:#F3F1E9;font-size:.72rem;font-weight:600;letter-spacing:.16em;font-variant-numeric:tabular-nums}
+.lb-bar div{display:flex;gap:.5rem}
+.lb button{font-family:var(--body);font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;background:transparent;color:#F3F1E9;border:2px solid #F3F1E9;padding:.4rem .75rem;cursor:pointer}
+.lb button:hover{background:var(--yellow);color:#14141A;border-color:var(--yellow)}
+.lb button:disabled{opacity:.3;cursor:default}
+.lb button:disabled:hover{background:transparent;color:#F3F1E9;border-color:#F3F1E9}
 
 /* faq */
 .faq{border-top:2px solid var(--ink)}
@@ -232,7 +245,8 @@ footer.btm .wrap{display:flex;justify-content:space-between;gap:1rem;flex-wrap:w
   .lineup-more,.cos-more{border-top:2px solid #000}
   /* nine photos eat a whole sheet; six still carries the point */
   .gal{grid-template-columns:repeat(3,1fr)}
-  .gal figure:nth-child(n+7){display:none}
+  .gal .cell:nth-child(n+7){display:none}
+  .lb{display:none!important}
   .endcta{background:#fff;color:#000;border-top:2px solid #000}
   .endcta h2{color:#000}
   .endcta a.btn{color:#000;border-color:#000}
@@ -428,9 +442,9 @@ footer.btm .wrap{display:flex;justify-content:space-between;gap:1rem;flex-wrap:w
   <p class="lead prose"><span class="zh">奖项以你的产品命名，由你的人上台颁发，获奖项目当天就是用你的东西搭的。奖金与额度由设奖方自定。</span><span class="en">The prize carries your product's name, your team presents it on stage, and the winning project was built on your stack that day. Amounts are set by the sponsor.</span></p>
   <div class="prizes">
     <div class="prize"><h3><span class="zh">主奖</span><span class="en">Grand prize</span></h3><p><span class="zh">独家与旗舰专场专属，全场最高奖。</span><span class="en">Title sponsor only. Top award of the event.</span></p></div>
-    <div class="prize"><h3><span class="zh">最佳 [你的产品] 应用</span><span class="en">Best use of [your product]</span></h3><p><span class="zh">三个套餐都可设，奖金由设奖方自定。示例结构：一等 $500 / 二等 $300 / 三等 $100。</span><span class="en">Available under any package, funded at your discretion. Example structure: 1st $500 / 2nd $300 / 3rd $100.</span></p></div>
-    <div class="prize"><h3><span class="zh">额度类奖励</span><span class="en">Credits award</span></h3><p><span class="zh">以算力或 API 额度发放，示例：$1,000 credits。</span><span class="en">Paid in compute or API credits. Example: $1,000 in credits.</span></p></div>
-    <div class="prize"><h3><span class="zh">特别奖</span><span class="en">Special prize</span></h3><p><span class="zh">实物赞助方可设，如工位、设备、社群权益。</span><span class="en">For in-kind sponsors: desks, hardware, community perks.</span></p></div>
+    <div class="prize"><h3><span class="zh">最佳 [你的产品] 应用</span><span class="en">Best use of [your product]</span></h3><p><span class="zh">三个套餐都可设，奖金额度由设奖方自定。</span><span class="en">Available under any package, funded at your discretion.</span></p></div>
+    <div class="prize"><h3><span class="zh">额度类奖励</span><span class="en">Credits award</span></h3><p><span class="zh">以算力或 API 额度发放，数额由你决定。</span><span class="en">Paid in compute or API credits, at a level you set.</span></p></div>
+    <div class="prize"><h3><span class="zh">特别奖</span><span class="en">Special prize</span></h3><p><span class="zh">任意套餐可设，如工位、设备、社群权益。</span><span class="en">Available under any package: desks, hardware, community perks.</span></p></div>
   </div>
 </section>
 
@@ -542,12 +556,24 @@ footer.btm .wrap{display:flex;justify-content:space-between;gap:1rem;flex-wrap:w
   </details>
 </section>
 
+<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Event photo">
+  <div class="lb-inner" id="lb-inner">
+    <div class="lb-bar">
+      <span class="lb-count" id="lb-count"></span>
+      <div>
+        <button type="button" id="lb-prev" aria-label="Previous photo">&larr;</button>
+        <button type="button" id="lb-next" aria-label="Next photo">&rarr;</button>
+        <button type="button" id="lb-close"><span class="zh">关闭</span><span class="en">Close</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <section class="wrap">
   <span class="label">FAQ</span>
   <h2><span class="zh">常见问题</span><span class="en">Questions we always get</span></h2>
   <div class="faq">
     <details><summary><span class="zh">截止时间是什么时候？</span><span class="en">What's the deadline?</span></summary><p><span class="zh">主视觉与印刷物料需在活动前两周定稿，logo 与冠名信息须在此之前确认。确切日期：<span class="tbd">待定</span></span><span class="en">Key art and printed collateral lock two weeks before the event; logos and naming must be confirmed by then. Exact date: <span class="tbd">TBC</span></span></p></details>
-    <details><summary><span class="zh">可以只出算力或奖品，不出现金吗？</span><span class="en">Can we sponsor in credits or prizes instead of cash?</span></summary><p><span class="zh">可以。实物赞助按折算价值对应到相应档位权益，算力、API credits、工具授权、餐饮、奖品都收。</span><span class="en">Yes. In-kind support is assessed by value and mapped to the equivalent tier. Compute, API credits, tool licenses, catering and prizes all work.</span></p></details>
     <details><summary><span class="zh">能拿到参会者名单吗？</span><span class="en">Do we get the attendee list?</span></summary><p><span class="zh">三个套餐都拿到 opt-in 名单，即报名时明确勾选同意被赞助方联系的那部分参会者。我们不提供全量名单，任何套餐都不提供。</span><span class="en">All three packages include the opt-in list — attendees who ticked the box agreeing to be contacted. We don't hand over the full list, under any package.</span></p></details>
     <details><summary><span class="zh">我们可以自己出赛题吗？</span><span class="en">Can we set our own challenge?</span></summary><p><span class="zh">可以，三个套餐都能出题。联合主办含一个品牌赛题；独家与旗舰专场的主题、赛题、规则与议程整套由你参与设计。你定题目和评判标准，我们把它写进参赛规则——这正是你花的钱买到的东西：不是希望有人用你的产品，是规则要求他们用。</span><span class="en">Yes, under all three packages. Co-Hosted includes one branded challenge; Exclusive and Flagship cover the whole theme, challenge, rules and agenda. You write the brief and the judging criteria, and we put it in the rules. That's the thing you're actually paying for: not hoping someone uses your product, but a rule that requires it.</span></p></details>
     <details><summary><span class="zh">价格为什么不写在页面上？</span><span class="en">Why isn't pricing on this page?</span></summary><p><span class="zh">档位和加购的组合差别很大，同一档对不同公司的价值也不一样——直接报一个数字对双方都不划算。约 15 分钟，我们按你想要的结果算给你听。付款方式与开票在这一步一并确认。</span><span class="en">Tier and add-on combinations vary a lot, and the same tier is worth very different things to different companies — a single posted number serves neither of us. Give us 15 minutes and we'll price it against the outcome you're after. Payment terms and invoicing get settled in the same conversation.</span></p></details>
@@ -671,13 +697,61 @@ footer.btm .wrap{display:flex;justify-content:space-between;gap:1rem;flex-wrap:w
   if(!PHOTOS.length){ grid.closest("section").hidden=true; return; }
 
   PHOTOS.forEach(function(src,i){
-    var fig=document.createElement("figure"), img=new Image();
+    var cell=document.createElement("button"), img=new Image();
+    cell.type="button";
+    cell.className="cell";
+    cell.setAttribute("aria-label","Enlarge photo "+(i+1)+" of "+PHOTOS.length);
     img.src=src;
     img.alt="2% Tech event photo "+(i+1);
     img.loading=i<3?"eager":"lazy";
     img.decoding="async";
-    fig.appendChild(img);
-    (i<VISIBLE?grid:gridMore).appendChild(fig);
+    cell.appendChild(img);
+    cell.addEventListener("click",function(){ open(i); });
+    (i<VISIBLE?grid:gridMore).appendChild(cell);
+  });
+
+  /* ---- lightbox -------------------------------------------------------
+     The stored photos are 560px wide, so the panel caps at 720 — beyond
+     that the upscale starts to show, and carrying a second larger copy of
+     each would cost more than the whole rest of the page. */
+  var lb=document.getElementById("lb"),
+      lbImg=new Image(),                       /* built here so no src-less <img> ever sits in the DOM */
+      lbCount=document.getElementById("lb-count"),
+      prev=document.getElementById("lb-prev"), next=document.getElementById("lb-next"),
+      close=document.getElementById("lb-close"), at=0, opener=null;
+  document.getElementById("lb-inner").insertBefore(lbImg, document.querySelector(".lb-bar"));
+
+  function show(i){
+    at=i;
+    lbImg.src=PHOTOS[i];
+    lbImg.alt="2% Tech event photo "+(i+1);
+    lbCount.textContent=(i+1)+" / "+PHOTOS.length;
+    prev.disabled=i===0;
+    next.disabled=i===PHOTOS.length-1;
+  }
+  function open(i){
+    opener=document.activeElement;
+    show(i);
+    lb.hidden=false;
+    document.body.style.overflow="hidden";
+    close.focus();
+  }
+  function hide(){
+    lb.hidden=true;
+    lbImg.removeAttribute("src");
+    document.body.style.overflow="";
+    if(opener&&opener.focus) opener.focus();
+  }
+
+  prev.addEventListener("click",function(){ if(at>0) show(at-1); });
+  next.addEventListener("click",function(){ if(at<PHOTOS.length-1) show(at+1); });
+  close.addEventListener("click",hide);
+  lb.addEventListener("click",function(e){ if(e.target===lb) hide(); });
+  document.addEventListener("keydown",function(e){
+    if(lb.hidden) return;
+    if(e.key==="Escape") hide();
+    else if(e.key==="ArrowLeft"&&at>0) show(at-1);
+    else if(e.key==="ArrowRight"&&at<PHOTOS.length-1) show(at+1);
   });
 
   var extra=Math.max(PHOTOS.length-VISIBLE,0);
