@@ -176,7 +176,7 @@ p{margin:0 0 1rem}
 .more[open] > summary::after{content:"–"}
 .more > summary:hover{background:var(--yellow);color:#14141A}
 .more > summary:hover::after{color:#14141A}
-.lineup-more,.cos-more{border-top:0;margin-top:0}
+.lineup-more,.cos-more,.gal-more{border-top:0;margin-top:0}
 
 /* gallery */
 .gal{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));border:2px solid var(--ink);border-right:0;border-bottom:0}
@@ -293,11 +293,12 @@ footer.btm .wrap{display:flex;justify-content:space-between;gap:1rem;flex-wrap:w
   <h2><span class="zh">谁在场</span><span class="en">Who's in the room</span></h2>
   <p class="statcap"><span class="zh">2% Tech 社区累计</span><span class="en">Across the 2% Tech network to date</span></p>
   <div class="stats">
+    <div><span class="stat-n" data-count="150000" data-suffix="+">150,000+</span><span class="stat-l"><span class="zh">Builder 社区触达</span><span class="en">Builder community reach</span></span></div>
     <div><span class="stat-n" data-count="10000" data-suffix="+">10,000+</span><span class="stat-l"><span class="zh">参与过的 Hacker</span><span class="en">Hackers reached</span></span></div>
     <div><span class="stat-n" data-count="200" data-suffix="+">200+</span><span class="stat-l"><span class="zh">评委与导师</span><span class="en">Judges &amp; mentors</span></span></div>
     <div><span class="stat-n" data-count="50" data-suffix="+">50+</span><span class="stat-l"><span class="zh">到场公司</span><span class="en">Companies</span></span></div>
   </div>
-  <p class="muted" style="font-size:.85rem;margin-bottom:2.2rem"><span class="zh">以上为 2% Tech 历次活动累计数字，非单场规模。<strong>本场为斯坦福单日制，预计参赛规模 150–200 人。</strong></span><span class="en">Figures above are cumulative across all 2% Tech events, not a single event's headcount. <strong>This one is a single day at Stanford — 150–200 expected.</strong></span></p>
+  <p class="muted" style="font-size:.85rem;margin-bottom:2.2rem"><span class="zh">以上为 2% Tech 社区累计数据，非单场规模。<strong>本场为斯坦福单日制，预计参赛规模 150–200 人。</strong></span><span class="en">Figures above are cumulative across the 2% Tech community, not a single event. <strong>This one is a single day at Stanford — 150–200 expected.</strong></span></p>
   <div class="prose">
     <p><span class="zh">往期 2% Tech 活动中出现过的公司（每场不同）：</span><span class="en">Companies represented at past 2% Tech events (varies by event):</span></p>
   </div>
@@ -535,6 +536,10 @@ footer.btm .wrap{display:flex;justify-content:space-between;gap:1rem;flex-wrap:w
   <h2><span class="zh">房间实际长什么样</span><span class="en">What the room actually looks like</span></h2>
   <p class="lead prose"><span class="zh">往期活动现场，摄于 AWS Builder Loft、Frontier Tower 及湾区其他场地。</span><span class="en">From past events at AWS Builder Loft, Frontier Tower and other Bay Area venues.</span></p>
   <div class="gal" id="gal"></div>
+  <details class="more" id="gal-more-wrap" hidden>
+    <summary><span class="zh">展开其余 <span class="n"></span> 张</span><span class="en">View the other <span class="n"></span></span></summary>
+    <div class="gal gal-more" id="gal-more"></div>
+  </details>
 </section>
 
 <section class="wrap">
@@ -658,19 +663,30 @@ footer.btm .wrap{display:flex;justify-content:space-between;gap:1rem;flex-wrap:w
    real edit under a wall of unreadable diff.
 --------------------------------------------------------------------- */
 (function(){
-  var PHOTOS=/*__PHOTOS__*/[], grid=document.getElementById("gal");
+  var PHOTOS=/*__PHOTOS__*/[], VISIBLE=10,
+      grid=document.getElementById("gal"),
+      gridMore=document.getElementById("gal-more"),
+      wrap=document.getElementById("gal-more-wrap");
   if(!grid) return;
   if(!PHOTOS.length){ grid.closest("section").hidden=true; return; }
+
   PHOTOS.forEach(function(src,i){
-    var fig=document.createElement("figure"),
-        img=new Image();
+    var fig=document.createElement("figure"), img=new Image();
     img.src=src;
     img.alt="2% Tech event photo "+(i+1);
     img.loading=i<3?"eager":"lazy";
     img.decoding="async";
     fig.appendChild(img);
-    grid.appendChild(fig);
+    (i<VISIBLE?grid:gridMore).appendChild(fig);
   });
+
+  var extra=Math.max(PHOTOS.length-VISIBLE,0);
+  if(extra){
+    wrap.hidden=false;
+    [].forEach.call(wrap.querySelectorAll("summary .n"),function(el){
+      el.textContent=extra;
+    });
+  }
 })();
 
 /* ---- company cards ---------------------------------------------------
@@ -713,7 +729,10 @@ var COMPANIES=[
   en:"Developer-first security across code, dependencies and containers."},
  {id:"gmi",name:"GMI Cloud",url:"https://www.gmicloud.ai",logo:"",
   zh:"GPU 云平台，为 AI 训练与推理提供算力。",
-  en:"GPU cloud providing compute for AI training and inference."}
+  en:"GPU cloud providing compute for AI training and inference."},
+ {id:"nebius",name:"Nebius",url:"https://nebius.com",logo:"",
+  zh:"全栈 AI 云基础设施，面向开发者、初创与研究团队提供训练与推理平台。",
+  en:"Full-stack AI cloud infrastructure — training and inference for developers, startups and research teams."}
 ];
 
 (function(){
