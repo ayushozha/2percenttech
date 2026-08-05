@@ -1,168 +1,172 @@
 # 2% Tech — Site
 
-Two pages, both bilingual (中文 / EN) and self-contained:
+A Next.js app, bilingual (中文 / EN) throughout, exported to static files.
 
-- **Homepage** (`home.html` → `docs/index.html`) — who 2% Tech is: track record
-  pulled from the [Luma profile](https://luma.com/user/usr-imLXdlHS1TlvX7X), the
-  company wall, the sponsor target list, and upcoming events.
-- **Sponsorship prospectus** (`sponsor.html` → `docs/sponsor.built.html`) — the pitch
-  for the one-day hackathon at Stanford (August 2026). Print-friendly.
+| Route | What it is |
+|---|---|
+| `/` | Landing page — who 2% Tech is, the track record from the [Luma profile](https://luma.com/user/usr-imLXdlHS1TlvX7X), the company wall, the sponsor target list, the calendar, and the "what do you want to host?" form. |
+| `/sponsor` | Sponsorship prospectus for the one-day hackathon at Stanford (August 2026). Print-friendly. |
+| `/signin`, `/signup` | Backstage account — demo auth, see [Auth](#auth-is-a-demo). |
+| `/dashboard` | Backstage — events, sponsor queries, users, judging queue, hackathon entry. Role-driven. |
 
-`docs/` is the deployable site root — point GitHub Pages (or any static host) at it.
-
-**Status: draft.** Several fields are unconfirmed and are marked in the page with a
-yellow highlight (`class="tbd"`). See [Unfinished](#unfinished) before sending it anywhere.
+**Status: draft.** Several fields are unconfirmed and marked in the page with a
+yellow highlight (`.tbd`). See [Unfinished](#unfinished) before sending it anywhere.
 
 ---
 
-## Two ways to use this
-
-**Just need pages to host?** Serve the `docs/` folder — `docs/index.html` (homepage)
-and `docs/sponsor.built.html` (prospectus). Each is a single file with fonts, logos
-and scripts all inlined — no build step, no external requests, no dependencies. They
-work opened straight from disk.
-
-**Editing?** Work from `home.html` and `sponsor.html`. The structure, styles and copy
-all live there; everything in `docs/` is generated output and should never be edited
-by hand — it gets overwritten on every build.
-
-## Build
+## Run it
 
 ```bash
-python3 build.py     # sponsor.html -> docs/sponsor.built.html, home.html -> docs/index.html
+npm install
+npm run dev            # http://localhost:3000
 ```
-
-Requires `fonttools`, `brotli` and `Pillow`:
 
 ```bash
-pip3 install fonttools brotli pillow
+npm run build          # static export -> out/
+npm start              # serve out/ locally
+npm run typecheck
 ```
 
-The build does three things:
+`output: 'export'` in `next.config.mjs` means the build produces plain files with
+no server. `docker build . && docker run -p 8080:80 <image>` builds the export
+with Node and serves `out/` from nginx; the runtime image contains no Node and no
+application code.
 
-1. **Subsets the fonts** to only the characters the page actually uses, converts them to
-   WOFF2, and inlines them as data URIs. This matters a lot for the Chinese face —
-   ZCOOL ships 8.1 MB of glyphs and the page needs about 105 KB of them.
-2. **Processes `logos/`** — trims each image to its content, samples its background
-   colour, downscales it to what the tile actually renders at, and picks whichever of
-   WebP or PNG comes out smaller. 1.2 MB of source art becomes ~80 KB.
-3. **Substitutes** everything into the `/*__BAKED__*/` style placeholders and writes
-   the built file. Both pages go through the same pipeline; fonts are subset per page,
-   so the homepage (fewer glyphs) comes out smaller.
+## Auth is a demo
 
-Everything is inlined because the page has to survive being emailed around as a single
-file and printed to PDF, and because the host it was first published on blocks external
-requests via CSP.
+**`lib/store.ts` is not a security boundary.** Everything — accounts, sessions,
+sponsor queries, submissions and scores — lives in the browser's
+`localStorage`. That means passwords are stored in the clear, anyone can open
+devtools and rewrite their own role to `admin`, and data is per-browser rather
+than shared or authoritative. The sign-in page says so on screen.
 
-## Files
+It is structured so that this can be replaced without touching any caller: every
+function in `lib/store.ts` is already `async` and returns plain data, so the
+localStorage bodies swap for `fetch('/api/…')` directly. Making it real means:
+
+1. drop `output: 'export'` from `next.config.mjs` (you need a Node runtime),
+2. move the role checks server-side — `TABS_BY_ROLE` in `components/Dashboard.tsx`
+   is presentation, not authorisation,
+3. hash the passwords and issue an httpOnly session cookie,
+4. rewrite `Dockerfile` and `nginx.conf`, which currently assume static files.
+
+Seeded demo accounts, password `demo2026`: `admin@`, `organizer@`, `judge@`,
+`builder@` `2pct.tech` — one per role.
+
+## Structure
 
 | Path | What it is |
 |---|---|
-| `home.html` | Homepage source. Edit this. Fonts load from local `.ttf` files; logos use `/*__BAKED__*/` placeholders resolved at build time. |
-| `sponsor.html` | Prospectus source. Edit this. Same conventions as `home.html`. |
-| `docs/index.html` | Generated homepage. Deployable single file. Do not edit. |
-| `docs/sponsor.built.html` | Generated prospectus. Deployable single file. Do not edit. |
-| `build.py` | The build described above. |
-| `logos/` | Company logo source images, one per company id. |
-| `*.ttf` | Font sources (see [Fonts](#fonts)). |
+| `app/` | Routes. One `page.tsx` per URL above, plus `layout.tsx` and `globals.css`. |
+| `app/globals.css` | The whole design system — tokens, then component classes. Start here for any visual change. |
+| `components/` | Shared UI. `B.tsx` and `LangProvider.tsx` carry the bilingual mechanism. |
+| `lib/data.ts` | Landing + shared content: companies, seats, events, stats, photos. |
+| `lib/sponsor-data.ts` | Prospectus content: packages, funnel, lineup, prizes, FAQ. |
+| `lib/store.ts` | The persistence seam described above. |
+| `logos/`, `photos/` | Source art. Not served directly. |
+| `public/` | Generated art (`npm run prepare-assets`) plus `mark.svg`. |
+| `tools/prepare_assets.py` | Processes `logos/` and `photos/` into `public/`. |
 
 ## Editing
 
-### Companies
+### Copy
 
-The walls on both pages render from the `COMPANIES` array near the bottom of each
-source file (`sponsor.html` carries per-company descriptions; `home.html` is logos
-only — keep the `id`s in sync so both pages share the same art):
+Every string exists twice, as `zh` and `en` on the `<B>` component:
 
-```js
-{id:"openai", name:"OpenAI", url:"https://openai.com", logo:"",
- zh:"...", en:"..."}
+```tsx
+<B zh="赞助咨询" en="Sponsor queries" />
 ```
 
-- Add a logo by dropping a file into `logos/` named after the `id` — `openai.png`,
-  `nvidia.svg`, whatever. Matching ignores case, spaces and punctuation, so
-  `Openai.png` and `mistral AI.png` both work. Outright misspellings go in the
-  `ALIASES` map in `build.py` (there's one there now for a file named `NVDIA.png`).
-- **Prefer SVG.** Vectors are inlined untouched — no trimming, no downscaling, sharp at
-  any size, and usually a fraction of the weight (Google, Mistral and Snyk together come
-  to 4.3 KB). If both an `.svg` and a raster of the same company are present, the vector
-  wins, so dropping an `.svg` beside an old `.png` is enough to upgrade it.
-- Raster sources with transparency are composited onto white before processing, since
-  that's what the tile sits on.
-- Add `more:1` to an entry to move it behind the "view more" toggle. The toggle counts
-  its own contents and hides itself entirely when empty, so nothing else needs changing.
+CSS on `#page[data-lang]` shows one and hides the other, so both halves are in
+the served HTML and the toggle is a single attribute flip. **Any new copy needs
+both** — a missing half renders as a gap when the reader switches language.
 
-### Judges and hosts
+### Companies
 
-Plain markup in the Lineup section. The first twelve are always visible; the rest sit
-inside `<details class="more">`. Move people between the two grids to re-rank them.
+`COMPANIES` in `lib/data.ts`. Add a logo by dropping a file into `logos/` named
+after the `id` — matching ignores case, spaces and punctuation, so `Openai.png`
+and `mistral AI.png` both work. Outright misspellings go in `ALIASES` in
+`tools/prepare_assets.py` (there's one there for a file named `NVDIA.png`).
+Then:
 
-### Language
+```bash
+npm run prepare-assets     # needs: pip3 install pillow
+```
 
-Every string exists twice, as `<span class="zh">` and `<span class="en">`. CSS on
-`#page[data-lang]` shows one and hides the other. **Any new copy needs both** — a missing
-`.en` span just renders as a gap when the reader toggles.
+**Prefer SVG.** Vectors are copied untouched — sharp at any size and usually a
+fraction of the weight. If both an `.svg` and a raster are present the vector
+wins, so dropping an `.svg` beside an old `.png` upgrades it.
+
+Rasters are trimmed to their content, their background colour is sampled, and
+they're downscaled to what the tile actually renders at. That sampled colour
+becomes the tile background, so a black mark and a lime one each sit on their
+own field. Everything lands in `lib/logo-assets.json`.
+
+### Photos
+
+Drop files in `photos/` and rerun `prepare-assets`; they're renumbered in
+filename order. `PHOTOS` in `lib/data.ts` expects 16 — update the length there if
+you change the count. These dominate page weight, so keep the count deliberate.
 
 ### Placeholders
 
-`class="tbd"` renders as a yellow highlight with a dashed underline. Use it for anything
-not yet confirmed, and search for it to find everything outstanding.
+`className="tbd"` renders as a yellow highlight with a dashed underline. Use it
+for anything not yet confirmed, and grep for it to find everything outstanding.
 
 ## Print
 
-Sponsors circulate this internally as a PDF, so printing is a supported output, not an
-afterthought:
+Sponsors circulate the prospectus as a PDF, so printing is a supported output:
+dark UI chrome is dropped, cards are kept from splitting across pages, and
+external links expand to show their URLs.
 
-- Dark mode is forced back to white/black, the draft banner and nav are dropped, tier
-  cards and table rows are kept from splitting across pages, and external links expand
-  to show their URLs.
-- A `beforeprint` handler opens every `<details>` first. Without it the collapsed half of
-  the lineup and all the FAQ answers silently vanish from the PDF — a collapsed
-  `<details>` isn't rendered at all.
+`components/SponsorPrint.tsx` force-opens every `<details>` on `beforeprint`.
+Without it the collapsed half of the lineup, the other 15 events and all the FAQ
+answers silently vanish from the PDF — a collapsed `<details>` isn't rendered at
+all. **If you restructure that page, keep it working.**
 
-If you restructure the page, keep both of those working.
+## Design notes
 
-## Fonts
+Ported from the Claude Design project *2%Tech Landing Page Redesign*
+(`2pct Landing.dc.html`, `Auth.dc.html`, `Dashboard.dc.html`). Deliberate
+differences from the prototypes:
 
-| Face | Role | Licence |
-|---|---|---|
-| Anton | Latin display | SIL Open Font License 1.1 |
-| IBM Plex Sans (400/600) | Body | SIL Open Font License 1.1 |
-| ZCOOL QingKe HuangYou 站酷庆科黄油体 | Chinese display | SIL Open Font License 1.1 |
-
-All three are redistributable under the OFL, which is why the `.ttf` sources are
-committed — the build won't run without them. They are only ever shipped subset and
-inlined, never served as standalone font files.
+- **Fonts are self-hosted.** The prototypes link Google Fonts at runtime;
+  `next/font/google` downloads Figtree, Instrument Serif, IBM Plex Mono and the
+  two Noto SC faces at build time instead, so the export makes no external
+  request — the property the old single-file build existed to preserve.
+- **No `support.js`.** The prototypes run on the Claude Design React runtime
+  (`x-dc` / `DCLogic`). That's replaced with ordinary React components.
+- **`three` is a dependency**, not a jsdelivr import, for the same reason.
+- **The dashboard reads its role from the session.** The prototype hardcoded
+  `const role = 'admin'`, so the judge, organizer and participant views were
+  unreachable. All four tab sets work.
+- **Light-only.** The previous site had a dark mode; the redesign commits to a
+  warm paper ground with oklch gradient accents and has no dark variant.
+- **The prospectus is bilingual and English-first**, matching the rest of the
+  site; the prototypes for auth and dashboard were English-only, so that Chinese
+  copy was written for this port and has not been reviewed by a native speaker.
 
 ## Unfinished
 
-On the homepage (`home.html`), highlighted in yellow:
+Highlighted in yellow on the pages:
 
-- **Stanford hackathon date** — "late August", exact day not set. No Luma event page
-  exists for it yet either; once it does, link the timeline row to it.
-- **Contact email and WeChat** in the closing CTA.
-- **The "Saved seats" target list** (Alibaba Cloud, Tencent Cloud, TRAE/ByteDance,
-  DeepSeek, Moonshot, Zhipu, MiniMax, Anthropic) is a starting suggestion — confirm
-  or edit it before publishing. It is labelled as a target list, not as sponsors.
-
-On the prospectus, highlighted in yellow:
-
-- **Event date** — "late August", exact day not set.
-- **Expected headcount** for this event. (The 10,000 / 200 / 50 figures above it are
-  cumulative across all past 2% Tech events, and are labelled as such — they are not
-  this event's numbers.)
+- **Stanford hackathon date** — "late August", exact day not set. No Luma event
+  page exists for it yet; once it does, link the calendar row to it.
+- **Contact email and WeChat** in the landing CTA.
+- **Contact email and booking link** in the prospectus CTA.
+- **Collateral deadline** in the first FAQ answer.
 - **Pricing** — deliberately absent. Tiers route to a conversation instead.
-- **Team pass counts** per tier.
-- **Contact email and booking link** in the closing CTA.
 
-Two things that are not marked on the page but need a decision:
+Not marked on the page, but needing a decision:
 
-- **The lineup is not confirmed.** All 29 people listed judged, hosted or volunteered at
-  recent partner events — they have not agreed to attend this one. The section says so,
-  twice. Do not remove that wording until individuals have actually confirmed.
-- **The company wall is past attendance**, not sponsors or endorsers of this event, and
-  carries a disclaimer to that effect. Same rule.
-
-Two logo files should be replaced when better sources are available: `mistral AI.png`
-carries a watermark grid, and `snyk.png` is a marketing banner with a tagline rather than
-a mark.
+- **The lineup is not confirmed.** All 29 people listed judged, hosted or
+  volunteered at recent partner events — they have not agreed to attend this one.
+  The section says so, twice. Do not remove that wording until individuals have
+  actually confirmed.
+- **The company wall is past attendance**, not sponsors or endorsers, and carries
+  a disclaimer to that effect. Same rule.
+- **The "Saved seats" target list** (Alibaba Cloud, Tencent Cloud, TRAE/ByteDance,
+  DeepSeek, Moonshot, Zhipu, MiniMax, Anthropic) is a starting suggestion —
+  confirm or edit it before publishing. It is labelled as a target list.
+- **Two logo sources should be replaced** when better art is available:
+  `mistral.svg` and `snyk.svg` came from marketing pages rather than brand kits.

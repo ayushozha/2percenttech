@@ -1,0 +1,50 @@
+{
+  "aws": {
+    "src": "/logos/aws.webp",
+    "tile": "#000000"
+  },
+  "circle": {
+    "src": "/logos/circle.webp",
+    "tile": "#d0e6fc"
+  },
+  "coinbase": {
+    "src": "/logos/coinbase.webp",
+    "tile": "#ffffff"
+  },
+  "gmi": {
+    "src": "/logos/gmi.webp",
+    "tile": "#3c7ee5"
+  },
+  "google": {
+    "src": "/logos/google.svg",
+    "tile": "#ffffff"
+  },
+  "meta": {
+    "src": "/logos/meta.webp",
+    "tile": "#ffffff"
+  },
+  "microsoft": {
+    "src": "/logos/microsoft.webp",
+    "tile": "#ffffff"
+  },
+  "mistral": {
+    "src": "/logos/mistral.svg",
+    "tile": "#ffffff"
+  },
+  "nebius": {
+    "src": "/logos/nebius.webp",
+    "tile": "#defd4e"
+  },
+  "nvidia": {
+    "src": "/logos/nvidia.webp",
+    "tile": "#86b737"
+  },
+  "openai": {
+    "src": "/logos/openai.webp",
+    "tile": "#000000"
+  },
+  "snyk": {
+    "src": "/logos/snyk.svg",
+    "tile": "#ffffff"
+  }
+}
