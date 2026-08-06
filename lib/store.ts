@@ -274,9 +274,12 @@ export type HostRequestInput = {
   message?: string;
 };
 
-/** "Host an event in Silicon Valley" — from the landing page (email + format
-    only) or from the full intake at /host/apply. Same lead either way; the
-    intake simply arrives already qualified. */
+/** "Host an event in Silicon Valley" — from the landing page form.
+
+    Takes an object rather than positional args because the blueprint's fuller
+    qualification set (goals, audience, dates, attendance, venue and media
+    needs) is already modelled on Lead. The landing form sends email + format;
+    anything richer can be added without touching this signature again. */
 export async function createHostRequest(input: HostRequestInput): Promise<void> {
   seed();
   const all = read<Lead[]>(K.leads, []);

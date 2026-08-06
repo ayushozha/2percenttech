@@ -303,9 +303,12 @@ export const FEATURED_PHOTOS: { src: string; alt: string; caption: Bi }[] = [
 
 export type EventType = { id: string; zh: string; en: string };
 
+/** The four standardised products, in the blueprint's own order and naming.
+    Hackathons lead because they build the deepest builder relationships and
+    are the most scalable thing we run. */
 export const EVENT_TYPES: EventType[] = [
-  { id: 'workshop', en: 'Workshop', zh: '工作坊' },
   { id: 'hackathon', en: 'Hackathon', zh: '黑客松' },
+  { id: 'workshop', en: 'Workshop', zh: '工作坊' },
   { id: 'panel', en: 'Panel', zh: '圆桌论坛' },
-  { id: 'keynote', en: 'Keynote', zh: '主题演讲' },
+  { id: 'keynote', en: 'Keynote / Founder Launch', zh: '主题演讲 / 新品发布' },
 ];

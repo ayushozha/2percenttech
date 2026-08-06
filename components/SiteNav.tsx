@@ -40,19 +40,11 @@ export default function SiteNav({ variant = 'landing' }: { variant?: 'landing' |
               <B zh="存成 PDF" en="Save PDF" />
             </button>
           )}
-          {/* The blueprint is explicit that "Host an Event in Silicon Valley"
-              is the first message on the site, so it's the primary action in
-              the nav too — except on the prospectus, where the reader is
-              already there to sponsor. */}
-          {variant === 'sponsor' ? (
-            <Link href="/sponsor/apply" className="btn btn-dark btn-sm">
-              <B zh="申请赞助" en="Sponsor us" />
-            </Link>
-          ) : (
-            <Link href="/host/apply" className="btn btn-dark btn-sm">
-              <B zh="办活动" en="Host an event" />
-            </Link>
-          )}
+          {/* The primary action everywhere on the public site is "apply to
+              sponsor"; signing in is for the people who already work here. */}
+          <Link href="/sponsor/apply" className="btn btn-dark btn-sm">
+            <B zh="申请赞助" en="Sponsor us" />
+          </Link>
           <Link href="/signin" className="btn btn-ghost btn-sm">
             <B zh="登录" en="Sign in" />
           </Link>
