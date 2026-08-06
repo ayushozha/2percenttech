@@ -7,6 +7,7 @@ import Gallery from '@/components/Gallery';
 import DraftBanner from '@/components/DraftBanner';
 import SponsorPrint from '@/components/SponsorPrint';
 import { COMPANIES, CONTACT, LUMA_PROFILE, PAST, PHOTOS, UPCOMING, logoOf, type Bi } from '@/lib/data';
+import { CAMPAIGN, CAMPAIGN_ARGUMENT, CAMPAIGN_HEADLINE } from '@/lib/blueprint';
 import {
   DELIVERABLES,
   EVENT_META,
@@ -137,6 +138,52 @@ export default function Sponsor() {
                 en="Sponsoring this isn't a logo slot. It's six hours with a room of builders deciding, that day, whose model and whose API they ship on."
               />
             </p>
+            <p className="body">
+              {bi(CAMPAIGN_ARGUMENT)}
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ---- the campaign, not the room (blueprint §5) ---- */}
+      <section className="section">
+        <div className="wrap" style={{ padding: 0 }}>
+          <p className="eyebrow">
+            <B zh="你买的是什么" en="What you're buying" />
+          </p>
+          <h2 className="h-sec" style={{ maxWidth: '26ch' }}>
+            {bi(CAMPAIGN_HEADLINE)}
+          </h2>
+          <p className="body prose" style={{ margin: '12px 0 26px' }}>
+            <B
+              zh="现场只有一天，但围绕它的内容与分发会持续数周。下面是三个阶段各自交付的东西。"
+              en="The room lasts a day; the content and distribution around it run for weeks. Here is what each phase delivers."
+            />
+          </p>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: 14 }}>
+            {CAMPAIGN.map((c) => (
+              <div key={c.phase.en} className="card" style={{ borderRadius: 22 }}>
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: 10 }}>
+                  <span className="mono-label" style={{ fontSize: 11, color: 'var(--violet-deep)' }}>
+                    {bi(c.phase)}
+                  </span>
+                  <em className="fine" style={{ fontStyle: 'normal' }}>
+                    {bi(c.sub)}
+                  </em>
+                </div>
+                <ul style={{ margin: '14px 0 0', padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 7 }}>
+                  {c.items.map((it, i) => (
+                    <li key={i} style={{ display: 'flex', gap: 8, fontSize: 13.5, lineHeight: 1.5 }}>
+                      <span aria-hidden="true" style={{ color: 'var(--violet-deep)' }}>
+                        ✓
+                      </span>
+                      <span>{bi(it)}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
         </div>
       </section>

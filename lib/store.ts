@@ -258,15 +258,44 @@ export async function listUsers(): Promise<User[]> {
 
 /* ---- leads (host requests + sponsor applications) ---------------------- */
 
-/** From the landing page: "what do you want to host?" */
-export async function createHostRequest(email: string, picks: string[]): Promise<void> {
+export type HostRequestInput = {
+  email: string;
+  picks: string[];
+  company?: string;
+  contact?: string;
+  goals?: string[];
+  audience?: string;
+  dates?: string;
+  attendance?: string;
+  budget?: string;
+  needs?: string[];
+  media?: string[];
+  access?: string[];
+  message?: string;
+};
+
+/** "Host an event in Silicon Valley" — from the landing page (email + format
+    only) or from the full intake at /host/apply. Same lead either way; the
+    intake simply arrives already qualified. */
+export async function createHostRequest(input: HostRequestInput): Promise<void> {
   seed();
   const all = read<Lead[]>(K.leads, []);
   all.push({
     id: `r-${Date.now()}`,
     kind: 'host',
-    email: email.trim().toLowerCase(),
-    picks,
+    email: input.email.trim().toLowerCase(),
+    picks: input.picks,
+    company: input.company?.trim() || undefined,
+    contact: input.contact?.trim() || undefined,
+    goals: input.goals?.length ? input.goals : undefined,
+    audience: input.audience?.trim() || undefined,
+    dates: input.dates?.trim() || undefined,
+    attendance: input.attendance || undefined,
+    budget: input.budget || undefined,
+    needs: input.needs?.length ? input.needs : undefined,
+    media: input.media?.length ? input.media : undefined,
+    access: input.access?.length ? input.access : undefined,
+    message: input.message?.trim() || undefined,
     ts: new Date().toISOString(),
     status: 'new',
   });

@@ -4,11 +4,13 @@ A Next.js app, bilingual (中文 / EN) throughout, exported to static files.
 
 | Route | What it is |
 |---|---|
-| `/` | Landing page — who 2% Tech is, the track record from the [Luma profile](https://luma.com/user/usr-imLXdlHS1TlvX7X), the company wall, the sponsor target list, the calendar, and the "what do you want to host?" form. |
+| `/` | Landing page — leads with "Host an event in Silicon Valley" and the four event products, then the company wall, track record, the campaign system, the three audiences, calendar, saved seats, partners and roadmap. |
+| `/host/[type]` | One page per event product: `hackathon`, `workshop`, `panel`, `keynote`. Ideal customer, objectives, scope, run of show, past cases. |
+| `/host/apply` | The event brief. Accepts `?type=<id>` to arrive pre-ticked. |
 | `/sponsor` | Sponsorship prospectus for the one-day hackathon at Stanford (August 2026). Print-friendly. |
 | `/sponsor/apply` | The sponsorship request form — package, goals, budget band. Accepts `?package=<id>` to arrive pre-ticked. |
 | `/signin`, `/signup` | Backstage account — demo auth, see [Auth](#auth-is-a-demo). |
-| `/dashboard` | Backstage — events, sponsor queries, users, judging queue, hackathon entry. Role-driven. |
+| `/dashboard` | Backstage — enquiries, users, events, judging queue, hackathon entry. Role-driven. |
 
 **Status: draft.** Several fields are unconfirmed and marked in the page with a
 yellow highlight (`.tbd`). See [Unfinished](#unfinished) before sending it anywhere.
@@ -61,6 +63,7 @@ Seeded demo accounts, password `demo2026`: `admin@`, `organizer@`, `judge@`,
 | `app/` | Routes. One `page.tsx` per URL above, plus `layout.tsx` and `globals.css`. |
 | `app/globals.css` | The whole design system — tokens, then component classes. Start here for any visual change. |
 | `components/` | Shared UI. `B.tsx` and `LangProvider.tsx` carry the bilingual mechanism. |
+| `lib/blueprint.ts` | Content derived from the Scale-Up Blueprint — see [Blueprint](#the-blueprint). |
 | `lib/data.ts` | Landing + shared content: companies, seats, events, stats, photos. |
 | `lib/sponsor-data.ts` | Prospectus content: packages, funnel, lineup, prizes, FAQ. |
 | `lib/store.ts` | The persistence seam described above. |
@@ -68,6 +71,38 @@ Seeded demo accounts, password `demo2026`: `admin@`, `organizer@`, `judge@`,
 | `logos/`, `photos/` | Source art. Not served directly. |
 | `public/` | Generated art (`npm run prepare-assets`) plus `mark.svg`. |
 | `tools/prepare_assets.py` | Processes `logos/` and `photos/` into `public/`. |
+
+## The blueprint
+
+The site's structure follows the **2% Tech Scale-Up Blueprint** (working
+strategy document, August 2026). `lib/blueprint.ts` holds the content derived
+from it, section by section:
+
+| Blueprint | On the site |
+|---|---|
+| §1 vision, three user groups | "Three groups, one network" on the landing page |
+| §3 agent-powered intake | `/host/apply` — the whole field set comes from here |
+| §4.1 clear landing page | Hero leads with the four products, straight into the brief |
+| §4.2 event product pages | `/host/[type]` ×4 |
+| §5 global campaign | Before / during / after, on the landing page *and* the prospectus |
+| §7 hybrid hackathons | The hackathon product page |
+| §8 partner network | "Community partners" on the landing page |
+| §4.4, §4.5 content hub + builder network | `ROADMAP` — see below |
+
+Two rules were applied turning a strategy document into public copy, and they
+should hold for future edits:
+
+1. **Anything not built yet goes in `ROADMAP`** and renders under "What we're
+   building", explicitly labelled *Planned*. The blueprint describes a builder
+   network, a content hub and an agent workflow — none exist. We do not
+   advertise a job board that isn't there.
+2. **Past cases are real events.** `EVENT_PRODUCTS[].caseNames` reference
+   entries in `lib/data.ts` by name and the product page resolves them, so
+   registration counts have one source and no case study is invented.
+
+Sections 2, 6, 9 and 10 (venue workflow, livestream equipment, team division,
+the sellable-company thesis) are internal strategy and deliberately have no
+public page.
 
 ## Inbound enquiries
 

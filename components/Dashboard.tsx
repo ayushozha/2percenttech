@@ -18,7 +18,22 @@ import {
   submitProject,
 } from '@/lib/store';
 import { PACKAGES } from '@/lib/sponsor-data';
-import { BUDGET_BANDS, SPONSOR_GOALS, type Lead, type QueryStatus, type Role, type Session, type Submission, type User } from '@/lib/types';
+import { EVENT_PRODUCTS } from '@/lib/blueprint';
+import {
+  ATTENDANCE_BANDS,
+  BUDGET_BANDS,
+  HOST_ACCESS,
+  HOST_GOALS,
+  HOST_MEDIA,
+  HOST_NEEDS,
+  SPONSOR_GOALS,
+  type Lead,
+  type QueryStatus,
+  type Role,
+  type Session,
+  type Submission,
+  type User,
+} from '@/lib/types';
 
 /* ---- tabs --------------------------------------------------------------
    Which tabs a role sees. The prototype hardcoded `const role = 'admin'`,
@@ -68,8 +83,39 @@ function initials(name: string) {
     .toUpperCase();
 }
 
-function picksLabel(picks: string[]) {
-  return picks.map((p) => p[0].toUpperCase() + p.slice(1)).join(' · ');
+/** Resolve stored ids to their bilingual labels; unknown ids fall through as
+    themselves rather than disappearing. */
+function Chips({ ids, table }: { ids: string[]; table: { id: string; zh: string; en: string }[] }) {
+  return (
+    <>
+      {ids.map((id, i) => {
+        const hit = table.find((t) => t.id === id);
+        return (
+          <span key={id}>
+            {i > 0 && ' · '}
+            {hit ? <B zh={hit.zh} en={hit.en} /> : id}
+          </span>
+        );
+      })}
+    </>
+  );
+}
+
+/** Event formats, resolved through the product list. */
+function formatsLabel(picks: string[]) {
+  return (
+    <>
+      {picks.map((id, i) => {
+        const p = EVENT_PRODUCTS.find((x) => x.id === id);
+        return (
+          <span key={id}>
+            {i > 0 && ' · '}
+            {p ? <B zh={p.name.zh} en={p.name.en} /> : id[0].toUpperCase() + id.slice(1)}
+          </span>
+        );
+      })}
+    </>
+  );
 }
 
 function shortDate(ts: string) {
@@ -276,9 +322,10 @@ function QueryRow({ q, onCycle }: { q: Lead; onCycle: (id: string) => void }) {
           >
             {bi(KIND_LABEL[q.kind])}
           </span>
-          <span style={{ fontWeight: 600, fontSize: 14.5, overflowWrap: 'anywhere' }}>
-            {isSponsor && q.company ? q.company : q.email}
-          </span>
+          {/* Lead with the company when we have one — a brief from the full
+              intake has it for either kind; a quick enquiry may only have an
+              email. */}
+          <span style={{ fontWeight: 600, fontSize: 14.5, overflowWrap: 'anywhere' }}>{q.company || q.email}</span>
         </div>
 
         {isSponsor ? (
@@ -318,9 +365,59 @@ function QueryRow({ q, onCycle }: { q: Lead; onCycle: (id: string) => void }) {
             )}
           </>
         ) : (
-          <span className="small" style={{ display: 'block', marginTop: 3, fontSize: 12.5 }}>
-            {picksLabel(q.picks ?? [])}
-          </span>
+          <>
+            {/* Only a second line when the header showed the company, else
+                the email would appear twice. */}
+            {q.company && (
+              <span className="small" style={{ display: 'block', marginTop: 3, fontSize: 12.5, overflowWrap: 'anywhere' }}>
+                {q.contact ? `${q.contact} · ` : ''}
+                {q.email}
+              </span>
+            )}
+            <span className="small" style={{ display: 'block', marginTop: 3, fontSize: 12.5 }}>
+              {formatsLabel(q.picks ?? [])}
+              {q.attendance && (
+                <>
+                  {' · '}
+                  <Chips ids={[q.attendance]} table={ATTENDANCE_BANDS} />
+                </>
+              )}
+              {q.budget && (
+                <>
+                  {' · '}
+                  <Chips ids={[q.budget]} table={BUDGET_BANDS} />
+                </>
+              )}
+              {q.dates && <> · {q.dates}</>}
+            </span>
+
+            {q.audience && (
+              <span className="fine" style={{ display: 'block', marginTop: 3 }}>
+                <B zh="目标受众：" en="Audience: " />
+                {q.audience}
+              </span>
+            )}
+
+            {/* The qualification set, only rendered where it was answered. */}
+            {[
+              { ids: q.goals, table: HOST_GOALS, label: { zh: '目标', en: 'Goals' } },
+              { ids: q.needs, table: HOST_NEEDS, label: { zh: '需要我们负责', en: 'Wants us to own' } },
+              { ids: q.media, table: HOST_MEDIA, label: { zh: '推广', en: 'Promotion' } },
+              { ids: q.access, table: HOST_ACCESS, label: { zh: '人群对接', en: 'Access' } },
+            ]
+              .filter((r) => r.ids?.length)
+              .map((r) => (
+                <span key={r.label.en} className="fine" style={{ display: 'block', marginTop: 3 }}>
+                  {bi(r.label)}: <Chips ids={r.ids!} table={r.table} />
+                </span>
+              ))}
+
+            {q.message && (
+              <span className="fine" style={{ display: 'block', marginTop: 5, fontStyle: 'italic', lineHeight: 1.45 }}>
+                “{q.message}”
+              </span>
+            )}
+          </>
         )}
       </div>
 
