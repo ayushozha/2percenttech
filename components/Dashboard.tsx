@@ -511,7 +511,7 @@ function Queries({ queries, onCycle }: { queries: Lead[]; onCycle: (id: string) 
       <p className="fine" style={{ marginTop: 14, fontSize: 12.5 }}>
         <B
           zh="「办活动」来自落地页表单，「赞助」来自 /sponsor/apply，两者实时写入同一个收件箱。点击状态标签可在 新 → 已联系 → 已关闭 之间切换。"
-          en="Host requests come from the landing-page form and sponsor applications from /sponsor/apply — both land in this one inbox. Click a status chip to move it new → contacted → closed."
+          en="Host requests come from the landing-page form and sponsor applications from /sponsor/apply, and both land in this one inbox. Click a status chip to move it new → contacted → closed."
         />
       </p>
     </>
@@ -707,8 +707,8 @@ function MyHack({
         <form onSubmit={onSubmit} className="card" style={{ maxWidth: 560, display: 'flex', flexDirection: 'column', gap: 14, padding: 24 }}>
           <p className="small" style={{ fontSize: 13.5, lineHeight: 1.55 }}>
             <B
-              zh="登记你的队伍与项目——评委会在他们的队列中看到它。"
-              en="Register your team and project — judges will see it in their queue."
+              zh="登记你的队伍与项目，评委会在他们的队列中看到它。"
+              en="Register your team and project, and judges will see it in their queue."
             />
           </p>
 

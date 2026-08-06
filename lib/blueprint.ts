@@ -77,8 +77,8 @@ export const EVENT_PRODUCTS: EventProduct[] = [
       en: 'Online + offline hybrid. Our core product, and the most scalable one we run.',
     },
     forWho: {
-      zh: '希望开发者真正把产品用起来的品牌——不是看一眼 logo，而是当天就写代码接进去。',
-      en: 'Brands that want developers actually building on their product — not glancing at a logo, but shipping on it that day.',
+      zh: '希望开发者真正把产品用起来的品牌，不是看一眼 logo，而是当天就写代码接进去。',
+      en: 'Brands that want developers actually building on their product, not glancing at a logo, but shipping on it that day.',
     },
     objectives: [
       { zh: '让开发者在当天完成一次真实接入', en: 'Get developers through a real integration, on the day' },
@@ -102,7 +102,7 @@ export const EVENT_PRODUCTS: EventProduct[] = [
       { t: { zh: 'T-4 周', en: 'T-4 weeks' }, d: { zh: '赛题与赛道确认，落地页上线，全球报名开放', en: 'Challenge and tracks locked, landing page live, global registration opens' } },
       { t: { zh: 'T-2 周', en: 'T-2 weeks' }, d: { zh: '线上社区开放，组队匹配启动，参赛者提前领取 credits', en: 'Online community opens, team matching starts, participants get credits early' } },
       { t: { zh: 'T-3 天', en: 'T-3 days' }, d: { zh: '技术 onboarding 与导师坐诊', en: 'Technical onboarding and mentor office hours' } },
-      { t: { zh: '当天', en: 'Event day' }, d: { zh: '开场、组队、编码冲刺、Demo、评审、颁奖，全程直播', en: 'Opening, team formation, sprint, demos, judging, awards — livestreamed throughout' } },
+      { t: { zh: '当天', en: 'Event day' }, d: { zh: '开场、组队、编码冲刺、Demo、评审、颁奖，全程直播', en: 'Opening, team formation, sprint, demos, judging, awards, livestreamed throughout' } },
       { t: { zh: '赛后', en: 'After' }, d: { zh: '切片分发、项目清单、赞助效果报告、招聘对接', en: 'Clip distribution, project list, sponsor report, recruiting introductions' } },
     ],
     addons: [
@@ -233,7 +233,7 @@ export const CAMPAIGN_HEADLINE: Bi = {
 
 export const CAMPAIGN_ARGUMENT: Bi = {
   zh: '单场线下活动只能触达 100–200 人，所以线下聚会不可能是产品的全部。赞助方买的不该是三小时的线下活动，而是一场持续数周的品牌、内容与获客战役。',
-  en: 'An onsite event reaches 100 to 200 people, so the physical gathering cannot be the whole product. Sponsors should not be buying a three-hour event — they should be buying a multi-week brand, content and customer-acquisition campaign.',
+  en: 'An onsite event reaches 100 to 200 people, so the physical gathering cannot be the whole product. Sponsors should not be buying a three-hour event. They should be buying a multi-week brand, content and customer-acquisition campaign.',
 };
 
 export const CAMPAIGN: { phase: Bi; sub: Bi; items: Bi[] }[] = [

@@ -154,8 +154,8 @@ export default function Landing() {
 
             <p style={{ margin: '20px 0 0', fontSize: 17, lineHeight: 1.65, color: 'var(--ink-3)', maxWidth: '47ch' }}>
               <B
-                zh="我们把湾区的创始人、Builder 与投资人放进同一个房间——自 2025 年 1 月以来 25 场活动、6,300+ 报名。你带主题来，房间、内容与后续传播我们来。"
-                en="We put the Bay Area's founders, builders and investors in one room — 25 events and 6,300+ registrations since January 2025. Bring the subject; we bring the room, the content and everything that runs after it."
+                zh="我们把湾区的创始人、Builder 与投资人放进同一个房间。自 2025 年 1 月以来 25 场活动、6,300+ 报名。你带主题来，房间、内容与后续传播我们来。"
+                en="We put the Bay Area's founders, builders and investors in one room. 25 events and 6,300+ registrations since January 2025. Bring the subject; we bring the room, the content and everything that runs after it."
               />
             </p>
 
@@ -192,7 +192,7 @@ export default function Landing() {
           <p style={{ margin: '8px 0 0', fontSize: 14, color: 'var(--ink-5)' }}>
             <B
               zh="往期 2%Tech 活动到场人员所属公司（每场不同）。我们的目标是把这些人持续留在同一个网络里。"
-              en="Companies whose people attended past 2%Tech events — varies by event. Our goal is to keep those people in one network, not just one room."
+              en="Companies whose people attended past 2%Tech events, and it varies by event. Our goal is to keep those people in one network, not just one room."
             />
           </p>
         </div>
@@ -203,7 +203,7 @@ export default function Landing() {
           <p className="fine">
             <B
               zh="以上为往期到场公司名录，不代表其对 2%Tech 或任何单场活动的赞助或背书。"
-              en="Historical attendance roster — not sponsorship or endorsement of 2%Tech or any event."
+              en="Historical attendance roster. This is not sponsorship or endorsement of 2%Tech or any event."
             />
           </p>
           <p style={{ margin: '10px 0 0', fontSize: 13.5, color: 'var(--ink-4)', lineHeight: 1.6 }}>
@@ -227,7 +227,7 @@ export default function Landing() {
           <p className="body" style={{ margin: '10px 0 24px', maxWidth: '64ch' }}>
             <B
               zh="斯坦福黑客松的评审席、独立赛道与冠名档，我们正在为下面这些团队留位置。在名单上看到自己？位子是你的。"
-              en="Judge chairs, tracks and the title slot at the Stanford hackathon — we're saving seats for the teams below. See your logo? The seat's yours."
+              en="Judge chairs, tracks and the title slot at the Stanford hackathon. We're saving seats for the teams below. See your logo? The seat's yours."
             />
           </p>
 
@@ -312,14 +312,14 @@ export default function Landing() {
 
           <p className="fine" style={{ marginTop: 18, fontSize: 12.5 }}>
             <span className="en">
-              Since January 2025 — pulled from our public{' '}
+              Since January 2025, pulled from our public{' '}
               <a href={LUMA_PROFILE} target="_blank" rel="noopener noreferrer">
                 Luma profile
               </a>
               , click through and check.
             </span>
             <span className="zh">
-              自 2025 年 1 月起——数据来自公开{' '}
+              自 2025 年 1 月起，数据来自公开{' '}
               <a href={LUMA_PROFILE} target="_blank" rel="noopener noreferrer">
                 Luma 主页
               </a>
@@ -439,8 +439,8 @@ export default function Landing() {
 
           <p className="lead" style={{ margin: '16px auto 0', maxWidth: '52ch' }}>
             <B
-              zh="8 月底的单日黑客松。告诉我们你想办什么——我们带方案、场地、当天流程，以及活动之后持续数周的内容与分发一起来。"
-              en="A one-day hackathon in late August. Tell us what you want to host — we'll come back with the plan, the room, the day's funnel, and the weeks of content and distribution that follow it."
+              zh="8 月底的单日黑客松。告诉我们你想办什么，我们带方案、场地、当天流程，以及活动之后持续数周的内容与分发一起来。"
+              en="A one-day hackathon in late August. Tell us what you want to host, and we'll come back with the plan, the room, the day's funnel, and the weeks of content and distribution that follow it."
             />
           </p>
 

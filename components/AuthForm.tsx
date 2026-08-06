@@ -13,10 +13,10 @@ const ERRORS: Record<Exclude<AuthResult & { ok: false }, never>['error'], { zh: 
   email: { zh: '请输入有效邮箱。', en: 'Please enter a valid email.' },
   name: { zh: '请输入你的姓名。', en: 'Please enter your name.' },
   short: { zh: '密码至少需要 6 位。', en: 'Password needs at least 6 characters.' },
-  taken: { zh: '该邮箱已注册——请直接登录。', en: 'That email already has an account — sign in instead.' },
+  taken: { zh: '该邮箱已注册，请直接登录。', en: 'That email already has an account. Sign in instead.' },
   nomatch: {
     zh: `邮箱或密码不匹配（演示密码：${DEMO_PASSWORD_LABEL}）。`,
-    en: `No match — check email and password (demo password: ${DEMO_PASSWORD_LABEL}).`,
+    en: `No match. Check the email and password (demo password: ${DEMO_PASSWORD_LABEL}).`,
   },
 };
 
@@ -93,8 +93,8 @@ export default function AuthForm({ mode }: { mode: 'signin' | 'signup' }) {
           </h1>
           <p className="body" style={{ margin: '16px 0 0', fontSize: 15.5, maxWidth: '44ch' }}>
             <B
-              zh="一个账号，管理 2%Tech 活动的所有幕后工作——黑客松运营、评审、赞助咨询，以及你自己的参赛项目。"
-              en="One account for everything behind 2%Tech events — hackathon ops, judging, sponsor queries and your own submissions."
+              zh="一个账号，管理 2%Tech 活动的所有幕后工作：黑客松运营、评审、赞助咨询，以及你自己的参赛项目。"
+              en="One account for everything behind 2%Tech events: hackathon ops, judging, sponsor queries and your own submissions."
             />
           </p>
 

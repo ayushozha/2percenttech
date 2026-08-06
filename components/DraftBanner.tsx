@@ -21,8 +21,8 @@ export default function DraftBanner() {
       >
         <span style={{ fontSize: 13, fontWeight: 600 }}>
           <B
-            zh="草稿 — 黄色高亮处为待你确认的信息，确认前请勿外发。"
-            en="DRAFT — highlighted fields are unconfirmed. Do not send externally yet."
+            zh="草稿。黄色高亮处为待你确认的信息，确认前请勿外发。"
+            en="DRAFT. Highlighted fields are unconfirmed. Do not send externally yet."
           />
         </span>
         <button
@@ -38,7 +38,7 @@ export default function DraftBanner() {
             cursor: 'pointer',
           }}
         >
-          <B zh="确认无误，移除此条" en="Confirmed — remove" />
+          <B zh="确认无误，移除此条" en="Confirmed, remove this" />
         </button>
       </div>
     </div>

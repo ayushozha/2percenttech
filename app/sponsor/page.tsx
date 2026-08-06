@@ -128,13 +128,13 @@ export default function Sponsor() {
           <div className="prose" style={{ marginTop: 14, display: 'flex', flexDirection: 'column', gap: 12 }}>
             <p className="lead">
               <B
-                zh="2%Tech 在湾区做 AI 社区活动——创始人、工程师、研究员、投资人，同一个房间。"
-                en="2%Tech runs AI community events across the Bay Area — founders, engineers, researchers and investors, one room."
+                zh="2%Tech 在湾区做 AI 社区活动：创始人、工程师、研究员、投资人，同一个房间。"
+                en="2%Tech runs AI community events across the Bay Area: founders, engineers, researchers and investors, one room."
               />
             </p>
             <p className="body">
               <B
-                zh="赞助这场不是买 logo 位，是买六个小时——一屋子 builder 当天就要决定，用谁的模型、谁的 API 把东西跑起来。"
+                zh="赞助这场不是买 logo 位，是买六个小时。一屋子 builder 当天就要决定，用谁的模型、谁的 API 把东西跑起来。"
                 en="Sponsoring this isn't a logo slot. It's six hours with a room of builders deciding, that day, whose model and whose API they ship on."
               />
             </p>
@@ -221,7 +221,7 @@ export default function Sponsor() {
             </span>
             <span className="en">
               Figures above are cumulative across the 2%Tech community, not a single event.{' '}
-              <strong>This one is a single day at Stanford — 150–200 expected.</strong>
+              <strong>This one is a single day at Stanford, with 150 to 200 expected.</strong>
             </span>
           </p>
 
@@ -291,7 +291,7 @@ export default function Sponsor() {
           <p className="body prose" style={{ margin: '10px 0 24px' }}>
             <B
               zh="高亮行是赞助方直接参与的节点。这不是 logo 版位图，是一条从「领到 key」到「跑出项目」的路径。当天流程为拟定版。"
-              en="Highlighted rows are where sponsors take part. This isn't a logo placement map — it's the path from handing out a key to shipping a project on it. Day schedule is a draft."
+              en="Highlighted rows are where sponsors take part. This isn't a logo placement map. It's the path from handing out a key to shipping a project on it. Day schedule is a draft."
             />
           </p>
 
@@ -447,7 +447,7 @@ export default function Sponsor() {
           <p className="body prose" style={{ margin: '10px 0 22px' }}>
             <B
               zh="每个套餐都含一封 recap 邮件加一个公开页面，内容全部来自报名表与提交表的导出，不需要额外生产。更深的效果报告、专访与内容分发是旗舰专场额外提供的部分。"
-              en="Every package includes a recap email and a public page, all of it exported straight from the signup and submission forms — nothing has to be produced from scratch. Deeper impact reporting, interviews and content distribution are what the Flagship package adds on top."
+              en="Every package includes a recap email and a public page, all of it exported straight from the signup and submission forms, so nothing has to be produced from scratch. Deeper impact reporting, interviews and content distribution are what the Flagship package adds on top."
             />
           </p>
           <div className="grid-auto">
@@ -501,7 +501,7 @@ export default function Sponsor() {
             <B zh="我们的办活动节奏" en="We run these constantly" />
           </h2>
           <p className="body prose" style={{ margin: '10px 0 24px' }}>
-            <B zh="共 31 场：6 场即将举行，25 场已结束。" en="31 events in total — 6 upcoming, 25 already run." />
+            <B zh="共 31 场：6 场即将举行，25 场已结束。" en="31 events in total: 6 upcoming, 25 already run." />
           </p>
 
           <p className="tl-head">

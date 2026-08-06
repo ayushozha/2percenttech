@@ -143,8 +143,8 @@ export default function HostRequestForm() {
 
       <p className="fine" style={{ marginTop: 12, fontSize: 12.5, color: 'var(--ink-5)' }}>
         <B
-          zh="可多选。不需要介绍人——我们会带着形式建议、场地、档期与推广方案回复你。"
-          en="Multiple picks welcome. No introduction needed — we come back with the format, a venue, dates and how we'd promote it."
+          zh="可多选。不需要介绍人。我们会带着形式建议、场地、档期与推广方案回复你。"
+          en="Multiple picks welcome. No introduction needed. We come back with the format, a venue, dates and how we'd promote it."
         />
       </p>
     </form>

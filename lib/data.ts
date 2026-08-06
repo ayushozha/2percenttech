@@ -70,7 +70,7 @@ export const COMPANIES: Company[] = [
     url: 'https://aws.amazon.com',
     desc: {
       zh: '全球最大云服务商，覆盖算力、存储与托管模型推理。也是我们常用场地 Builder Loft 的方。',
-      en: 'The largest cloud provider — compute, storage and managed model inference. Also hosts our Builder Loft venue.',
+      en: 'The largest cloud provider, covering compute, storage and managed model inference. Also hosts our Builder Loft venue.',
     },
   },
   {
@@ -118,7 +118,7 @@ export const COMPANIES: Company[] = [
     url: 'https://nebius.com',
     desc: {
       zh: '全栈 AI 云基础设施，面向开发者、初创与研究团队提供训练与推理平台。',
-      en: 'Full-stack AI cloud infrastructure — training and inference for developers, startups and research teams.',
+      en: 'Full-stack AI cloud infrastructure for training and inference, for developers, startups and research teams.',
     },
   },
 ];
@@ -181,7 +181,7 @@ export const UPCOMING: EventRow[] = [
   {
     date: 'LATE AUG',
     name: 'Hackathon @ Stanford',
-    note: { zh: '赞助洽谈中——冠名席还空着。', en: 'Sponsorship open — the title seat is still open.' },
+    note: { zh: '赞助洽谈中，冠名席还空着。', en: 'Sponsorship open. The title seat is still open.' },
     highlight: true,
   },
   { date: '8/31', name: 'Beyond RAG: Skill Function', url: 'https://luma.com/9yyasy4z' },

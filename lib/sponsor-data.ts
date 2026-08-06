@@ -174,8 +174,8 @@ export const PACKAGES: Package[] = [
     id: 'exclusive',
     name: { zh: '品牌独家专场', en: 'Exclusive Brand Hackathon' },
     for: {
-      zh: '整场活动只属于你——一个品牌、一个赛题，全程没有同品类竞品。主题、规则与议程由你参与设计。',
-      en: 'The whole room is yours — one brand, one challenge, no competing sponsor in the building. You help design the theme, the rules and the agenda.',
+      zh: '整场活动只属于你：一个品牌、一个赛题，全程没有同品类竞品。主题、规则与议程由你参与设计。',
+      en: 'The whole room is yours: one brand, one challenge, no competing sponsor in the building. You help design the theme, the rules and the agenda.',
     },
     feature: true,
     flag: { zh: '最受欢迎', en: 'Most popular' },
@@ -342,13 +342,13 @@ export const FAQ: { q: Bi; a: Bi; tbd?: Bi }[] = [
     q: { zh: '能拿到参会者名单吗？', en: 'Do we get the attendee list?' },
     a: {
       zh: '三个套餐都拿到 opt-in 名单，即报名时明确勾选同意被赞助方联系的那部分参会者。我们不提供全量名单，任何套餐都不提供。',
-      en: "All three packages include the opt-in list — attendees who ticked the box agreeing to be contacted. We don't hand over the full list, under any package.",
+      en: "All three packages include the opt-in list, meaning attendees who ticked the box agreeing to be contacted. We don't hand over the full list, under any package.",
     },
   },
   {
     q: { zh: '我们可以自己出赛题吗？', en: 'Can we set our own challenge?' },
     a: {
-      zh: '可以，三个套餐都能出题。联合主办含一个品牌赛题；独家与旗舰专场的主题、赛题、规则与议程整套由你参与设计。你定题目和评判标准，我们把它写进参赛规则——这正是你花的钱买到的东西：不是希望有人用你的产品，是规则要求他们用。',
+      zh: '可以，三个套餐都能出题。联合主办含一个品牌赛题；独家与旗舰专场的主题、赛题、规则与议程整套由你参与设计。你定题目和评判标准，我们把它写进参赛规则。这正是你花的钱买到的东西：不是希望有人用你的产品，是规则要求他们用。',
       en: "Yes, under all three packages. Co-Hosted includes one branded challenge; Exclusive and Flagship cover the whole theme, challenge, rules and agenda. You write the brief and the judging criteria, and we put it in the rules. That's the thing you're actually paying for: not hoping someone uses your product, but a rule that requires it.",
     },
   },
