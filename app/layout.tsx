@@ -53,11 +53,11 @@ const notoSerifSC = Noto_Serif_SC({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://2percenttech.com'),
-  title: '2% Tech — Bay Area AI Hackathons & Developer Community · 湾区 AI 黑客松',
+  title: '2%Tech — Bay Area AI Hackathons & Developer Community · 湾区 AI 黑客松',
   description:
-    '2% Tech runs high-signal AI hackathons, workshops and demo days across the SF Bay Area. 25 events, 6,300+ registrations since January 2025. 湾区高质量 AI 黑客松与开发者社区。',
+    '2%Tech runs high-signal AI hackathons, workshops and demo days across the SF Bay Area. 25 events, 6,300+ registrations since January 2025. 湾区高质量 AI 黑客松与开发者社区。',
   openGraph: {
-    title: '2% Tech — Bay Area AI Hackathons 湾区 AI 黑客松',
+    title: '2%Tech — Bay Area AI Hackathons 湾区 AI 黑客松',
     description: '25 events · 6,300+ registrations since Jan 2025. Next stop: Hackathon @ Stanford.',
     type: 'website',
   },

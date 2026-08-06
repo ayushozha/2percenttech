@@ -1,4 +1,4 @@
-# 2% Tech — Site
+# 2%Tech — Site
 
 A Next.js app, bilingual (中文 / EN) throughout, exported to static files.
 
@@ -74,7 +74,7 @@ Seeded demo accounts, password `demo2026`: `admin@`, `organizer@`, `judge@`,
 
 ## The blueprint
 
-The site's structure follows the **2% Tech Scale-Up Blueprint** (working
+The site's structure follows the **2%Tech Scale-Up Blueprint** (working
 strategy document, August 2026). `lib/blueprint.ts` holds the content derived
 from it, section by section:
 
@@ -217,8 +217,9 @@ Highlighted in yellow on the pages:
 
 - **Stanford hackathon date** — "late August", exact day not set. No Luma event
   page exists for it yet; once it does, link the calendar row to it.
-- **Contact email and WeChat** in the landing CTA.
-- **Contact email and booking link** in the prospectus CTA.
+- **WeChat** in the landing CTA. (The contact email is confirmed:
+  `team@2percenttech.com`, in `CONTACT` in `lib/data.ts`.)
+- **Booking link** in the prospectus CTA.
 - **Collateral deadline** in the first FAQ answer.
 - **Pricing** — deliberately absent. Tiers route to a conversation instead.
 

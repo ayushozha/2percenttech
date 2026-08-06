@@ -191,8 +191,8 @@ export default function Landing() {
           </h2>
           <p style={{ margin: '8px 0 0', fontSize: 14, color: 'var(--ink-5)' }}>
             <B
-              zh="往期 2% Tech 活动到场人员所属公司（每场不同）。我们的目标是把这些人持续留在同一个网络里。"
-              en="Companies whose people attended past 2% Tech events — varies by event. Our goal is to keep those people in one network, not just one room."
+              zh="往期 2%Tech 活动到场人员所属公司（每场不同）。我们的目标是把这些人持续留在同一个网络里。"
+              en="Companies whose people attended past 2%Tech events — varies by event. Our goal is to keep those people in one network, not just one room."
             />
           </p>
         </div>
@@ -202,8 +202,8 @@ export default function Landing() {
         <div className="wrap" style={{ marginTop: 16 }}>
           <p className="fine">
             <B
-              zh="以上为往期到场公司名录，不代表其对 2% Tech 或任何单场活动的赞助或背书。"
-              en="Historical attendance roster — not sponsorship or endorsement of 2% Tech or any event."
+              zh="以上为往期到场公司名录，不代表其对 2%Tech 或任何单场活动的赞助或背书。"
+              en="Historical attendance roster — not sponsorship or endorsement of 2%Tech or any event."
             />
           </p>
           <p style={{ margin: '10px 0 0', fontSize: 13.5, color: 'var(--ink-4)', lineHeight: 1.6 }}>
@@ -287,8 +287,8 @@ export default function Landing() {
 
           <p className="fine" style={{ marginTop: 14 }}>
             <B
-              zh="这是我们的目标名单，非已确认赞助方。名单上的公司与 2% Tech 尚无合作关系。"
-              en="This is our target list, not confirmed sponsors. Companies named here have no existing relationship with 2% Tech."
+              zh="这是我们的目标名单，非已确认赞助方。名单上的公司与 2%Tech 尚无合作关系。"
+              en="This is our target list, not confirmed sponsors. Companies named here have no existing relationship with 2%Tech."
             />
           </p>
         </div>
@@ -461,7 +461,7 @@ export default function Landing() {
               <span className="mono-label" style={{ fontSize: 11, letterSpacing: '.14em' }}>
                 Email
               </span>{' '}
-              <span className="tbd">{CONTACT.email}</span>
+              <a href={`mailto:${CONTACT.email}`} style={{ fontWeight: 600 }}>{CONTACT.email}</a>
             </span>
             <span>
               <span className="mono-label" style={{ fontSize: 11, letterSpacing: '.14em' }}>

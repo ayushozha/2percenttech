@@ -14,7 +14,7 @@ export const EVENT_META: { label: Bi; value: Bi | string; tbd?: boolean }[] = [
   { label: { zh: '形式', en: 'Format' }, value: { zh: '单日黑客松', en: 'One-day hackathon' } },
 ];
 
-/** Cumulative across the whole 2% Tech network — NOT this event's numbers.
+/** Cumulative across the whole 2%Tech network — NOT this event's numbers.
     The caption underneath says so, and has to keep saying so. */
 export const NETWORK_STATS: { display: string; label: Bi }[] = [
   { display: '150,000+', label: { zh: 'Builder 社区触达', en: 'Builder community reach' } },
@@ -155,7 +155,10 @@ export const PACKAGES: Package[] = [
   {
     id: 'cohosted',
     name: { zh: '联合主办', en: 'Co-Hosted Hackathon' },
-    for: { zh: '适合希望加入一场更大规模社区活动的品牌', en: 'Best for brands joining a larger community event' },
+    for: {
+      zh: '想让开发者用上你的产品，但不需要独占整场活动。与其他合作方共享场地与观众，你出自己的赛题。',
+      en: 'Get builders onto your product without owning the whole event. You share the venue and the audience with other partners, and bring your own challenge.',
+    },
     items: [
       { zh: '与其他主要合作方共同主办', en: 'Co-hosted with other major partners' },
       { zh: '共享场地与观众', en: 'Shared venue and shared audience' },
@@ -170,7 +173,10 @@ export const PACKAGES: Package[] = [
   {
     id: 'exclusive',
     name: { zh: '品牌独家专场', en: 'Exclusive Brand Hackathon' },
-    for: { zh: '适合在湾区办一场专属于你的单品牌黑客松', en: 'Best for a dedicated one-brand hackathon in the Bay Area' },
+    for: {
+      zh: '整场活动只属于你——一个品牌、一个赛题，全程没有同品类竞品。主题、规则与议程由你参与设计。',
+      en: 'The whole room is yours — one brand, one challenge, no competing sponsor in the building. You help design the theme, the rules and the agenda.',
+    },
     feature: true,
     flag: { zh: '最受欢迎', en: 'Most popular' },
     items: [
@@ -189,7 +195,10 @@ export const PACKAGES: Package[] = [
   {
     id: 'flagship',
     name: { zh: '旗舰专场 + 内容', en: 'Flagship Hackathon + Media' },
-    for: { zh: '适合同时要活动、曝光与内容的品牌', en: 'Best for brands that want event + visibility + content' },
+    for: {
+      zh: '内容和活动本身同等重要。包含独家专场的一切，再加上专访、直播、短视频与赛后效果报告。',
+      en: 'For when the content matters as much as the day. Everything in Exclusive, plus interviews, livestream, short-form video and an impact report.',
+    },
     items: [
       { zh: '包含独家专场全部内容', en: 'Everything in the Exclusive package' },
       { zh: '更强的品牌叙事与视觉包装', en: 'Stronger brand storytelling and visual packaging' },
@@ -344,10 +353,10 @@ export const FAQ: { q: Bi; a: Bi; tbd?: Bi }[] = [
     },
   },
   {
-    q: { zh: '价格为什么不写在页面上？', en: "Why isn't pricing on this page?" },
+    q: { zh: '价格怎么算？', en: 'How does pricing work?' },
     a: {
-      zh: '档位和加购的组合差别很大，同一档对不同公司的价值也不一样——直接报一个数字对双方都不划算。约 15 分钟，我们按你想要的结果算给你听。付款方式与开票在这一步一并确认。',
-      en: "Tier and add-on combinations vary a lot, and the same tier is worth very different things to different companies — a single posted number serves neither of us. Give us 15 minutes and we'll price it against the outcome you're after. Payment terms and invoicing get settled in the same conversation.",
+      zh: '我们按你想要的结果来定价：套餐、加购与规模确定后给出报价。告诉我们今年你被考核的指标是什么，15 分钟就能算清楚。付款方式与开票在同一次沟通里确认。',
+      en: "We price against the outcome you're after: the package, the add-ons and the scale settle the number. Tell us what you're measured on this year and fifteen minutes is enough to work it out. Payment terms and invoicing are settled in the same conversation.",
     },
   },
   {

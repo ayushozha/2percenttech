@@ -1,4 +1,4 @@
-/* Content derived from the 2% Tech Scale-Up Blueprint (working strategy
+/* Content derived from the 2%Tech Scale-Up Blueprint (working strategy
    document, August 2026).
 
    Two rules were applied translating that document into public copy:
@@ -259,7 +259,7 @@ export const CAMPAIGN: { phase: Bi; sub: Bi; items: Bi[] }[] = [
       { zh: '开放社区伙伴转播', en: 'Partner communities redistribute the stream' },
       { zh: '收集线上观众信息', en: 'Collect online audience information' },
       { zh: '接收线上提问', en: 'Take questions from the online audience' },
-      { zh: '直播回放托管在 2% Tech 站点', en: 'Stream hosted on the 2% Tech site' },
+      { zh: '直播回放托管在 2%Tech 站点', en: 'Stream hosted on the 2%Tech site' },
       { zh: '通过二维码与表单捕获线索', en: 'Capture leads through QR codes and forms' },
     ],
   },

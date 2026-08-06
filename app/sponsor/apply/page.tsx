@@ -9,9 +9,9 @@ import { CONTACT, LUMA_PROFILE } from '@/lib/data';
 import { DELIVERABLES, NETWORK_STATS, PACKAGES } from '@/lib/sponsor-data';
 
 export const metadata: Metadata = {
-  title: 'Sponsor a hackathon · 2% Tech',
+  title: 'Sponsor a hackathon · 2%Tech',
   description:
-    'Apply to sponsor a 2% Tech hackathon — pick a package, tell us what you are measured on, and we come back with a proposal. 申请赞助 2% Tech 黑客松。',
+    'Apply to sponsor a 2%Tech hackathon — pick a package, tell us what you are measured on, and we come back with a proposal. 申请赞助 2%Tech 黑客松。',
 };
 
 export default function SponsorApply() {
@@ -72,26 +72,60 @@ export default function SponsorApply() {
           </Suspense>
 
           <aside className="apply-aside">
+            {/* The packages in full, not as one-liners — this is the reference
+                someone reads while deciding which box to tick. */}
+            {PACKAGES.map((p) => (
+              <div
+                key={p.id}
+                className="card"
+                style={{
+                  borderRadius: 20,
+                  border: p.feature ? '1.5px solid var(--ink)' : '1px solid var(--line-2)',
+                  background: p.feature ? 'linear-gradient(150deg,var(--tint-violet-soft),var(--tint-amber-soft))' : '#fff',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 8, flexWrap: 'wrap' }}>
+                  <h2 style={{ fontSize: 16, fontWeight: 800, letterSpacing: '-.01em' }}>
+                    <B zh={p.name.zh} en={p.name.en} />
+                  </h2>
+                  {p.flag && (
+                    <span className="badge badge-new" style={{ fontSize: 9.5, padding: '3px 9px' }}>
+                      <B zh={p.flag.zh} en={p.flag.en} />
+                    </span>
+                  )}
+                </div>
+
+                <p className="small" style={{ margin: '8px 0 12px', fontSize: 13, lineHeight: 1.55 }}>
+                  <B zh={p.for.zh} en={p.for.en} />
+                </p>
+
+                <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  {p.items.map((it, i) => (
+                    <li key={i} style={{ display: 'flex', gap: 8, fontSize: 12.5, lineHeight: 1.45 }}>
+                      <span aria-hidden="true" style={{ color: 'var(--violet-deep)' }}>
+                        ✓
+                      </span>
+                      <span>
+                        <B zh={it.zh} en={it.en} />
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+
+                <span className="mono-label" style={{ display: 'block', marginTop: 14, fontSize: 9.5 }}>
+                  <B zh={p.format.zh} en={p.format.en} />
+                </span>
+              </div>
+            ))}
+
             <div className="card" style={{ borderRadius: 20 }}>
               <p className="mono-label" style={{ fontSize: 10 }}>
-                <B zh="套餐一览" en="The packages" />
+                <B zh="都可以调整" en="All of it flexes" />
               </p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 12 }}>
-                {PACKAGES.map((p) => (
-                  <div key={p.id}>
-                    <span style={{ fontWeight: 700, fontSize: 14 }}>
-                      <B zh={p.name.zh} en={p.name.en} />
-                    </span>
-                    <span className="fine" style={{ display: 'block', marginTop: 2, lineHeight: 1.45 }}>
-                      <B zh={p.for.zh} en={p.for.en} />
-                    </span>
-                  </div>
-                ))}
-              </div>
-              <p className="fine" style={{ marginTop: 14 }}>
+              <p className="small" style={{ marginTop: 10, fontSize: 13, lineHeight: 1.55 }}>
                 <B
-                  zh="价格不在页面上——我们按你想要的结果算给你听。"
-                  en="Pricing isn't posted — we price it against the outcome you're after."
+                  zh="套餐可按你的赛题、规模与加购组合调整。奖金、餐饮与付费场地另行计费。"
+                  en="Every package flexes to your challenge, your scale and the add-ons you pick. Prize money, catering and paid venue costs are billed separately."
                 />
               </p>
             </div>
@@ -141,7 +175,7 @@ export default function SponsorApply() {
                 <B zh="更想直接联系？" en="Rather just email?" />
               </p>
               <p style={{ marginTop: 10, fontSize: 13.5 }}>
-                <span className="tbd">{CONTACT.email}</span>
+                <a href={`mailto:${CONTACT.email}`} style={{ fontWeight: 600 }}>{CONTACT.email}</a>
               </p>
               <p style={{ marginTop: 8, fontSize: 13.5 }}>
                 <a href={LUMA_PROFILE} target="_blank" rel="noopener noreferrer" style={{ fontWeight: 600 }}>

@@ -26,8 +26,8 @@ export default function SiteNav({ variant = 'landing' }: { variant?: 'landing' |
     <nav className="nav">
       <div className="nav-in">
         <Link href="/" className="brand">
-          <img src="/mark.svg" alt="2% Tech mark" width={28} height={28} />
-          <span>2% Tech</span>
+          <img src="/mark.svg" alt="2%Tech mark" width={28} height={28} />
+          <span>2%Tech</span>
         </Link>
         <div className="nav-actions">
           <LangToggle />

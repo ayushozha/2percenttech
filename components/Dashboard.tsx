@@ -219,9 +219,9 @@ export default function Dashboard() {
       <nav className="nav">
         <div className="nav-in">
           <Link href="/" className="brand">
-            <img src="/mark.svg" alt="2% Tech mark" width={28} height={28} />
+            <img src="/mark.svg" alt="2%Tech mark" width={28} height={28} />
             <span>
-              2% Tech <span className="brand-sub">· <B zh="后台" en="Backstage" /></span>
+              2%Tech <span className="brand-sub">· <B zh="后台" en="Backstage" /></span>
             </span>
           </Link>
           <div className="nav-actions">

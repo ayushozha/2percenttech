@@ -15,8 +15,8 @@ export type Bi = { zh: string; en: string };
 export const LUMA_PROFILE = 'https://luma.com/user/usr-imLXdlHS1TlvX7X';
 
 export const CONTACT = {
-  // Both still unconfirmed — rendered with .tbd until they're settled.
-  email: 'sponsors@ —',
+  email: 'team@2percenttech.com',
+  // Still unconfirmed — rendered with .tbd until they're settled.
   wechat: { zh: '待补', en: 'TBC' },
   calendar: 'calendly / luma —',
 };
@@ -131,7 +131,7 @@ export const logoOf = (id: string) => LOGOS[id] ?? { src: '', tile: '#ffffff' };
 
 /* ---- saved seats -------------------------------------------------------
    A target list, clearly disclaimed on the page. None of these have any
-   existing relationship with 2% Tech — do not reword that disclaimer. */
+   existing relationship with 2%Tech — do not reword that disclaimer. */
 
 export type Seat = { name: string } | Bi;
 

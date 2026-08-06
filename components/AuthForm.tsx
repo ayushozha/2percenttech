@@ -72,8 +72,8 @@ export default function AuthForm({ mode }: { mode: 'signin' | 'signup' }) {
         />
 
         <Link href="/" className="brand" style={{ position: 'relative', width: 'max-content', fontSize: 18 }}>
-          <img src="/mark.svg" alt="2% Tech mark" width={30} height={30} style={{ borderRadius: 8 }} />
-          <span>2% Tech</span>
+          <img src="/mark.svg" alt="2%Tech mark" width={30} height={30} style={{ borderRadius: 8 }} />
+          <span>2%Tech</span>
         </Link>
 
         <div style={{ position: 'relative' }}>
@@ -93,8 +93,8 @@ export default function AuthForm({ mode }: { mode: 'signin' | 'signup' }) {
           </h1>
           <p className="body" style={{ margin: '16px 0 0', fontSize: 15.5, maxWidth: '44ch' }}>
             <B
-              zh="一个账号，管理 2% Tech 活动的所有幕后工作——黑客松运营、评审、赞助咨询，以及你自己的参赛项目。"
-              en="One account for everything behind 2% Tech events — hackathon ops, judging, sponsor queries and your own submissions."
+              zh="一个账号，管理 2%Tech 活动的所有幕后工作——黑客松运营、评审、赞助咨询，以及你自己的参赛项目。"
+              en="One account for everything behind 2%Tech events — hackathon ops, judging, sponsor queries and your own submissions."
             />
           </p>
 

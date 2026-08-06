@@ -23,9 +23,9 @@ import {
 } from '@/lib/sponsor-data';
 
 export const metadata: Metadata = {
-  title: 'Sponsorship · Hackathon @ Stanford — 2% Tech',
+  title: 'Sponsorship · Hackathon @ Stanford — 2%Tech',
   description:
-    'One day. One room. Sponsorship packages for the 2% Tech one-day hackathon at Stanford, August 2026. 斯坦福单日黑客松赞助方案。',
+    'One day. One room. Sponsorship packages for the 2%Tech one-day hackathon at Stanford, August 2026. 斯坦福单日黑客松赞助方案。',
 };
 
 const bi = (v: Bi | string) => (typeof v === 'string' ? v : <B zh={v.zh} en={v.en} />);
@@ -79,7 +79,7 @@ export default function Sponsor() {
 
         <div className="wrap" style={{ position: 'relative', zIndex: 1, padding: 0 }}>
           <p className="eyebrow">
-            <B zh="2% TECH · 赞助方案" en="2% Tech · Sponsorship Prospectus" />
+            <B zh="2% TECH · 赞助方案" en="2%Tech · Sponsorship Prospectus" />
           </p>
 
           <h1 className="h-page" style={{ maxWidth: '18ch' }}>
@@ -89,7 +89,7 @@ export default function Sponsor() {
             </em>
           </h1>
           <p className="mono-label" style={{ marginTop: 12 }}>
-            2% Tech · August 2026
+            2%Tech · August 2026
           </p>
 
           <div className="grid-auto" style={{ marginTop: 30 }}>
@@ -128,8 +128,8 @@ export default function Sponsor() {
           <div className="prose" style={{ marginTop: 14, display: 'flex', flexDirection: 'column', gap: 12 }}>
             <p className="lead">
               <B
-                zh="2% Tech 在湾区做 AI 社区活动——创始人、工程师、研究员、投资人，同一个房间。"
-                en="2% Tech runs AI community events across the Bay Area — founders, engineers, researchers and investors, one room."
+                zh="2%Tech 在湾区做 AI 社区活动——创始人、工程师、研究员、投资人，同一个房间。"
+                en="2%Tech runs AI community events across the Bay Area — founders, engineers, researchers and investors, one room."
               />
             </p>
             <p className="body">
@@ -198,7 +198,7 @@ export default function Sponsor() {
             <B zh="谁在场" en="Who's in the room" />
           </h2>
           <p className="mono-label" style={{ marginTop: 16 }}>
-            <B zh="2% Tech 社区累计" en="Across the 2% Tech network to date" />
+            <B zh="2%Tech 社区累计" en="Across the 2%Tech network to date" />
           </p>
 
           <div className="grid-auto" style={{ marginTop: 14 }}>
@@ -217,18 +217,18 @@ export default function Sponsor() {
           {/* Cumulative-vs-this-event distinction. Keep it adjacent to the numbers. */}
           <p className="small" style={{ margin: '16px 0 32px' }}>
             <span className="zh">
-              以上为 2% Tech 社区累计数据，非单场规模。<strong>本场为斯坦福单日制，预计参赛规模 150–200 人。</strong>
+              以上为 2%Tech 社区累计数据，非单场规模。<strong>本场为斯坦福单日制，预计参赛规模 150–200 人。</strong>
             </span>
             <span className="en">
-              Figures above are cumulative across the 2% Tech community, not a single event.{' '}
+              Figures above are cumulative across the 2%Tech community, not a single event.{' '}
               <strong>This one is a single day at Stanford — 150–200 expected.</strong>
             </span>
           </p>
 
           <p className="body" style={{ marginBottom: 16 }}>
             <B
-              zh="往期 2% Tech 活动中出现过的公司（每场不同）："
-              en="Companies represented at past 2% Tech events (varies by event):"
+              zh="往期 2%Tech 活动中出现过的公司（每场不同）："
+              en="Companies represented at past 2%Tech events (varies by event):"
             />
           </p>
 
@@ -428,8 +428,8 @@ export default function Sponsor() {
 
           <p className="fine" style={{ marginTop: 14 }}>
             <B
-              zh="价格不在此页，我们当面谈——套餐与加购的组合差别很大。"
-              en="Pricing isn't on this page — we'd rather talk it through, since package and add-on combinations vary a lot."
+              zh="每个套餐都可按你的赛题、规模与加购调整。告诉我们你想要的结果，我们给出对应的方案与报价。"
+              en="Every package flexes to your challenge, your scale and the add-ons you want. Tell us the outcome you're after and we'll shape the package and the quote around it."
             />
           </p>
         </div>
@@ -703,8 +703,8 @@ export default function Sponsor() {
           </h2>
           <p className="lead" style={{ margin: '16px auto 0', maxWidth: '54ch' }}>
             <B
-              zh="价格我们当面谈。15 分钟，告诉我们你今年的指标是什么，我们按结果倒推该选哪个套餐。"
-              en="We talk pricing in person. Give us 15 minutes, tell us what you're measured on this year, and we'll work backwards to the package that gets you there."
+              zh="给我们 15 分钟，告诉我们你今年被考核的指标是什么，我们按结果倒推该选哪个套餐、怎么报价。"
+              en="Give us fifteen minutes and tell us what you're measured on this year. We'll work backwards to the package that gets you there, and quote it."
             />
           </p>
 
@@ -719,7 +719,7 @@ export default function Sponsor() {
               <span className="mono-label" style={{ fontSize: 11, letterSpacing: '.14em' }}>
                 <B zh="邮箱" en="Email" />
               </span>{' '}
-              <span className="tbd">{CONTACT.email}</span>
+              <a href={`mailto:${CONTACT.email}`} style={{ fontWeight: 600 }}>{CONTACT.email}</a>
             </span>
             <span>
               <span className="mono-label" style={{ fontSize: 11, letterSpacing: '.14em' }}>
@@ -731,7 +731,7 @@ export default function Sponsor() {
               <span className="mono-label" style={{ fontSize: 11, letterSpacing: '.14em' }}>
                 <B zh="主办" en="Organizer" />
               </span>{' '}
-              <strong>2% Tech</strong>
+              <strong>2%Tech</strong>
             </span>
           </div>
         </div>
