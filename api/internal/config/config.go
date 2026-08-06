@@ -19,6 +19,16 @@ type Config struct {
 	AuthAPIKey   string
 	AuthClientID string
 
+	// Where the proxied auth calls actually go. Traefik overwrites
+	// X-Forwarded-For on anything it forwards — it trusts no upstream by
+	// default — so a signup routed through the public hostname reaches the auth
+	// service carrying the Docker gateway's address instead of the visitor's.
+	// Its signup and login limits are per-IP, so that would put every visitor
+	// in one bucket and break signup site-wide after five attempts an hour.
+	// Going container-to-container on the private network preserves the header.
+	// Falls back to AuthBaseURL when unset.
+	AuthInternalURL string
+
 	// The dedicated email-waitlist instance lead emails are mirrored into.
 	// Optional: with no key configured the mirror is skipped, not failed.
 	WaitlistBaseURL   string
@@ -36,6 +46,7 @@ func Load() (*Config, error) {
 		DatabaseURL:       env("DATABASE_URL", ""),
 		Port:              env("PORT", "8091"),
 		AuthBaseURL:       strings.TrimRight(env("AUTH_BASE_URL", ""), "/"),
+		AuthInternalURL:   strings.TrimRight(env("AUTH_INTERNAL_URL", ""), "/"),
 		AuthAPIKey:        env("AUTH_API_KEY", ""),
 		AuthClientID:      env("AUTH_CLIENT_ID", ""),
 		WaitlistBaseURL:   strings.TrimRight(env("WAITLIST_BASE_URL", ""), "/"),
@@ -72,7 +83,17 @@ func Load() (*Config, error) {
 	return c, nil
 }
 
+// AuthCallURL is the origin for proxied auth requests. See AuthInternalURL.
+func (c *Config) AuthCallURL() string {
+	if c.AuthInternalURL != "" {
+		return c.AuthInternalURL
+	}
+	return c.AuthBaseURL
+}
+
 // JWKSURL is where access tokens minted for this client are verified against.
+// Deliberately the public origin: key material is worth fetching over TLS, and
+// this call carries no client IP for anything to get wrong.
 func (c *Config) JWKSURL() string {
 	return c.AuthBaseURL + "/.well-known/jwks.json"
 }

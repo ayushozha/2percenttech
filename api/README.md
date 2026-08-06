@@ -40,7 +40,8 @@ changes.
 | Variable | Required | Purpose |
 |---|---|---|
 | `DATABASE_URL` | yes | `twopct_app` on `projects-db` |
-| `AUTH_BASE_URL` | yes | `https://authservice.2percenttech.com` |
+| `AUTH_BASE_URL` | yes | `https://authservice.2percenttech.com` — public origin, used for JWKS |
+| `AUTH_INTERNAL_URL` | no | Container-to-container origin for proxied auth calls, e.g. `http://twopct-authservice:8080`. See the note below — without it, per-IP rate limiting collapses onto one bucket. |
 | `AUTH_API_KEY` | yes | The 2% Tech client key. Server-side only — never ship it to a browser. |
 | `AUTH_CLIENT_ID` | yes | Client UUID; JWTs are rejected unless their `client_id` claim matches |
 | `ALLOWED_ORIGINS` | yes | Comma-separated. Credentialed CORS cannot use a wildcard, so each origin is named. |
@@ -72,10 +73,17 @@ Each mirrors a function in the site's `lib/store.ts`.
 
 ## Two things worth knowing
 
-**The end user's IP is forwarded upstream.** The auth service rate-limits signup
-at 5/hour and login at 10/15min *per IP*. Without `X-Forwarded-For` on the
-proxied call, every visitor would share one bucket keyed to this container and
-the sixth signup of the hour would fail for everyone.
+**The end user's IP is forwarded upstream, and it must not go through Traefik.**
+The auth service rate-limits signup at 5/hour and login at 10/15min *per IP*, and
+reads the IP from `X-Forwarded-For`. Traefik trusts no upstream by default, so it
+**overwrites** that header on anything it forwards: routed through the public
+hostname, every signup arrives at the auth service carrying the Docker gateway's
+address (`10.0.1.1`), every visitor lands in the same bucket, and the sixth
+signup of the hour fails for everyone. `AUTH_INTERNAL_URL` points these calls at
+the auth container directly over the private `coolify` network, which preserves
+the header. The auth app carries a stable Docker network alias
+(`twopct-authservice`, set as Coolify's `custom_network_aliases`) so the target
+survives redeploys — its container name does not.
 
 **The waitlist mirror is best effort and must stay that way.** A lead is durable
 once it is in `leads`; the mirror runs on its own context afterwards. If the

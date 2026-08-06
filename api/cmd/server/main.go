@@ -59,7 +59,7 @@ func main() {
 	srv := httpapi.New(
 		cfg,
 		st,
-		upstream.NewAuthClient(cfg.AuthBaseURL, cfg.AuthAPIKey),
+		upstream.NewAuthClient(cfg.AuthCallURL(), cfg.AuthAPIKey),
 		upstream.NewWaitlistClient(cfg.WaitlistBaseURL, cfg.WaitlistSecretKey),
 		validator,
 	)
