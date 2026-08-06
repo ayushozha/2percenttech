@@ -42,16 +42,22 @@ type AuthResponse struct {
 	} `json:"user"`
 }
 
-// Error carries the upstream status and error code so handlers can map them to
-// the discriminated codes the frontend already renders.
+// Error carries an upstream failure. Note the field the service calls "error"
+// is a human sentence, not an identifier — the machine-readable keys are
+// "code" (coarse, e.g. invalid_signup covers both email and password problems)
+// and "auth_code" (specific). Map on AuthCode first.
 type Error struct {
-	Status  int
-	Code    string `json:"error"`
-	Message string `json:"message"`
+	Status      int
+	Prose       string `json:"error"`
+	Code        string `json:"code"`
+	AuthCode    string `json:"auth_code"`
+	Message     string `json:"message"`
+	UserMessage string `json:"user_message"`
 }
 
 func (e *Error) Error() string {
-	return fmt.Sprintf("auth service %d %s: %s", e.Status, e.Code, e.Message)
+	return fmt.Sprintf("auth service %d code=%q auth_code=%q: %s",
+		e.Status, e.Code, e.AuthCode, e.Message)
 }
 
 // Signup and Login both take the end user's IP. The auth service rate-limits

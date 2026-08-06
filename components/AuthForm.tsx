@@ -12,7 +12,12 @@ import { SELECTABLE_ROLES, type Role } from '@/lib/types';
 const ERRORS: Record<Exclude<AuthResult & { ok: false }, never>['error'], { zh: string; en: string }> = {
   email: { zh: '请输入有效邮箱。', en: 'Please enter a valid email.' },
   name: { zh: '请输入你的姓名。', en: 'Please enter your name.' },
-  short: { zh: '密码至少需要 8 位。', en: 'Password needs at least 8 characters.' },
+  /* Covers every way the auth service rejects a password: too short, too
+     common, or containing your own name or email. */
+  short: {
+    zh: '密码至少需要 8 位，且不能包含你的姓名或邮箱。',
+    en: 'Password needs at least 8 characters and must not contain your name or email.',
+  },
   taken: { zh: '该邮箱已注册，请直接登录。', en: 'That email already has an account. Sign in instead.' },
   nomatch: { zh: '邮箱或密码不匹配。', en: 'No match. Check the email and password.' },
   /* Rate limits, an unreachable API, a bad gateway — anything that isn't the

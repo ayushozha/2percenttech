@@ -2,6 +2,7 @@ package httpapi
 
 import (
 	"errors"
+	"log"
 	"net/http"
 	"net/mail"
 	"strings"
@@ -219,25 +220,33 @@ func (s *Server) handleResetPassword(w http.ResponseWriter, r *http.Request) {
 
 /* ---- error mapping ------------------------------------------------------ */
 
-// writeAuthError translates the auth service's codes into the discriminated
-// set the frontend already renders messages for.
+// writeAuthError translates an upstream failure into the discriminated set the
+// frontend renders messages for.
+//
+// It keys on auth_code, which is a stable enum. The service's "error" field
+// looks like a code but is a human sentence, and "code" is too coarse to
+// separate a bad email from a bad password — both arrive as invalid_signup.
 func writeAuthError(w http.ResponseWriter, err error, flow string) {
 	var ae *upstream.Error
 	if !errors.As(err, &ae) {
+		log.Printf("auth %s: transport failure: %v", flow, err)
 		writeError(w, http.StatusBadGateway, "server_error", "the sign-in service is unavailable")
 		return
 	}
 
-	switch ae.Code {
-	case "invalid_email":
+	switch ae.AuthCode {
+	case "AUTH_INVALID_EMAIL":
 		writeError(w, http.StatusBadRequest, "email", "enter a valid email address")
-	case "email_exists", "email_taken":
+	case "AUTH_EMAIL_EXISTS":
 		writeError(w, http.StatusConflict, "taken", "that email is already registered")
-	case "password_too_short", "weak_password":
-		writeError(w, http.StatusBadRequest, "short", "choose a stronger password")
-	case "invalid_credentials":
+	case "AUTH_PASSWORD_REQUIREMENTS", "AUTH_WEAK_PASSWORD":
+		// The upstream sentence is the specific reason — too short, contains
+		// your name, too common — and is worth more than a generic message.
+		writeError(w, http.StatusBadRequest, "short", firstNonEmpty(ae.UserMessage, ae.Message,
+			"choose a stronger password"))
+	case "AUTH_INVALID_CREDENTIALS":
 		writeError(w, http.StatusUnauthorized, "nomatch", "email and password do not match")
-	case "email_not_configured":
+	case "AUTH_EMAIL_NOT_CONFIGURED":
 		writeError(w, http.StatusServiceUnavailable, "email_unavailable",
 			"we cannot send email yet, so this cannot be completed")
 	default:
@@ -247,9 +256,21 @@ func writeAuthError(w http.ResponseWriter, err error, flow string) {
 		case http.StatusUnauthorized:
 			writeError(w, http.StatusUnauthorized, "nomatch", "email and password do not match")
 		default:
+			// Unmapped. Log the upstream identifiers — without this an
+			// unrecognised rejection is a 502 with nothing to debug from.
+			log.Printf("auth %s: unmapped upstream error: %v", flow, ae)
 			writeError(w, http.StatusBadGateway, "server_error", "could not complete "+flow)
 		}
 	}
+}
+
+func firstNonEmpty(vals ...string) string {
+	for _, v := range vals {
+		if strings.TrimSpace(v) != "" {
+			return v
+		}
+	}
+	return ""
 }
 
 func validEmail(addr string) bool {
