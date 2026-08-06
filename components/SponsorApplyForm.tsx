@@ -20,7 +20,7 @@ import { BUDGET_BANDS, SPONSOR_GOALS } from '@/lib/types';
     and message are optional, because every extra required field costs
     completions, and "Not sure yet" is a valid answer. */
 
-type ErrKey = 'company' | 'contact' | 'email' | 'packages';
+type ErrKey = 'company' | 'contact' | 'email' | 'packages' | 'submit';
 type Errors = Partial<Record<ErrKey, { zh: string; en: string }>>;
 
 function Step({
@@ -121,9 +121,22 @@ export default function SponsorApplyForm() {
     if (Object.keys(next).length) return;
 
     setBusy(true);
-    await createSponsorApplication({ company, contact, email, packages, goals, budget, message });
-    setBusy(false);
-    setDone(true);
+    try {
+      await createSponsorApplication({ company, contact, email, packages, goals, budget, message });
+      setDone(true);
+    } catch {
+      /* The request is a real network call now. Surface the failure on the
+         submit button's own error slot rather than silently swallowing it —
+         a sponsor who thinks they applied and hasn't is the worst outcome. */
+      setErrors({
+        submit: {
+          zh: '提交失败，请稍后重试，或直接发邮件给我们。',
+          en: "That didn't go through. Please try again, or email us directly.",
+        },
+      });
+    } finally {
+      setBusy(false);
+    }
   }
 
   const err = (k: ErrKey) =>
@@ -369,10 +382,11 @@ export default function SponsorApplyForm() {
         <button type="submit" className="btn btn-dark" disabled={busy}>
           <B zh="提交赞助申请 →" en="Send sponsorship request →" />
         </button>
+        {err('submit')}
         <p className="fine" style={{ marginTop: 12, lineHeight: 1.5, maxWidth: '60ch' }}>
           <B
-            zh="我们在两个工作日内回复。这是演示站点，申请只保存在你的浏览器里，不会真的发送。"
-            en="We reply within two working days. This is a demo site, so the request is stored in your browser and is not actually sent."
+            zh="我们在两个工作日内回复。"
+            en="We reply within two working days."
           />
         </p>
       </div>

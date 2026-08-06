@@ -6,8 +6,9 @@ import './globals.css';
 
 /* The design specifies these five faces. next/font downloads and self-hosts
    them at build time, so the exported site makes no request to Google at
-   runtime — which keeps the old site's "no external requests" property that
-   the deploy host's CSP depends on. */
+   runtime. The page is no longer request-free in general — it calls the 2% Tech
+   API and loads the analytics tracker below — but fonts staying local keeps
+   text rendering independent of any third party. */
 
 const figtree = Figtree({
   subsets: ['latin'],
@@ -70,6 +71,15 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en" className={fonts}>
       <body>
         <LangProvider>{children}</LangProvider>
+        {/* Pageview tracking on the project's own Pulse instance. The ingest
+            key is publishable by design — it can only write, and only for this
+            project. `defer` keeps it off the critical path. */}
+        <script
+          defer
+          src="https://analytics.2percenttech.com/api/script.js"
+          data-api="https://analytics.2percenttech.com"
+          data-key="pa_live__ozATLMeaGC_qJfNO2qR871-"
+        />
       </body>
     </html>
   );

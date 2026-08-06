@@ -37,10 +37,21 @@ export default function HostRequestForm() {
       return;
     }
     setBusy(true);
-    await createHostRequest({ email: em, picks });
-    setBusy(false);
-    setDone(true);
-    setError('');
+    try {
+      await createHostRequest({ email: em, picks });
+      setDone(true);
+      setError('');
+    } catch {
+      /* The request now goes over the network, so it can genuinely fail.
+         Keep what they typed and let them retry. */
+      setError(
+        zh
+          ? '提交失败，请稍后重试。'
+          : "That didn't go through. Please try again in a moment.",
+      );
+    } finally {
+      setBusy(false);
+    }
   }
 
   if (done) {

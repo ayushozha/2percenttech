@@ -1,230 +1,68 @@
 /* ============================================================================
-   DEMO PERSISTENCE — NOT A SECURITY BOUNDARY.
+   The data layer. Everything here is a call to api.2percenttech.com, which
+   stores it in Postgres.
 
-   Everything here lives in the browser's localStorage. That means:
+   This used to be localStorage, and the difference is not cosmetic: an enquiry
+   submitted here is now something 2% Tech can actually read, and a `role` is
+   something the server decides rather than something the browser claims. Role
+   checks are enforced per request by the API — `TABS_BY_ROLE` in the dashboard
+   only decides what to draw.
 
-     · Passwords are stored in the clear and compared in the clear.
-     · Anyone can open devtools and rewrite their own role to "admin".
-     · Data is per-browser; it is not shared, backed up or authoritative.
-
-   This is a working prototype of the flows, not access control. Do not put
-   anything real behind it and do not treat a `role` from here as trusted.
-
-   The seam: every function below is async and returns plain data, so the
-   localStorage bodies can be replaced with `fetch('/api/…')` without any
-   caller changing. When that happens, drop `output: 'export'` from
-   next.config.mjs, move the role checks server-side, and hash the passwords.
+   Every function is async and returns plain data, which is what let the swap
+   from localStorage happen without any caller changing shape.
    ========================================================================= */
 
-import type { Lead, QueryStatus, Session, Submission, User } from './types';
-import { QUERY_STATUSES } from './types';
+import { api, ApiError } from './api';
+import type { Lead, Session, Submission, User } from './types';
 
-const K = {
-  users: '2pct-users',
-  session: '2pct-session',
-  leads: '2pct-leads',
-  submissions: '2pct-submissions',
-} as const;
+/* ---- session ------------------------------------------------------------ */
 
-/** Pre-`kind` key. Entries there were all host requests; migrated on first read. */
-const LEGACY_REQUESTS_KEY = '2pct-host-requests';
-
-/* ---- raw localStorage helpers ------------------------------------------
-   All reads are defensive: storage can be disabled (private mode, embedded
-   webviews) and the contents can be hand-edited into nonsense. A bad read
-   degrades to the seed rather than throwing through a render. */
-
-function read<T>(key: string, fallback: T): T {
-  if (typeof window === 'undefined') return fallback;
-  try {
-    const raw = localStorage.getItem(key);
-    if (!raw) return fallback;
-    const parsed = JSON.parse(raw);
-    return parsed ?? fallback;
-  } catch {
-    return fallback;
-  }
-}
-
-function write(key: string, value: unknown): void {
-  if (typeof window === 'undefined') return;
-  try {
-    localStorage.setItem(key, JSON.stringify(value));
-  } catch {
-    /* quota or disabled storage — the in-memory result still renders */
-  }
-}
-
-/* ---- seed --------------------------------------------------------------
-   Demo content so every screen has something to show on a fresh browser.
-   Seeding is additive and idempotent: it never overwrites a key that
-   already has content, so a signed-up account survives a reload. */
-
-const DEMO_PASSWORD = 'demo2026';
-
-const SEED_USERS: User[] = [
-  { name: 'Ava Admin', email: 'admin@2pct.tech', pass: DEMO_PASSWORD, role: 'admin' },
-  { name: 'Owen Organizer', email: 'organizer@2pct.tech', pass: DEMO_PASSWORD, role: 'organizer' },
-  { name: 'Jia Judge', email: 'judge@2pct.tech', pass: DEMO_PASSWORD, role: 'judge' },
-  { name: 'Ben Builder', email: 'builder@2pct.tech', pass: DEMO_PASSWORD, role: 'participant' },
-];
-
-export const DEMO_ACCOUNTS = SEED_USERS.map((u) => ({ email: u.email, role: u.role }));
-export const DEMO_PASSWORD_LABEL = DEMO_PASSWORD;
-
-const SEED_SUBMISSIONS: Submission[] = [
-  {
-    id: 's1',
-    team: 'Latent Labs',
-    project: 'VenueScout',
-    track: 'Agentic AI',
-    desc: 'An agent that scouts, negotiates and books Bay Area event venues end-to-end.',
-    scores: {},
-  },
-  {
-    id: 's2',
-    team: 'Fork & Merge',
-    project: 'PatchPilot',
-    track: 'Dev Tools',
-    desc: 'Auto-triages CI failures and opens ranked fix PRs before standup.',
-    scores: {},
-  },
-  {
-    id: 's3',
-    team: 'Golden Gate Grads',
-    project: 'SponsorMatch',
-    track: 'Agentic AI',
-    desc: 'Matches hackathons with sponsor briefs using event history and audience data.',
-    scores: {},
-  },
-  {
-    id: 's4',
-    team: 'Null Island',
-    project: 'CrowdCam',
-    track: 'Physical AI',
-    desc: 'Real-time crowd flow analytics for event ops from a single door camera.',
-    scores: {},
-  },
-];
-
-const SEED_LEADS: Lead[] = [
-  {
-    id: 'q1',
-    kind: 'host',
-    email: 'devrel@vectorbase.ai',
-    picks: ['workshop', 'hackathon'],
-    ts: '2026-08-01T18:20:00Z',
-    status: 'new',
-  },
-  { id: 'q2', kind: 'host', email: 'events@cloudpeak.io', picks: ['keynote'], ts: '2026-07-28T02:11:00Z', status: 'contacted' },
-  {
-    id: 'q3',
-    kind: 'host',
-    email: 'maya@agentforge.dev',
-    picks: ['panel', 'workshop'],
-    ts: '2026-07-21T21:47:00Z',
-    status: 'new',
-  },
-  {
-    id: 'q4',
-    kind: 'sponsor',
-    email: 'partnerships@northstar.ai',
-    company: 'Northstar AI',
-    contact: 'Priya Raman',
-    packages: ['exclusive'],
-    goals: ['adoption', 'feedback'],
-    budget: '50-100',
-    message: 'Want our inference API in front of builders before the Q4 launch.',
-    ts: '2026-08-02T16:05:00Z',
-    status: 'new',
-  },
-  {
-    id: 'q5',
-    kind: 'sponsor',
-    email: 'community@ridgeline.dev',
-    company: 'Ridgeline',
-    contact: 'Tom Okafor',
-    packages: ['cohosted', 'unsure'],
-    goals: ['awareness', 'hiring'],
-    budget: 'under25',
-    message: '',
-    ts: '2026-07-30T09:40:00Z',
-    status: 'contacted',
-  },
-];
-
-let seeded = false;
-
-/** Idempotent. Safe to call from every page that reads the store. */
-export function seed(): void {
-  if (seeded || typeof window === 'undefined') return;
-  seeded = true;
-
-  const users = read<User[]>(K.users, []);
-  let changed = false;
-  for (const demo of SEED_USERS) {
-    if (!users.some((u) => u.email === demo.email)) {
-      users.push(demo);
-      changed = true;
-    }
-  }
-  if (changed) write(K.users, users);
-
-  if (!read<Submission[]>(K.submissions, []).length) write(K.submissions, SEED_SUBMISSIONS);
-
-  // Migrate anything written before leads gained a `kind`, then seed only if
-  // there is still nothing — so a browser with real enquiries keeps them.
-  if (!read<Lead[]>(K.leads, []).length) {
-    const legacy = read<Partial<Lead>[]>(LEGACY_REQUESTS_KEY, []);
-    if (legacy.length) {
-      write(
-        K.leads,
-        legacy.map((q, i) => ({
-          id: q.id ?? `legacy-${i}`,
-          kind: 'host' as const,
-          email: q.email ?? '',
-          picks: q.picks ?? [],
-          ts: q.ts ?? '',
-          status: (q.status ?? 'new') as QueryStatus,
-        })),
-      );
-    } else {
-      write(K.leads, SEED_LEADS);
-    }
-  }
-}
-
-/* ---- session ----------------------------------------------------------- */
-
+/** `null` when signed out — which is an ordinary answer, not an error, so the
+    API returns 200 with a null body and the dashboard renders its gate. */
 export async function getSession(): Promise<Session | null> {
-  seed();
-  return read<Session | null>(K.session, null);
+  try {
+    return await api<Session | null>('/api/auth/me');
+  } catch {
+    /* A session probe that fails for any reason means "not signed in" as far
+       as the UI is concerned; it must never break the page render. */
+    return null;
+  }
 }
 
 export async function signOut(): Promise<void> {
-  if (typeof window === 'undefined') return;
   try {
-    localStorage.removeItem(K.session);
+    await api<{ ok: boolean }>('/api/auth/logout', { method: 'POST' });
   } catch {
-    /* ignore */
+    /* The cookies are cleared server-side on a best-effort basis; if the call
+       fails the caller still navigates away. */
   }
 }
 
-const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+/** The error codes the auth forms render messages for. */
+export type AuthResult =
+  | { ok: true; session: Session }
+  | { ok: false; error: 'email' | 'name' | 'short' | 'taken' | 'nomatch' | 'unavailable' };
 
-export type AuthResult = { ok: true; session: Session } | { ok: false; error: 'email' | 'name' | 'short' | 'taken' | 'nomatch' };
+/* The API returns these codes directly; anything unrecognised (a rate limit, a
+   bad gateway, the network) becomes `unavailable` so the form can say something
+   true rather than blaming the user's credentials. */
+const AUTH_CODES = new Set(['email', 'name', 'short', 'taken', 'nomatch']);
+
+function authFailure(err: unknown): AuthResult {
+  const code = err instanceof ApiError ? err.code : '';
+  return { ok: false, error: AUTH_CODES.has(code) ? (code as 'email') : 'unavailable' };
+}
 
 export async function signIn(email: string, pass: string): Promise<AuthResult> {
-  seed();
-  const em = email.trim().toLowerCase();
-  if (!EMAIL_RE.test(em)) return { ok: false, error: 'email' };
-
-  const user = read<User[]>(K.users, []).find((u) => u.email === em && u.pass === pass);
-  if (!user) return { ok: false, error: 'nomatch' };
-
-  const session: Session = { name: user.name, email: user.email, role: user.role };
-  write(K.session, session);
-  return { ok: true, session };
+  try {
+    const session = await api<Session>('/api/auth/login', {
+      method: 'POST',
+      body: { email: email.trim().toLowerCase(), password: pass },
+    });
+    return { ok: true, session };
+  } catch (err) {
+    return authFailure(err);
+  }
 }
 
 export async function signUp(
@@ -233,27 +71,34 @@ export async function signUp(
   pass: string,
   role: Session['role'],
 ): Promise<AuthResult> {
-  seed();
-  const em = email.trim().toLowerCase();
-  if (!EMAIL_RE.test(em)) return { ok: false, error: 'email' };
-  if (!name.trim()) return { ok: false, error: 'name' };
-  if (pass.length < 6) return { ok: false, error: 'short' };
-
-  const users = read<User[]>(K.users, []);
-  if (users.some((u) => u.email === em)) return { ok: false, error: 'taken' };
-
-  const user: User = { name: name.trim(), email: em, pass, role };
-  users.push(user);
-  write(K.users, users);
-
-  const session: Session = { name: user.name, email: user.email, role: user.role };
-  write(K.session, session);
-  return { ok: true, session };
+  try {
+    const session = await api<Session>('/api/auth/signup', {
+      method: 'POST',
+      body: { name: name.trim(), email: email.trim().toLowerCase(), password: pass, role },
+    });
+    return { ok: true, session };
+  } catch (err) {
+    return authFailure(err);
+  }
 }
 
+export async function requestPasswordReset(email: string): Promise<void> {
+  await api('/api/auth/forgot-password', {
+    method: 'POST',
+    body: { email: email.trim().toLowerCase() },
+  });
+}
+
+export async function resetPassword(token: string, newPassword: string): Promise<void> {
+  await api('/api/auth/reset-password', {
+    method: 'POST',
+    body: { token, new_password: newPassword },
+  });
+}
+
+/** Admin only — the API returns 403 for anyone else. */
 export async function listUsers(): Promise<User[]> {
-  seed();
-  return read<User[]>(K.users, []);
+  return api<User[]>('/api/users');
 }
 
 /* ---- leads (host requests + sponsor applications) ---------------------- */
@@ -274,35 +119,9 @@ export type HostRequestInput = {
   message?: string;
 };
 
-/** "Host an event in Silicon Valley" — from the landing page form.
-
-    Takes an object rather than positional args because the blueprint's fuller
-    qualification set (goals, audience, dates, attendance, venue and media
-    needs) is already modelled on Lead. The landing form sends email + format;
-    anything richer can be added without touching this signature again. */
+/** "Host an event in Silicon Valley" — from the landing page form. */
 export async function createHostRequest(input: HostRequestInput): Promise<void> {
-  seed();
-  const all = read<Lead[]>(K.leads, []);
-  all.push({
-    id: `r-${Date.now()}`,
-    kind: 'host',
-    email: input.email.trim().toLowerCase(),
-    picks: input.picks,
-    company: input.company?.trim() || undefined,
-    contact: input.contact?.trim() || undefined,
-    goals: input.goals?.length ? input.goals : undefined,
-    audience: input.audience?.trim() || undefined,
-    dates: input.dates?.trim() || undefined,
-    attendance: input.attendance || undefined,
-    budget: input.budget || undefined,
-    needs: input.needs?.length ? input.needs : undefined,
-    media: input.media?.length ? input.media : undefined,
-    access: input.access?.length ? input.access : undefined,
-    message: input.message?.trim() || undefined,
-    ts: new Date().toISOString(),
-    status: 'new',
-  });
-  write(K.leads, all);
+  await api<Lead>('/api/leads', { method: 'POST', body: { kind: 'host', ...input } });
 }
 
 export type SponsorApplication = {
@@ -317,82 +136,47 @@ export type SponsorApplication = {
 
 /** From /sponsor/apply. */
 export async function createSponsorApplication(app: SponsorApplication): Promise<void> {
-  seed();
-  const all = read<Lead[]>(K.leads, []);
-  all.push({
-    id: `s-${Date.now()}`,
-    kind: 'sponsor',
-    email: app.email.trim().toLowerCase(),
-    company: app.company.trim(),
-    contact: app.contact.trim(),
-    packages: app.packages,
-    goals: app.goals,
-    budget: app.budget,
-    message: app.message.trim(),
-    ts: new Date().toISOString(),
-    status: 'new',
-  });
-  write(K.leads, all);
+  await api<Lead>('/api/leads', { method: 'POST', body: { kind: 'sponsor', ...app } });
 }
 
-/** Newest first. Both kinds — the dashboard filters if it wants one. */
+/** Newest first, both kinds. Admin and organizer only. */
 export async function listLeads(): Promise<Lead[]> {
-  seed();
-  return read<Lead[]>(K.leads, [])
-    .slice()
-    .sort((a, b) => (b.ts || '').localeCompare(a.ts || ''));
+  return api<Lead[]>('/api/leads');
 }
 
-/** Advances new → contacted → closed → new. Returns the updated list. */
-export async function cycleQueryStatus(id: string): Promise<Lead[]> {
-  const all = read<Lead[]>(K.leads, []);
-  const row = all.find((q) => q.id === id);
-  if (row) {
-    const i = QUERY_STATUSES.indexOf(row.status ?? 'new');
-    row.status = QUERY_STATUSES[(i + 1) % QUERY_STATUSES.length] as QueryStatus;
-    write(K.leads, all);
-  }
-  return listLeads();
+/** Advances new → contacted → closed → new and returns the updated lead.
+    The rotation happens in SQL so two dashboards working the same inbox cannot
+    both read `new` and both write `contacted`. */
+export async function cycleQueryStatus(id: string): Promise<Lead> {
+  return api<Lead>(`/api/leads/${encodeURIComponent(id)}/status`, { method: 'PATCH' });
 }
 
 /* ---- hackathon submissions --------------------------------------------- */
 
 export async function listSubmissions(): Promise<Submission[]> {
-  seed();
-  return read<Submission[]>(K.submissions, []);
+  return api<Submission[]>('/api/submissions');
 }
 
-export async function setScore(id: string, judgeEmail: string, score: number): Promise<Submission[]> {
-  const all = read<Submission[]>(K.submissions, []);
-  const row = all.find((s) => s.id === id);
-  if (row) {
-    row.scores = { ...(row.scores ?? {}), [judgeEmail]: score };
-    write(K.submissions, all);
-  }
-  return all;
+/** Judges only. Returns nothing useful — callers re-read the list. */
+export async function setScore(id: string, _judgeEmail: string, score: number): Promise<void> {
+  await api(`/api/submissions/${encodeURIComponent(id)}/score`, { method: 'PUT', body: { score } });
 }
 
+/** Participants only. The owner is taken from the session server-side. */
 export async function submitProject(
-  owner: string,
+  _owner: string,
   team: string,
   project: string,
   desc: string,
-): Promise<Submission[]> {
-  const all = read<Submission[]>(K.submissions, []);
-  all.push({
-    id: `u-${Date.now()}`,
-    team: team.trim(),
-    project: project.trim(),
-    track: 'Open',
-    desc: desc.trim(),
-    scores: {},
-    owner,
+): Promise<Submission> {
+  return api<Submission>('/api/submissions', {
+    method: 'POST',
+    body: { team, project, desc },
   });
-  write(K.submissions, all);
-  return all;
 }
 
-/** Mean of a submission's scores, or null when nobody has scored it. */
+/** Mean of a submission's scores, or null when nobody has scored it.
+    Pure — no storage, no network. */
 export function averageScore(s: Submission): string | null {
   const v = Object.values(s.scores ?? {});
   if (!v.length) return null;

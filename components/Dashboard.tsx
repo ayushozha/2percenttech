@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import B from './B';
 import { LangToggle } from './SiteNav';
 import { useLang } from './LangProvider';
@@ -159,6 +159,12 @@ export default function Dashboard() {
   const [users, setUsers] = useState<User[]>([]);
   const [subs, setSubs] = useState<Submission[]>([]);
 
+  // Lets the score handler capture the pre-optimistic list without taking
+  // `subs` as a dependency, which would rebuild the callback on every keystroke
+  // of a slider drag.
+  const subsRef = useRef(subs);
+  subsRef.current = subs;
+
   // Greeting depends on the local clock, so it is computed after mount —
   // deriving it during render would disagree with the prerendered HTML.
   const [greeting, setGreeting] = useState<Bi | null>(null);
@@ -173,15 +179,28 @@ export default function Dashboard() {
     );
   }, []);
 
+  // Fetch only what this role is allowed to read. The API enforces the same
+  // rules and answers 403 otherwise, so asking for everything regardless of
+  // role — as this did when it all came from localStorage — would now mean a
+  // participant's dashboard firing two guaranteed failures on every load.
   useEffect(() => {
     if (!session) return;
     let live = true;
-    Promise.all([listLeads(), listUsers(), listSubmissions()]).then(([q, u, s]) => {
+
+    const staff = session.role === 'admin' || session.role === 'organizer';
+    const settle = <T,>(p: Promise<T>, fallback: T) => p.catch(() => fallback);
+
+    Promise.all([
+      staff ? settle(listLeads(), [] as Lead[]) : Promise.resolve([] as Lead[]),
+      session.role === 'admin' ? settle(listUsers(), [] as User[]) : Promise.resolve([] as User[]),
+      settle(listSubmissions(), [] as Submission[]),
+    ]).then(([q, u, s]) => {
       if (!live) return;
       setQueries(q);
       setUsers(u);
       setSubs(s);
     });
+
     return () => {
       live = false;
     };
@@ -193,13 +212,29 @@ export default function Dashboard() {
   // role's set — including right after sign-in as a different role.
   const active: TabId = tab && tabs.includes(tab) ? tab : tabs[0];
 
-  const onCycle = useCallback(async (id: string) => setQueries(await cycleQueryStatus(id)), []);
+  // The API returns just the row it changed, so splice it in rather than
+  // replacing the whole list.
+  const onCycle = useCallback(async (id: string) => {
+    try {
+      const updated = await cycleQueryStatus(id);
+      setQueries((prev) => prev.map((q) => (q.id === id ? updated : q)));
+    } catch {
+      /* Leave the row as it was; the next load reconciles. */
+    }
+  }, []);
 
   const onScore = useCallback(
     async (id: string, value: number, email: string) => {
       // Update locally first so the slider tracks the drag without waiting.
+      const before = subsRef.current;
       setSubs((prev) => prev.map((s) => (s.id === id ? { ...s, scores: { ...s.scores, [email]: value } } : s)));
-      setSubs(await persistScore(id, email, value));
+      try {
+        await persistScore(id, email, value);
+      } catch {
+        // Put the score back rather than leaving a number on screen that was
+        // never recorded.
+        setSubs(before);
+      }
     },
     [],
   );
@@ -668,15 +703,31 @@ function MyHack({
   const [project, setProject] = useState('');
   const [desc, setDesc] = useState('');
   const [error, setError] = useState('');
+  // Submitting is a network call now, so the button has to be able to lock —
+  // without this a double-click would send two entries.
+  const [busy, setBusy] = useState(false);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (busy) return;
     if (!team.trim() || !project.trim() || !desc.trim()) {
       setError(lang === 'zh' ? '三项均为必填。' : 'All three fields are required.');
       return;
     }
-    setSubs(await submitProject(session.email, team, project, desc));
-    setError('');
+    setBusy(true);
+    try {
+      const created = await submitProject(session.email, team, project, desc);
+      setSubs([...subs, created]);
+      setError('');
+    } catch {
+      setError(
+        lang === 'zh'
+          ? '提交失败，请稍后重试。'
+          : "That didn't go through. Please try again in a moment.",
+      );
+    } finally {
+      setBusy(false);
+    }
   }
 
   return (
@@ -757,7 +808,7 @@ function MyHack({
             </p>
           )}
 
-          <button type="submit" className="btn btn-dark" style={{ alignSelf: 'flex-start' }}>
+          <button type="submit" className="btn btn-dark" style={{ alignSelf: 'flex-start' }} disabled={busy}>
             <B zh="提交项目 →" en="Submit project →" />
           </button>
         </form>

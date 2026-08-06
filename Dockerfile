@@ -10,6 +10,13 @@ COPY package.json package-lock.json ./
 RUN npm ci
 
 COPY . .
+
+# The site is a static export, so NEXT_PUBLIC_* values are baked in here rather
+# than read at runtime. The default is the production API; override the build
+# arg to point a local or preview build somewhere else.
+ARG NEXT_PUBLIC_API_BASE=https://api.2percenttech.com
+ENV NEXT_PUBLIC_API_BASE=$NEXT_PUBLIC_API_BASE
+
 RUN npm run build          # -> /app/out
 
 FROM nginx:1.27-alpine

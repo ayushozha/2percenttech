@@ -6,17 +6,20 @@ import { useState } from 'react';
 import B from './B';
 import { LangToggle } from './SiteNav';
 import { PHOTOS } from '@/lib/data';
-import { DEMO_ACCOUNTS, DEMO_PASSWORD_LABEL, signIn, signUp, type AuthResult } from '@/lib/store';
+import { signIn, signUp, type AuthResult } from '@/lib/store';
 import { SELECTABLE_ROLES, type Role } from '@/lib/types';
 
 const ERRORS: Record<Exclude<AuthResult & { ok: false }, never>['error'], { zh: string; en: string }> = {
   email: { zh: '请输入有效邮箱。', en: 'Please enter a valid email.' },
   name: { zh: '请输入你的姓名。', en: 'Please enter your name.' },
-  short: { zh: '密码至少需要 6 位。', en: 'Password needs at least 6 characters.' },
+  short: { zh: '密码至少需要 8 位。', en: 'Password needs at least 8 characters.' },
   taken: { zh: '该邮箱已注册，请直接登录。', en: 'That email already has an account. Sign in instead.' },
-  nomatch: {
-    zh: `邮箱或密码不匹配（演示密码：${DEMO_PASSWORD_LABEL}）。`,
-    en: `No match. Check the email and password (demo password: ${DEMO_PASSWORD_LABEL}).`,
+  nomatch: { zh: '邮箱或密码不匹配。', en: 'No match. Check the email and password.' },
+  /* Rate limits, an unreachable API, a bad gateway — anything that isn't the
+     person's fault. Saying so beats blaming their password. */
+  unavailable: {
+    zh: '暂时无法登录，请稍后再试。',
+    en: "We couldn't sign you in just now. Please try again in a moment.",
   },
 };
 
@@ -248,35 +251,10 @@ export default function AuthForm({ mode }: { mode: 'signin' | 'signup' }) {
             </button>
           </form>
 
-          <div
-            style={{
-              marginTop: 26,
-              padding: '16px 18px',
-              borderRadius: 16,
-              background: 'rgba(255,255,255,.8)',
-              border: '1px solid rgba(23,22,28,.09)',
-            }}
-          >
-            <p className="mono-label" style={{ margin: '0 0 8px', fontSize: 10.5, letterSpacing: '.18em' }}>
-              <B
-                zh={`演示账号 · 密码 ${DEMO_PASSWORD_LABEL}`}
-                en={`Demo accounts · password ${DEMO_PASSWORD_LABEL}`}
-              />
-            </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 4, fontSize: 13, color: 'var(--ink-3)' }}>
-              {DEMO_ACCOUNTS.map((a) => (
-                <span key={a.email}>
-                  <strong style={{ color: 'var(--ink)' }}>{a.email}</strong> — {a.role}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {/* Say plainly what this is. See the header of lib/store.ts. */}
-          <p className="fine" style={{ marginTop: 14, lineHeight: 1.5 }}>
+          <p className="fine" style={{ marginTop: 20, lineHeight: 1.5 }}>
             <B
-              zh="演示登录：账号与数据只保存在这个浏览器里，密码未加密，角色可被随意修改。请勿用于真实凭据。"
-              en="Demo sign-in: accounts live only in this browser, passwords are stored unencrypted and roles can be edited freely. Don't use real credentials."
+              zh="账号由 2%Tech 认证服务托管，密码经加密存储，登录状态保存在 httpOnly cookie 中。"
+              en="Accounts are held by the 2% Tech authentication service. Passwords are hashed, and your session lives in an httpOnly cookie."
             />
           </p>
         </div>
