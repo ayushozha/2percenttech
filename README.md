@@ -173,6 +173,13 @@ Drop files in `photos/` and rerun `prepare-assets`; they're renumbered in
 filename order. `PHOTOS` in `lib/data.ts` expects 16 — update the length there if
 you change the count. These dominate page weight, so keep the count deliberate.
 
+**Renumbering moves pictures between pages.** `FEATURED_PHOTOS` in `lib/data.ts`
+and `EVENT_PRODUCTS[].shots` in `lib/blueprint.ts` both index into `PHOTOS` by
+position, and the product shots are picked so each format shows itself — the
+workshop page shows a workshop, not a 300-seat auditorium. Adding a file in the
+middle shifts every index after it, so re-check both lists against the images
+afterwards. The `alt` text is the quickest way to tell what a slot should be.
+
 ### Placeholders
 
 `className="tbd"` renders as a yellow highlight with a dashed underline. Use it

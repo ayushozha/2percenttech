@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import B from './B';
+import { ChipRow, Step } from './FormBits';
 import { useLang } from './LangProvider';
 import { createSponsorApplication } from '@/lib/store';
 import { PACKAGES } from '@/lib/sponsor-data';
@@ -22,66 +23,6 @@ import { BUDGET_BANDS, SPONSOR_GOALS } from '@/lib/types';
 
 type ErrKey = 'company' | 'contact' | 'email' | 'packages' | 'submit';
 type Errors = Partial<Record<ErrKey, { zh: string; en: string }>>;
-
-function Step({
-  n,
-  title,
-  hint,
-  children,
-}: {
-  n: string;
-  title: React.ReactNode;
-  hint?: React.ReactNode;
-  children: React.ReactNode;
-}) {
-  return (
-    <section style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-      <div>
-        <span className="step-n">{n}</span>
-        <h2 className="h-sub" style={{ display: 'inline', fontSize: 19 }}>
-          {title}
-        </h2>
-        {hint && (
-          <p className="fine" style={{ marginTop: 6 }}>
-            {hint}
-          </p>
-        )}
-      </div>
-      {children}
-    </section>
-  );
-}
-
-function ChipRow({
-  options,
-  selected,
-  onToggle,
-}: {
-  options: { id: string; zh: string; en: string }[];
-  selected: string[];
-  onToggle: (id: string) => void;
-}) {
-  return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-      {options.map((o) => {
-        const on = selected.includes(o.id);
-        return (
-          <button
-            key={o.id}
-            type="button"
-            className={`chip${on ? ' on' : ''}`}
-            aria-pressed={on}
-            onClick={() => onToggle(o.id)}
-            style={{ padding: '9px 16px', fontSize: 13.5 }}
-          >
-            {on ? '✓ ' : ''}
-            <B zh={o.zh} en={o.en} />
-          </button>
-        );
-      })}
-    </div>
-  );
-}
 
 export default function SponsorApplyForm() {
   const { lang } = useLang();

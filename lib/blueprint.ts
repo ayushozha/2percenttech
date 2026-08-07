@@ -10,7 +10,7 @@
    2. Past cases reference real events from lib/data.ts with their real
       registration counts. No case study is invented. */
 
-import type { Bi } from './data';
+import { PAST, PHOTOS, UPCOMING, type Bi, type EventRow } from './data';
 
 /* ---- §1 vision --------------------------------------------------------- */
 
@@ -66,7 +66,15 @@ export type EventProduct = {
   addons: Bi[];
   /** Names must match entries in UPCOMING or PAST in lib/data.ts */
   caseNames: string[];
+  /** Real photographs of this format being run. The first is the page hero.
+      No product gets a photo of a different format — a workshop tile showing
+      a 300-seat auditorium is a promise we would not keep. */
+  shots: { src: string; alt: string }[];
 };
+
+/** Indexed into PHOTOS rather than spelled out, so the extension can never
+    drift from what prepare-assets emits. */
+const shot = (i: number, alt: string) => ({ src: PHOTOS[i], alt });
 
 export const EVENT_PRODUCTS: EventProduct[] = [
   {
@@ -111,6 +119,11 @@ export const EVENT_PRODUCTS: EventProduct[] = [
       { zh: '卫星场次（由社区伙伴在本地承办）', en: 'Satellite events hosted locally by community partners' },
     ],
     caseNames: ['Agentic AI Hackathon — SF', 'Bay Builders Hackathon', 'Wizard Hackathon'],
+    shots: [
+      shot(0, 'Hackathon floor at the AWS Builder Loft, every table on laptops'),
+      shot(14, 'Two builders at their table mid-hackathon'),
+      shot(3, 'Bay Builders Hackathon opening from the stage'),
+    ],
   },
   {
     id: 'workshop',
@@ -150,6 +163,11 @@ export const EVENT_PRODUCTS: EventProduct[] = [
       'Build your AI Organization Workshop',
       'Design & Deploy Workshop',
     ],
+    shots: [
+      shot(4, 'Workshop in progress, the walkthrough up on both screens'),
+      shot(6, 'A small group working through the docs together'),
+      shot(11, 'Hands-on session at the AWS Builder Loft'),
+    ],
   },
   {
     id: 'panel',
@@ -185,6 +203,11 @@ export const EVENT_PRODUCTS: EventProduct[] = [
       { zh: '社区伙伴同步转播', en: 'Partner communities redistributing the stream' },
     ],
     caseNames: ['The Agentic World #1', 'AI Founders x VCs: Conversation + Networking'],
+    shots: [
+      shot(2, 'Five panelists on stage for a session on the agent economy'),
+      shot(1, 'A standing-room panel discussion'),
+      shot(9, 'Panel on stage with the room filled in front of it'),
+    ],
   },
   {
     id: 'keynote',
@@ -219,10 +242,26 @@ export const EVENT_PRODUCTS: EventProduct[] = [
       { zh: '中文市场同步发布', en: 'Simultaneous launch into the Chinese-speaking market' },
     ],
     caseNames: ['Skills & Agents — YC Founder Night', 'AI Agents in Real-World Business + Demo Day'],
+    shots: [
+      shot(12, 'A founder presenting to a seated room'),
+      shot(15, 'Keynote under way in a tiered auditorium'),
+      shot(8, 'Full lecture theatre watching a talk'),
+    ],
   },
 ];
 
 export const productById = (id: string) => EVENT_PRODUCTS.find((p) => p.id === id);
+
+/** Resolve a product's `caseNames` against the real calendar, so registration
+    counts and Luma links have exactly one source and no case study can be
+    invented. A name that no longer matches an event drops out rather than
+    rendering as an empty row. */
+export function casesFor(p: EventProduct): EventRow[] {
+  const all = [...UPCOMING, ...PAST];
+  return p.caseNames
+    .map((name) => all.find((e) => e.name === name))
+    .filter((e): e is EventRow => e !== undefined);
+}
 
 /* ---- §5 the campaign system -------------------------------------------- */
 

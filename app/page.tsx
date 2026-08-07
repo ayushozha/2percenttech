@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import B from '@/components/B';
 import SiteNav from '@/components/SiteNav';
 import SiteFooter from '@/components/SiteFooter';
@@ -15,6 +16,17 @@ import {
   UPCOMING,
   type EventRow,
 } from '@/lib/data';
+import {
+  AUDIENCES,
+  CAMPAIGN,
+  CAMPAIGN_ARGUMENT,
+  CAMPAIGN_HEADLINE,
+  EVENT_PRODUCTS,
+  PARTNER_OFFER,
+  PARTNER_TYPES,
+  POSITIONING,
+  ROADMAP,
+} from '@/lib/blueprint';
 
 function Row({ e }: { e: EventRow }) {
   if (e.highlight) {
@@ -160,6 +172,13 @@ export default function Landing() {
             </p>
 
             <HostRequestForm />
+
+            <p className="small" style={{ marginTop: 14 }}>
+              <B zh="想说得更具体？" en="Want to tell us more? " />
+              <Link href="/host/apply" style={{ fontWeight: 600 }}>
+                <B zh="填写完整活动简报 →" en="Fill in the full brief →" />
+              </Link>
+            </p>
           </div>
 
           <div style={{ position: 'relative', height: 540, minWidth: 0 }}>
@@ -180,8 +199,81 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* ---- the four event products ----
+          Blueprint §4.2. The hero asks "what do you want to host?"; this is the
+          answer set, and each card is the entry to its own page. */}
+      <section className="section section-first" id="products">
+        <div className="wrap" style={{ padding: 0 }}>
+          <p className="eyebrow">
+            <B zh="活动形式" en="Event products" />
+          </p>
+          <h2 className="h-sec">
+            <B zh="四种标准形式" en="Four formats we run" />
+          </h2>
+          <p className="body" style={{ margin: '10px 0 28px', maxWidth: '64ch' }}>
+            <B
+              zh="每一种都是一套完整流程，不是一次性的场地租赁。点进去看服务范围、执行流程与过往案例。"
+              en="Each one is a worked process rather than a room booking. Click through for the scope, the run of show and what we've already run."
+            />
+          </p>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 16 }}>
+            {EVENT_PRODUCTS.map((p) => (
+              <Link
+                key={p.id}
+                href={`/host/${p.id}`}
+                className="card"
+                style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', gap: 12 }}
+              >
+                <img
+                  src={p.shots[0].src}
+                  alt={p.shots[0].alt}
+                  loading="lazy"
+                  style={{
+                    width: '100%',
+                    height: 168,
+                    objectFit: 'cover',
+                    borderRadius: 14,
+                    display: 'block',
+                  }}
+                />
+
+                <h3 style={{ fontSize: 18, fontWeight: 800, letterSpacing: '-.02em' }}>
+                  <B zh={p.name.zh} en={p.name.en} />
+                </h3>
+
+                <p style={{ fontSize: 14, lineHeight: 1.55, color: 'var(--ink-3)' }}>
+                  <B zh={p.tagline.zh} en={p.tagline.en} />
+                </p>
+
+                <p className="fine" style={{ marginTop: 'auto', paddingTop: 4 }}>
+                  <B zh="适合：" en="For: " />
+                  <B zh={p.forWho.zh} en={p.forWho.en} />
+                </p>
+
+                <p className="mono-label" style={{ fontSize: 10 }}>
+                  <B
+                    zh={`${p.included.length} 项服务 · 查看 →`}
+                    en={`${p.included.length} things included · read it →`}
+                  />
+                </p>
+              </Link>
+            ))}
+          </div>
+
+          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: 26 }}>
+            <Link href="/host/apply" className="btn btn-dark">
+              <B zh="填写活动简报 →" en="Start the brief →" />
+            </Link>
+            <Link href="/sponsor" className="btn btn-ghost">
+              <B zh="我想赞助，不是主办" en="I'd rather sponsor one" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* ---- logo wall ---- */}
-      <section className="section-flush section-first" style={{ padding: '26px 0 56px' }}>
+      <section className="section-flush" style={{ padding: '26px 0 56px' }}>
         <div className="wrap">
           <p className="eyebrow">
             <B zh="到场记录" en="The room" />
@@ -211,6 +303,200 @@ export default function Landing() {
               <B zh="共办社区与场地：" en="Co-host communities & venues:" />
             </strong>{' '}
             {COHOSTS}
+          </p>
+        </div>
+      </section>
+
+      {/* ---- stats + photos ---- */}
+      <section className="section">
+        <div className="wrap" style={{ padding: 0 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: 24 }}>
+            {STATS.map((s) => (
+              <div key={s.display} style={{ borderLeft: '1px solid var(--line-3)', paddingLeft: 22 }}>
+                <span className="serif-num" style={{ fontSize: 64 }}>
+                  {s.display}
+                </span>
+                <span className="mono-label" style={{ display: 'block', marginTop: 8 }}>
+                  <B zh={s.zh} en={s.en} />
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <p className="fine" style={{ marginTop: 18, fontSize: 12.5 }}>
+            <span className="en">
+              Since January 2025, pulled from our public{' '}
+              <a href={LUMA_PROFILE} target="_blank" rel="noopener noreferrer">
+                Luma profile
+              </a>
+              , click through and check.
+            </span>
+            <span className="zh">
+              自 2025 年 1 月起，数据来自公开{' '}
+              <a href={LUMA_PROFILE} target="_blank" rel="noopener noreferrer">
+                Luma 主页
+              </a>
+              ，欢迎点进去核验。
+            </span>
+          </p>
+
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 26, justifyContent: 'center', marginTop: 44 }}>
+            {FEATURED_PHOTOS.map((p, i) => (
+              <div
+                key={p.src}
+                style={{
+                  flex: '0 1 340px',
+                  transform: ['rotate(-2deg)', 'rotate(1.6deg) translateY(14px)', 'rotate(-1.2deg)'][i],
+                  background: '#fff',
+                  border: '1px solid var(--line-2)',
+                  borderRadius: 18,
+                  padding: '10px 10px 12px',
+                  boxShadow: 'var(--shadow-card)',
+                }}
+              >
+                <div style={{ width: '100%', height: 230 }}>
+                  <img
+                    src={p.src}
+                    alt={p.alt}
+                    loading="lazy"
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 10, display: 'block' }}
+                  />
+                </div>
+                <p style={{ margin: '10px 4px 0', fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ink-5)' }}>
+                  <B zh={p.caption.zh} en={p.caption.en} />
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ---- the campaign system ----
+          Blueprint §5. The argument the whole business rests on: a room holds
+          150 people, so the room cannot be the product. Also on the prospectus,
+          where it's the same three phases aimed at a sponsor. */}
+      <section className="section">
+        <div className="wrap" style={{ padding: 0 }}>
+          <p className="eyebrow">
+            <B zh="传播系统" en="The campaign system" />
+          </p>
+          <h2 className="h-sec" style={{ maxWidth: '20ch' }}>
+            <B zh={CAMPAIGN_HEADLINE.zh} en={CAMPAIGN_HEADLINE.en} />
+          </h2>
+          <p className="body" style={{ margin: '12px 0 28px', maxWidth: '64ch' }}>
+            <B zh={CAMPAIGN_ARGUMENT.zh} en={CAMPAIGN_ARGUMENT.en} />
+          </p>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: 16 }}>
+            {CAMPAIGN.map((phase, i) => (
+              <div key={phase.phase.en} className="card" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                <div>
+                  <span className="step-n">{String(i + 1).padStart(2, '0')}</span>
+                  <h3 className="h-sub" style={{ display: 'inline', fontSize: 18 }}>
+                    <B zh={phase.phase.zh} en={phase.phase.en} />
+                  </h3>
+                  <p className="mono-label" style={{ fontSize: 10, marginTop: 6 }}>
+                    <B zh={phase.sub.zh} en={phase.sub.en} />
+                  </p>
+                </div>
+
+                <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 7 }}>
+                  {phase.items.map((it) => (
+                    <li key={it.en} style={{ display: 'flex', gap: 8, fontSize: 13.5, lineHeight: 1.5 }}>
+                      <span aria-hidden="true" style={{ color: 'var(--violet-deep)' }}>
+                        ✓
+                      </span>
+                      <span>
+                        <B zh={it.zh} en={it.en} />
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ---- three groups ----
+          Blueprint §1. Everything else on the page is one of these three
+          groups' view of the same network. */}
+      <section className="section">
+        <div className="wrap" style={{ padding: 0 }}>
+          <p className="eyebrow">
+            <B zh="我们服务谁" en="Who we serve" />
+          </p>
+          <h2 className="h-sec">
+            <B zh="三个群体，一个网络" en="Three groups, one network" />
+          </h2>
+          <p className="body" style={{ margin: '10px 0 28px', maxWidth: '64ch' }}>
+            <B zh={POSITIONING.zh} en={POSITIONING.en} />
+          </p>
+
+          <div className="grid-auto">
+            {AUDIENCES.map((a) => (
+              <div key={a.key} className="card">
+                <h3 style={{ fontSize: 17, fontWeight: 800, letterSpacing: '-.01em' }}>
+                  <B zh={a.h.zh} en={a.h.en} />
+                </h3>
+                <p style={{ marginTop: 8, fontSize: 14, lineHeight: 1.6, color: 'var(--ink-3)' }}>
+                  <B zh={a.p.zh} en={a.p.en} />
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ---- calendar ---- */}
+      <section className="section">
+        <div className="wrap" style={{ padding: 0 }}>
+          <p className="eyebrow">
+            <B zh="活动" en="Calendar" />
+          </p>
+          <h2 className="h-sec" style={{ marginBottom: 28 }}>
+            <B zh="接下来 & 刚办完" en="Coming up & just wrapped" />
+          </h2>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(320px,1fr))', gap: 44 }}>
+            <div>
+              <p className="tl-head">
+                <B zh="接下来" en="Upcoming" />
+              </p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                {UPCOMING.map((e) => (
+                  <Row key={`${e.date}-${e.name}`} e={e} />
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <p className="tl-head">
+                <B zh="过往精选 · 2026 年（另有标注）" en="Recent highlights · 2026 unless noted" />
+              </p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                {PAST_HIGHLIGHTS.map((e) => (
+                  <Row key={`${e.date}-${e.name}-${e.registered}`} e={e} />
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <p className="fine" style={{ marginTop: 22, fontSize: 12.5 }}>
+            <span className="en">
+              All 25 events are on our{' '}
+              <a href={LUMA_PROFILE} target="_blank" rel="noopener noreferrer">
+                Luma profile
+              </a>
+              .
+            </span>
+            <span className="zh">
+              全部 25 场记录都在{' '}
+              <a href={LUMA_PROFILE} target="_blank" rel="noopener noreferrer">
+                Luma 主页
+              </a>
+              。
+            </span>
           </p>
         </div>
       </section>
@@ -294,120 +580,106 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ---- stats + photos ---- */}
+      {/* ---- community partners ----
+          Blueprint §8. The distribution layer: how a single Bay Area room
+          reaches builders who are nowhere near it. */}
       <section className="section">
         <div className="wrap" style={{ padding: 0 }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: 24 }}>
-            {STATS.map((s) => (
-              <div key={s.display} style={{ borderLeft: '1px solid var(--line-3)', paddingLeft: 22 }}>
-                <span className="serif-num" style={{ fontSize: 64 }}>
-                  {s.display}
-                </span>
-                <span className="mono-label" style={{ display: 'block', marginTop: 8 }}>
-                  <B zh={s.zh} en={s.en} />
-                </span>
-              </div>
-            ))}
-          </div>
-
-          <p className="fine" style={{ marginTop: 18, fontSize: 12.5 }}>
-            <span className="en">
-              Since January 2025, pulled from our public{' '}
-              <a href={LUMA_PROFILE} target="_blank" rel="noopener noreferrer">
-                Luma profile
-              </a>
-              , click through and check.
-            </span>
-            <span className="zh">
-              自 2025 年 1 月起，数据来自公开{' '}
-              <a href={LUMA_PROFILE} target="_blank" rel="noopener noreferrer">
-                Luma 主页
-              </a>
-              ，欢迎点进去核验。
-            </span>
+          <p className="eyebrow">
+            <B zh="社区伙伴" en="Community partners" />
+          </p>
+          <h2 className="h-sec">
+            <B zh="一起把活动办到更远的地方" en="Taking the event further than the room" />
+          </h2>
+          <p className="body" style={{ margin: '10px 0 28px', maxWidth: '64ch' }}>
+            <B
+              zh="我们和各地的社区、社团与组织者合作，把黑客松带到湾区之外。如果你在运营一个开发者社区，我们想认识你。"
+              en="We work with communities, clubs and organisers elsewhere to take hackathons beyond the Bay Area. If you run a developer community, we'd like to meet you."
+            />
           </p>
 
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 26, justifyContent: 'center', marginTop: 44 }}>
-            {FEATURED_PHOTOS.map((p, i) => (
-              <div
-                key={p.src}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 16 }}>
+            <div className="card">
+              <p className="mono-label" style={{ fontSize: 10 }}>
+                <B zh="我们在找" en="Who we partner with" />
+              </p>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 14 }}>
+                {PARTNER_TYPES.map((t) => (
+                  <span key={t.en} className="chip" style={{ cursor: 'default' }}>
+                    <B zh={t.zh} en={t.en} />
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="card">
+              <p className="mono-label" style={{ fontSize: 10 }}>
+                <B zh="伙伴可以做的事" en="What partners do" />
+              </p>
+              <ul
                 style={{
-                  flex: '0 1 340px',
-                  transform: ['rotate(-2deg)', 'rotate(1.6deg) translateY(14px)', 'rotate(-1.2deg)'][i],
-                  background: '#fff',
-                  border: '1px solid var(--line-2)',
-                  borderRadius: 18,
-                  padding: '10px 10px 12px',
-                  boxShadow: 'var(--shadow-card)',
+                  margin: '14px 0 0',
+                  padding: 0,
+                  listStyle: 'none',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 8,
                 }}
               >
-                <div style={{ width: '100%', height: 230 }}>
-                  <img
-                    src={p.src}
-                    alt={p.alt}
-                    loading="lazy"
-                    style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 10, display: 'block' }}
-                  />
-                </div>
-                <p style={{ margin: '10px 4px 0', fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ink-5)' }}>
-                  <B zh={p.caption.zh} en={p.caption.en} />
-                </p>
-              </div>
-            ))}
+                {PARTNER_OFFER.map((o) => (
+                  <li key={o.en} style={{ display: 'flex', gap: 8, fontSize: 14, lineHeight: 1.5 }}>
+                    <span aria-hidden="true" style={{ color: 'var(--violet-deep)' }}>
+                      ✓
+                    </span>
+                    <span>
+                      <B zh={o.zh} en={o.en} />
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              <p style={{ marginTop: 16, fontSize: 13.5 }}>
+                <a href={`mailto:${CONTACT.email}`} style={{ fontWeight: 600 }}>
+                  <B zh="想成为社区伙伴 →" en="Partner with us →" />
+                </a>
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ---- calendar ---- */}
+      {/* ---- roadmap ----
+          Blueprint §4.4 and §4.5. None of this exists yet, and every card says
+          so. We do not advertise a builder network that isn't built. */}
       <section className="section">
         <div className="wrap" style={{ padding: 0 }}>
           <p className="eyebrow">
-            <B zh="活动" en="Calendar" />
+            <B zh="在建" en="In progress" />
           </p>
-          <h2 className="h-sec" style={{ marginBottom: 28 }}>
-            <B zh="接下来 & 刚办完" en="Coming up & just wrapped" />
+          <h2 className="h-sec">
+            <B zh="我们正在建的东西" en="What we're building" />
           </h2>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(320px,1fr))', gap: 44 }}>
-            <div>
-              <p className="tl-head">
-                <B zh="接下来" en="Upcoming" />
-              </p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                {UPCOMING.map((e) => (
-                  <Row key={`${e.date}-${e.name}`} e={e} />
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <p className="tl-head">
-                <B zh="过往精选 · 2026 年（另有标注）" en="Recent highlights · 2026 unless noted" />
-              </p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                {PAST_HIGHLIGHTS.map((e) => (
-                  <Row key={`${e.date}-${e.name}-${e.registered}`} e={e} />
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <p className="fine" style={{ marginTop: 22, fontSize: 12.5 }}>
-            <span className="en">
-              All 25 events are on our{' '}
-              <a href={LUMA_PROFILE} target="_blank" rel="noopener noreferrer">
-                Luma profile
-              </a>
-              .
-            </span>
-            <span className="zh">
-              全部 25 场记录都在{' '}
-              <a href={LUMA_PROFILE} target="_blank" rel="noopener noreferrer">
-                Luma 主页
-              </a>
-              。
-            </span>
+          <p className="body" style={{ margin: '10px 0 28px', maxWidth: '64ch' }}>
+            <B
+              zh="以下功能尚未上线。放在这里是为了说明方向，不是现在就能用的东西。"
+              en="None of this is live yet. It's here to show where we're going, not to describe something you can use today."
+            />
           </p>
+
+          <div className="grid-auto">
+            {ROADMAP.map((r) => (
+              <div key={r.h.en} className="card">
+                <span className="badge badge-new">
+                  <B zh="规划中" en="Planned" />
+                </span>
+                <h3 style={{ marginTop: 12, fontSize: 17, fontWeight: 800, letterSpacing: '-.01em' }}>
+                  <B zh={r.h.zh} en={r.h.en} />
+                </h3>
+                <p style={{ marginTop: 8, fontSize: 14, lineHeight: 1.6, color: 'var(--ink-3)' }}>
+                  <B zh={r.p.zh} en={r.p.en} />
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -451,9 +723,9 @@ export default function Landing() {
             <a href="/sponsor" className="btn btn-ghost">
               <B zh="看赞助方案" en="Read the prospectus" />
             </a>
-            <a href="#top" className="btn btn-ghost">
-              <B zh="我想办活动 ↑" en="I want to host ↑" />
-            </a>
+            <Link href="/host/apply" className="btn btn-ghost">
+              <B zh="我想办活动" en="I want to host" />
+            </Link>
           </div>
 
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '14px 36px', justifyContent: 'center', marginTop: 34, fontSize: 13.5 }}>

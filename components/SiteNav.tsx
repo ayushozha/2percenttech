@@ -20,8 +20,18 @@ export function LangToggle() {
   );
 }
 
-/** Public site nav — landing page and prospectus. */
-export default function SiteNav({ variant = 'landing' }: { variant?: 'landing' | 'sponsor' }) {
+/** Public site nav — landing page, product pages and prospectus.
+
+    The primary action follows the page: on the host side it's "brief us on an
+    event", on the sponsor side it's "apply to sponsor". Signing in is for the
+    people who already work here, so it stays a ghost button everywhere. */
+export default function SiteNav({
+  variant = 'landing',
+}: {
+  variant?: 'landing' | 'sponsor' | 'host';
+}) {
+  const host = variant === 'host';
+
   return (
     <nav className="nav">
       <div className="nav-in">
@@ -31,20 +41,27 @@ export default function SiteNav({ variant = 'landing' }: { variant?: 'landing' |
         </Link>
         <div className="nav-actions">
           <LangToggle />
-          {variant === 'landing' ? (
-            <Link href="/sponsor" className="btn btn-ghost btn-sm">
-              <B zh="赞助方案" en="Sponsor" />
-            </Link>
-          ) : (
+
+          {variant === 'sponsor' ? (
             <button type="button" className="btn btn-ghost btn-sm no-print" onClick={() => window.print()}>
               <B zh="存成 PDF" en="Save PDF" />
             </button>
+          ) : (
+            <Link href="/sponsor" className="btn btn-ghost btn-sm">
+              <B zh="赞助方案" en="Sponsor" />
+            </Link>
           )}
-          {/* The primary action everywhere on the public site is "apply to
-              sponsor"; signing in is for the people who already work here. */}
-          <Link href="/sponsor/apply" className="btn btn-dark btn-sm">
-            <B zh="申请赞助" en="Sponsor us" />
-          </Link>
+
+          {host ? (
+            <Link href="/host/apply" className="btn btn-dark btn-sm">
+              <B zh="办活动" en="Host an event" />
+            </Link>
+          ) : (
+            <Link href="/sponsor/apply" className="btn btn-dark btn-sm">
+              <B zh="申请赞助" en="Sponsor us" />
+            </Link>
+          )}
+
           <Link href="/signin" className="btn btn-ghost btn-sm">
             <B zh="登录" en="Sign in" />
           </Link>
