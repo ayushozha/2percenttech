@@ -1,6 +1,15 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
-import { Figtree, Instrument_Serif, IBM_Plex_Mono, Noto_Sans_SC, Noto_Serif_SC } from 'next/font/google';
+import {
+  Anton,
+  Figtree,
+  IBM_Plex_Mono,
+  Instrument_Serif,
+  Noto_Sans_SC,
+  Noto_Serif_SC,
+  Space_Grotesk,
+  Space_Mono,
+} from 'next/font/google';
 import LangProvider from '@/components/LangProvider';
 import './globals.css';
 
@@ -52,6 +61,31 @@ const notoSerifSC = Noto_Serif_SC({
   preload: false,
 });
 
+/* The v4 landing's three faces. The prototype links these from Google at
+   runtime; self-hosting them here holds the same "no external request for
+   text" property the rest of the site already has. */
+
+const anton = Anton({
+  subsets: ['latin'],
+  weight: '400',
+  variable: '--font-anton',
+  display: 'swap',
+});
+
+const grotesk = Space_Grotesk({
+  subsets: ['latin'],
+  weight: ['400', '500', '700'],
+  variable: '--font-grotesk',
+  display: 'swap',
+});
+
+const spaceMono = Space_Mono({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+  variable: '--font-space-mono',
+  display: 'swap',
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL('https://2percenttech.com'),
   title: '2%Tech · Bay Area AI Hackathons & Developer Community · 湾区 AI 黑客松',
@@ -66,7 +100,9 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
-  const fonts = [figtree, instrument, plexMono, notoSC, notoSerifSC].map((f) => f.variable).join(' ');
+  const fonts = [figtree, instrument, plexMono, notoSC, notoSerifSC, anton, grotesk, spaceMono]
+    .map((f) => f.variable)
+    .join(' ');
   return (
     <html lang="en" className={fonts}>
       <body>

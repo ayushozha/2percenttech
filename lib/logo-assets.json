@@ -1,49 +1,61 @@
 {
   "aws": {
+    "mq": "/logos/mq/aws.webp",
     "src": "/logos/aws.webp",
     "tile": "#000000"
   },
   "circle": {
+    "mq": "/logos/mq/circle.webp",
     "src": "/logos/circle.webp",
     "tile": "#d0e6fc"
   },
   "coinbase": {
+    "mq": "/logos/mq/coinbase.webp",
     "src": "/logos/coinbase.webp",
     "tile": "#ffffff"
   },
   "gmi": {
+    "mq": "/logos/mq/gmi.webp",
     "src": "/logos/gmi.webp",
     "tile": "#3c7ee5"
   },
   "google": {
+    "mq": "/logos/mq/google.svg",
     "src": "/logos/google.svg",
     "tile": "#ffffff"
   },
   "meta": {
+    "mq": "/logos/mq/meta.webp",
     "src": "/logos/meta.webp",
     "tile": "#ffffff"
   },
   "microsoft": {
+    "mq": "/logos/mq/microsoft.webp",
     "src": "/logos/microsoft.webp",
     "tile": "#ffffff"
   },
   "mistral": {
+    "mq": "/logos/mq/mistral.svg",
     "src": "/logos/mistral.svg",
     "tile": "#ffffff"
   },
   "nebius": {
+    "mq": "/logos/mq/nebius.webp",
     "src": "/logos/nebius.webp",
     "tile": "#defd4e"
   },
   "nvidia": {
+    "mq": "/logos/mq/nvidia.webp",
     "src": "/logos/nvidia.webp",
     "tile": "#86b737"
   },
   "openai": {
+    "mq": "/logos/mq/openai.webp",
     "src": "/logos/openai.webp",
     "tile": "#000000"
   },
   "snyk": {
+    "mq": "/logos/mq/snyk.svg",
     "src": "/logos/snyk.svg",
     "tile": "#ffffff"
   }

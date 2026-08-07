@@ -975,3 +975,134 @@ details.more[open] > summary::before {
     break-inside: avoid;
   }
 }
+
+/* ===========================================================================
+   v4 landing — the brutalist black/yellow page at `/`.
+
+   Ported from the Claude Design project "2pct Landing v4.dc.html". The
+   prototype styles everything inline; what lives here is only what inline
+   styles cannot express — keyframes, pseudo-elements, hover/focus states and
+   the responsive collapses. Everything is namespaced under `.v4` so none of
+   it reaches the prospectus, the dashboard or the auth pages, which still run
+   the warm-paper design system above.
+   ======================================================================== */
+
+.v4 {
+  --ink: #111;
+  --paper: #fffdf4;
+  --pop: #ffd400;
+  font-family: var(--font-grotesk), ui-sans-serif, system-ui, sans-serif;
+  color: var(--ink);
+  background: var(--paper);
+  min-height: 100vh;
+  overflow-x: clip;
+}
+
+.v4 a {
+  color: var(--ink);
+  text-decoration: none;
+}
+.v4 a:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
+  text-decoration-color: var(--pop);
+}
+.v4 ::selection {
+  background: var(--pop);
+  color: var(--ink);
+}
+.v4 input:focus,
+.v4 textarea:focus {
+  outline: 3px solid var(--pop);
+  outline-offset: 0;
+}
+
+/* The one moving part on the page. Two identical halves translate -50%, so
+   the seam lands exactly where the sequence repeats. */
+@keyframes v4-mq {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@keyframes v4-ring {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.v4-marquee-track {
+  display: inline-flex;
+  animation: v4-mq 36s linear infinite;
+  will-change: transform;
+}
+
+/* The marquee marks are white silhouettes (prepare_assets emits them that
+   way). The filter is what whitens the three that stayed vectors, and is a
+   no-op on the rasters — so the markup does not have to know which is which. */
+.v4-marquee-track img {
+  display: block;
+  width: auto;
+  opacity: 0.92;
+  filter: brightness(0) invert(1);
+}
+
+.v4-ring-spin {
+  animation: v4-ring 40s linear infinite;
+}
+
+/* Offset-shadow blocks. The press keeps the shadow anchored while the button
+   moves into it, which is the whole trick of the style. */
+.v4-press {
+  transition: transform 0.08s, box-shadow 0.08s;
+}
+.v4-press:hover {
+  transform: translate(2px, 2px);
+}
+.v4-press:active {
+  transform: translate(4px, 4px);
+}
+
+.v4-join-card {
+  transition: background 0.12s;
+}
+.v4-join-card:hover {
+  background: #fff7cc !important;
+}
+
+/* Respect a reduced-motion preference: the marquee and the orbit are
+   decoration, and a 36s crawl is exactly the kind of thing that triggers
+   vestibular symptoms. */
+@media (prefers-reduced-motion: reduce) {
+  .v4-marquee-track,
+  .v4-ring-spin {
+    animation: none;
+  }
+  .v4-press:hover,
+  .v4-press:active {
+    transform: none;
+  }
+}
+
+/* ---- responsive collapses ----
+   The prototype is desktop-only; these are the breakpoints it never had. */
+
+@media (max-width: 1080px) {
+  .v4-hero-formats { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+  .v4-upcoming-grid { grid-template-columns: minmax(0, 1fr) !important; }
+  .v4-upcoming-grid aside { position: static !important; }
+  .v4-global-grid { grid-template-columns: minmax(0, 1fr) !important; }
+  .v4-dist-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .v4-footer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+}
+
+@media (max-width: 760px) {
+  .v4-nav-links { display: none !important; }
+  .v4-hero-formats { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .v4-join-grid { grid-template-columns: minmax(0, 1fr) !important; }
+  .v4-dist-grid { grid-template-columns: minmax(0, 1fr) !important; }
+  .v4-takeaways { grid-template-columns: minmax(0, 1fr) !important; }
+  .v4-takeaway-head { grid-template-columns: minmax(0, 1fr) !important; }
+}
+
+@media (max-width: 520px) {
+  .v4-hero-formats { grid-template-columns: minmax(0, 1fr) !important; }
+  .v4-footer-grid { grid-template-columns: minmax(0, 1fr) !important; }
+}

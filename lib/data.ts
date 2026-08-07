@@ -125,9 +125,12 @@ export const COMPANIES: Company[] = [
 
 /** id -> { src, tile }. A mark whose art is missing simply falls back to a
     white tile and no image, rather than breaking the wall. */
-export const LOGOS: Record<string, { src: string; tile: string }> = logoAssets;
+/** `mq` is the flat white marquee variant — see the marquee pass in
+    tools/prepare_assets.py. Vectors point at the same .svg as `src` and get
+    whitened in CSS. */
+export const LOGOS: Record<string, { src: string; tile: string; mq: string }> = logoAssets;
 
-export const logoOf = (id: string) => LOGOS[id] ?? { src: '', tile: '#ffffff' };
+export const logoOf = (id: string) => LOGOS[id] ?? { src: '', tile: '#ffffff', mq: '' };
 
 /* ---- saved seats -------------------------------------------------------
    A target list, clearly disclaimed on the page. None of these have any

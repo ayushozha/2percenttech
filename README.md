@@ -4,7 +4,7 @@ A Next.js app, bilingual (中文 / EN) throughout, exported to static files.
 
 | Route | What it is |
 |---|---|
-| `/` | Landing page — leads with "Host an event in Silicon Valley" and the four event products, then the company wall, track record, the campaign system, the three audiences, calendar, saved seats, partners and roadmap. |
+| `/` | Landing page — the v4 design. Black/yellow, Anton display, five event formats, the network roles, upcoming events, global scale, distribution and the agent. **English only** — see [Bilingual](#bilingual). |
 | `/host/[type]` | One page per event product: `hackathon`, `workshop`, `panel`, `keynote`. Ideal customer, objectives, scope, run of show, past cases. |
 | `/host/apply` | The event brief. Accepts `?type=<id>` to arrive pre-ticked. |
 | `/sponsor` | Sponsorship prospectus for the one-day hackathon at Stanford (August 2026). Print-friendly. |
@@ -134,6 +134,16 @@ newer data.
 
 ## Editing
 
+### Bilingual
+
+**The landing page is the exception.** `/` runs the v4 design, which was drawn
+English-only and has no language toggle; its copy lives in `lib/v4-content.ts`
+as plain strings. Everything else on the site — the prospectus, the product
+pages, the brief, auth and the dashboard — is still bilingual and still obeys
+the rule below. Adding Chinese to the landing means giving `v4-content.ts` the
+`Bi` shape from `lib/data.ts`, wrapping the strings in `<B>`, and putting a
+`LangToggle` in the v4 header; nothing else about the page has to move.
+
 ### Copy
 
 Every string exists twice, as `zh` and `en` on the `<B>` component:
@@ -161,6 +171,14 @@ npm run prepare-assets     # needs: pip3 install pillow
 **Prefer SVG.** Vectors are copied untouched — sharp at any size and usually a
 fraction of the weight. If both an `.svg` and a raster are present the vector
 wins, so dropping an `.svg` beside an old `.png` upgrades it.
+
+Each logo also gets a **marquee variant** in `public/logos/mq/`, for the dark
+band on the landing page: the background is keyed out and whatever is left is
+repainted flat white, because twelve brand palettes on one black strip reads as
+noise rather than as a roster. Vectors are copied there as-is and whitened by
+CSS instead; the same filter is a no-op on the rasters, so the marquee applies
+it to every mark without caring which is which. Both paths are in
+`lib/logo-assets.json` as `src` and `mq`.
 
 Rasters are trimmed to their content, their background colour is sampled, and
 they're downscaled to what the tile actually renders at. That sampled colour
