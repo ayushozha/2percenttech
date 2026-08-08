@@ -466,13 +466,7 @@ h1, h2, h3 { margin: 0; font-weight: 400; }
   position: absolute; inset: 0;
   width: 100%; height: 100%;
   object-fit: cover;
-  filter: grayscale(1) contrast(1.05);
-  transition: filter .2s ease;
 }
-/* Colour returns on hover for the one event that is actually open — it is the
-   card we want people to land on. */
-.event--live .event__media img { filter: grayscale(.35) contrast(1.03); }
-.event:hover .event__media img { filter: none; }
 .event__body { padding: 22px 24px; }
 .event__meta {
   display: flex; justify-content: space-between; gap: 12px;
@@ -640,7 +634,6 @@ h1, h2, h3 { margin: 0; font-weight: 400; }
   position: absolute; inset: 0;
   width: 100%; height: 100%;
   object-fit: cover;
-  filter: grayscale(1) contrast(1.05);
 }
 .dist-card__play {
   position: absolute; top: 50%; left: 50%;
@@ -735,10 +728,9 @@ h1, h2, h3 { margin: 0; font-weight: 400; }
   position: absolute; inset: 0;
   width: 100%; height: 100%;
   object-fit: cover;
-  filter: grayscale(1) contrast(1.05);
-  transition: filter .25s ease, transform .25s ease;
+  transition: transform .25s ease;
 }
-.gallery__figure:hover img { filter: none; transform: scale(1.03); }
+.gallery__figure:hover img { transform: scale(1.03); }
 
 .gallery__caption {
   position: absolute; left: 0; bottom: 0;
