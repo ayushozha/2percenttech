@@ -30,9 +30,6 @@ export const SAVED_SEATS: readonly SavedSeat[] = [
   savedSeat('alibabacloud', '阿里云', 'Alibaba Cloud', {
     zh: '/logos/saved-seats/alibabacloud-zh.svg',
   }),
-  savedSeat('tencentcloud', '腾讯云', 'Tencent Cloud', {
-    en: '/logos/saved-seats/tencentcloud-en.svg',
-  }),
   savedSeat('trae', 'TRAE · 字节跳动', 'TRAE · ByteDance'),
   savedSeat('deepseek', 'DeepSeek', 'DeepSeek'),
   savedSeat('moonshot', '月之暗面', 'Moonshot AI'),

@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import { SAVED_SEATS } from '../lib/saved-seats.ts';
 
 test('every saved seat uses real local mark and localized wordmark assets', async () => {
-  assert.equal(SAVED_SEATS.length, 8);
+  assert.equal(SAVED_SEATS.length, 7);
 
   for (const seat of SAVED_SEATS) {
     assert.match(seat.mark, /^\/logos\/saved-seats\/[a-z0-9-]+-mark\.svg$/);
@@ -22,12 +22,9 @@ test('every saved seat uses real local mark and localized wordmark assets', asyn
   }
 });
 
-test('English mode uses English Tencent Cloud and Z.ai wordmarks', () => {
-  const tencent = SAVED_SEATS.find(({ id }) => id === 'tencentcloud');
+test('English mode uses the Z.ai wordmark', () => {
   const zhipu = SAVED_SEATS.find(({ id }) => id === 'zhipu');
 
-  assert.equal(tencent?.wordmark.en, '/logos/saved-seats/tencentcloud-en.svg');
   assert.equal(zhipu?.wordmark.en, '/logos/saved-seats/zai-en.svg');
-  assert.notEqual(tencent?.wordmark.en, tencent?.wordmark.zh);
   assert.notEqual(zhipu?.wordmark.en, zhipu?.wordmark.zh);
 });
