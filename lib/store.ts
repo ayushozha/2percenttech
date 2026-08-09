@@ -182,3 +182,19 @@ export function averageScore(s: Submission): string | null {
   if (!v.length) return null;
   return (v.reduce((a, b) => a + b, 0) / v.length).toFixed(1);
 }
+
+/* ---- concierge chat ------------------------------------------------------
+   The bright-theme landing page's chat widget. This call goes to the app API,
+   which proxies to an internal AI microservice (see /agent) — the browser
+   never talks to OpenAI, and never sees that key.
+
+   Throws on any failure: the concierge not being configured yet, a rate
+   limit, the network. Callers keep their own canned fallback for exactly
+   that reason, so a backend outage never reads as a crash. */
+
+export type ConciergeMessage = { role: 'user' | 'assistant'; content: string };
+
+export async function conciergeChat(lang: 'en' | 'zh', messages: ConciergeMessage[]): Promise<string> {
+  const { reply } = await api<{ reply: string }>('/api/concierge/chat', { method: 'POST', body: { lang, messages } });
+  return reply;
+}

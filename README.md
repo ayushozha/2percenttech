@@ -11,6 +11,7 @@ A Next.js app, bilingual (中文 / EN) throughout, exported to static files.
 | `/sponsor/apply` | The sponsorship request form — package, goals, budget band. Accepts `?package=<id>` to arrive pre-ticked. |
 | `/signin`, `/signup` | Backstage account — demo auth, see [Auth](#auth-is-a-demo). |
 | `/dashboard` | Backstage — enquiries, users, events, judging queue, hackathon entry. Role-driven. |
+| `/bright` | Design-preview redesign ("Bright mode"), unlinked and noindexed. Its chat concierge talks to `agent/` — see that service's README. |
 
 **Status: draft.** Several fields are unconfirmed and marked in the page with a
 yellow highlight (`.tbd`). See [Unfinished](#unfinished) before sending it anywhere.
@@ -71,6 +72,14 @@ Seeded demo accounts, password `demo2026`: `admin@`, `organizer@`, `judge@`,
 | `logos/`, `photos/` | Source art. Not served directly. |
 | `public/` | Generated art (`npm run prepare-assets`) plus `mark.svg`. |
 | `tools/prepare_assets.py` | Processes `logos/` and `photos/` into `public/`. |
+| `api/` | The Go application API — enquiries, roles, auth proxy. Separate service, separate README. |
+| `agent/` | The Python AI concierge microservice behind `/bright`'s chat widget. Separate service, separate README. |
+
+This is three independently deployed services sharing one repo, not a
+monorepo build — the site is a static export, `api/` and `agent/` each build
+from their own subdirectory (Coolify's "base directory" per app), and none of
+them import code from either of the others. See each one's own README for
+what it owns and how to run it.
 
 ## The blueprint
 

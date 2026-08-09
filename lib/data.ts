@@ -312,3 +312,75 @@ export const EVENT_TYPES: EventType[] = [
   { id: 'panel', en: 'Panel', zh: '圆桌论坛' },
   { id: 'keynote', en: 'Keynote / Founder Launch', zh: '主题演讲 / 新品发布' },
 ];
+
+/* ---- formats ("What we host") -------------------------------------------
+   The six formats we actually run, in scale order (flagship first). Powers
+   the landing page's format grid and doubles as the fuller event-type list
+   for pages that want private dinner / watch party as pickable options too —
+   see BRIGHT_EVENT_TYPES below. Registration counts quoted here are pulled
+   from specific past events (see PAST), not the aggregate STATS. */
+
+export type Format = { id: string; zh: string; en: string; desc: Bi };
+
+export const FORMATS: Format[] = [
+  {
+    id: 'hackathon',
+    zh: '黑客松',
+    en: 'Hackathon',
+    desc: {
+      zh: '旗舰形式。一天时间、真实作品、评审 Demo——最能沉淀 Builder 关系、也最可复制的一种活动。',
+      en: 'Our flagship. One day, real builds, judged demos — the format that creates the deepest builder relationships, and the one we scale.',
+    },
+  },
+  {
+    id: 'workshop',
+    zh: '工作坊',
+    en: 'Workshop',
+    desc: {
+      zh: '动手实操的小班课，从 Prompt 到上线。如 Prompt to Production（230 人报名）。',
+      en: 'Hands-on sessions that ship something by the end — like Prompt to Production (230 registered).',
+    },
+  },
+  {
+    id: 'panel',
+    zh: '圆桌论坛',
+    en: 'Panel',
+    desc: {
+      zh: '创始人与投资人同台对谈。AI Founders × VCs 一场 254 人报名。',
+      en: 'Founders and investors on one stage. AI Founders × VCs drew 254 registrations.',
+    },
+  },
+  {
+    id: 'keynote',
+    zh: '主题演讲 / 新品发布',
+    en: 'Keynote / founder launch',
+    desc: {
+      zh: '把你的新品放到整个房间面前——舞台、议程与现场记录我们来。',
+      en: 'Your product in front of the whole room — we run the stage, the agenda and the coverage.',
+    },
+  },
+  {
+    id: 'dinner',
+    zh: '私享晚宴',
+    en: 'Private dinner',
+    desc: {
+      zh: '每场 10–20 席，视场合而定。一张桌子、一晚上，深度关系由此而来。',
+      en: '10–20 seats depending on the occasion. One table, one evening — where the deep bonds form.',
+    },
+  },
+  {
+    id: 'social',
+    zh: '观赛派对 / 社交',
+    en: 'Watch party / social',
+    desc: {
+      zh: '从世界杯观赛到 Speed Dating——最高一场 359 人报名。',
+      en: 'From World Cup watch parties to speed dating — up to 359 registrations a night.',
+    },
+  },
+];
+
+/** All six formats as pickable chips — a superset of EVENT_TYPES (adds
+    private dinner and watch party/social). Used by the bright-theme landing
+    page's request form; the live page keeps the narrower EVENT_TYPES so this
+    doesn't change what's already shipped. */
+export const BRIGHT_EVENT_TYPES: EventType[] = FORMATS.map(({ id, zh, en }) => ({ id, zh, en }));

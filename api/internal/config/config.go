@@ -34,6 +34,15 @@ type Config struct {
 	WaitlistBaseURL   string
 	WaitlistSecretKey string
 
+	// The internal AI concierge microservice (see /agent) that backs the
+	// bright-theme landing page's chat widget. Internal-only by design — it
+	// carries no public hostname, and this is the only client it accepts
+	// calls from. Optional, same convention as the waitlist mirror: with
+	// nothing configured, the concierge endpoint answers "not configured"
+	// rather than failing this service's boot.
+	AgentBaseURL   string
+	AgentSecretKey string
+
 	// Cookies are issued on the parent domain so the static site on
 	// 2percenttech.com sends them to api.2percenttech.com.
 	CookieDomain string
@@ -51,6 +60,8 @@ func Load() (*Config, error) {
 		AuthClientID:      env("AUTH_CLIENT_ID", ""),
 		WaitlistBaseURL:   strings.TrimRight(env("WAITLIST_BASE_URL", ""), "/"),
 		WaitlistSecretKey: env("WAITLIST_SECRET_KEY", ""),
+		AgentBaseURL:      strings.TrimRight(env("AGENT_BASE_URL", ""), "/"),
+		AgentSecretKey:    env("AGENT_SECRET_KEY", ""),
 		CookieDomain:      env("COOKIE_DOMAIN", ".2percenttech.com"),
 	}
 

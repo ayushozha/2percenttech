@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
-import { Figtree, Instrument_Serif, IBM_Plex_Mono, Noto_Sans_SC, Noto_Serif_SC } from 'next/font/google';
+import { Figtree, Instrument_Serif, IBM_Plex_Mono, Noto_Sans_SC, Noto_Serif_SC, Space_Grotesk } from 'next/font/google';
 import LangProvider from '@/components/LangProvider';
 import './globals.css';
 
@@ -29,6 +29,16 @@ const plexMono = IBM_Plex_Mono({
   subsets: ['latin'],
   weight: ['400', '500'],
   variable: '--font-plex-mono',
+  display: 'swap',
+});
+
+// Only used by the /bright theme scope (see .page-bright in globals.css) —
+// the rest of the site stays on Figtree. Self-hosted like the others so the
+// preview route doesn't add a runtime request to Google either.
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-space-grotesk',
   display: 'swap',
 });
 
@@ -66,7 +76,7 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
-  const fonts = [figtree, instrument, plexMono, notoSC, notoSerifSC].map((f) => f.variable).join(' ');
+  const fonts = [figtree, instrument, plexMono, notoSC, notoSerifSC, spaceGrotesk].map((f) => f.variable).join(' ');
   return (
     <html lang="en" className={fonts}>
       <body>

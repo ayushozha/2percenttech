@@ -19,12 +19,13 @@ type Server struct {
 	store     *store.Store
 	auth      *upstream.AuthClient
 	waitlist  *upstream.WaitlistClient
+	agent     *upstream.AgentClient
 	validator *jwtvalidator.Validator
 }
 
 func New(cfg *config.Config, st *store.Store, auth *upstream.AuthClient,
-	wl *upstream.WaitlistClient, v *jwtvalidator.Validator) *Server {
-	return &Server{cfg: cfg, store: st, auth: auth, waitlist: wl, validator: v}
+	wl *upstream.WaitlistClient, agent *upstream.AgentClient, v *jwtvalidator.Validator) *Server {
+	return &Server{cfg: cfg, store: st, auth: auth, waitlist: wl, agent: agent, validator: v}
 }
 
 func (s *Server) Routes() http.Handler {
@@ -43,6 +44,11 @@ func (s *Server) Routes() http.Handler {
 	// Leads. Creating one is public — it is the site's contact form.
 	// Reading and working them is staff-only.
 	mux.HandleFunc("POST /api/leads", s.handleCreateLead)
+
+	// The bright-theme landing page's chat widget. Public, rate-limited per
+	// IP (see ratelimit.go) rather than requiring a session — a visitor who
+	// hasn't signed up yet is exactly who this is for.
+	mux.HandleFunc("POST /api/concierge/chat", s.handleConciergeChat)
 	mux.Handle("GET /api/leads", s.requireRole(store.RoleAdmin, store.RoleOrganizer)(http.HandlerFunc(s.handleListLeads)))
 	mux.Handle("PATCH /api/leads/{id}/status", s.requireRole(store.RoleAdmin, store.RoleOrganizer)(http.HandlerFunc(s.handleCycleLeadStatus)))
 

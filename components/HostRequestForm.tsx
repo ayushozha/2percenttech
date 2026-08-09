@@ -3,14 +3,18 @@
 import { useState } from 'react';
 import B from './B';
 import { useLang } from './LangProvider';
-import { EVENT_TYPES } from '@/lib/data';
+import { EVENT_TYPES, type EventType } from '@/lib/data';
 import { createHostRequest } from '@/lib/store';
 
 /** "What do you want to host?" — the landing page's primary conversion.
 
     Submissions land in the same store the dashboard reads, so a request made
-    here shows up under Sponsor queries for an admin or organizer. */
-export default function HostRequestForm() {
+    here shows up under Sponsor queries for an admin or organizer.
+
+    `eventTypes` defaults to the live page's four-item EVENT_TYPES; pages that
+    want the fuller six-item list (e.g. the bright-theme preview) can pass
+    BRIGHT_EVENT_TYPES instead without forking this component. */
+export default function HostRequestForm({ eventTypes = EVENT_TYPES }: { eventTypes?: EventType[] }) {
   const { lang } = useLang();
   const zh = lang === 'zh';
 
@@ -55,7 +59,7 @@ export default function HostRequestForm() {
   }
 
   if (done) {
-    const labels = EVENT_TYPES.filter((t) => picks.includes(t.id)).map((t) => (zh ? t.zh : t.en));
+    const labels = eventTypes.filter((t) => picks.includes(t.id)).map((t) => (zh ? t.zh : t.en));
     return (
       <div className="glass" style={{ marginTop: 30 }}>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 10, padding: '6px 2px' }}>
@@ -111,7 +115,7 @@ export default function HostRequestForm() {
       </p>
 
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-        {EVENT_TYPES.map((t) => {
+        {eventTypes.map((t) => {
           const on = picks.includes(t.id);
           return (
             <button

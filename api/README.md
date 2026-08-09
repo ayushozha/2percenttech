@@ -47,6 +47,8 @@ changes.
 | `ALLOWED_ORIGINS` | yes | Comma-separated. Credentialed CORS cannot use a wildcard, so each origin is named. |
 | `WAITLIST_BASE_URL` | no | Unset disables the mailing-list mirror rather than failing it |
 | `WAITLIST_SECRET_KEY` | no | The `wl_sec_…` key |
+| `AGENT_BASE_URL` | no | Internal origin of the concierge agent service, e.g. `http://twopct-agent:8092`. Unset answers the concierge endpoint with `503 concierge_unavailable` rather than failing this service's boot — see `../agent/README.md`. |
+| `AGENT_SECRET_KEY` | no (required if `AGENT_BASE_URL` is set) | Shared secret sent as `X-Internal-Key` on every call to the agent service. Must match that service's own `AGENT_SECRET_KEY` exactly. |
 | `COOKIE_DOMAIN` | no | Defaults to `.2percenttech.com` |
 | `PORT` | no | Defaults to `8091` |
 
@@ -70,6 +72,7 @@ Each mirrors a function in the site's `lib/store.ts`.
 | `GET` | `/api/submissions` | any signed-in account |
 | `POST` | `/api/submissions` | participant |
 | `PUT` | `/api/submissions/{id}/score` | judge |
+| `POST` | `/api/concierge/chat` | **public**, rate-limited 12 msgs / 10 min per IP — the `/bright` landing page's chat widget, proxied to `../agent` |
 
 ## Two things worth knowing
 
@@ -91,3 +94,24 @@ waitlist service is slow or down, the enquiry still succeeds — losing the mail
 list copy is recoverable by re-exporting from this database, losing the lead is
 not. A `409` from that service means the address is already subscribed, which is
 a normal outcome for a repeat enquirer, not an error.
+
+## The concierge agent is a third proxied service, deliberately shaped like the first two
+
+`POST /api/concierge/chat` doesn't call OpenAI itself — it forwards to the
+internal agent service in `../agent`, the same shape as the auth proxy:
+the thing holding the actual third-party key is one hop further from the
+browser than this API is. Two differences from the auth and waitlist proxies:
+
+- **It's optional at boot, not required.** `upstream.NewAgentClient` returns
+  `nil` when `AGENT_BASE_URL`/`AGENT_SECRET_KEY` aren't set, and the handler
+  answers `503 concierge_unavailable` rather than this service failing to
+  start — deploying this API and deploying the agent service are two
+  separate steps, and the frontend already has a canned fallback for the
+  concierge being unavailable.
+- **It's rate-limited here, not just validated.** Every other public write
+  (`/api/leads`, auth) has an upstream service enforcing its own limits or
+  costs nothing per call. A chat message costs an OpenAI call, so this
+  service enforces its own per-IP cap (`ratelimit.go`, in-memory, 12
+  requests / 10 minutes) independent of whatever the agent service does —
+  it shouldn't be the only thing standing between the public internet and
+  an unbounded OpenAI bill.

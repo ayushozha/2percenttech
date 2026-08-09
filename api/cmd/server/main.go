@@ -61,6 +61,7 @@ func main() {
 		st,
 		upstream.NewAuthClient(cfg.AuthCallURL(), cfg.AuthAPIKey),
 		upstream.NewWaitlistClient(cfg.WaitlistBaseURL, cfg.WaitlistSecretKey),
+		upstream.NewAgentClient(cfg.AgentBaseURL, cfg.AgentSecretKey),
 		validator,
 	)
 
