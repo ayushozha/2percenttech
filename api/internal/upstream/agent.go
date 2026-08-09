@@ -45,36 +45,51 @@ type ChatMessage struct {
 	Content string `json:"content"`
 }
 
-// Chat forwards a conversation to the agent service and returns its reply.
-func (c *AgentClient) Chat(ctx context.Context, lang string, messages []ChatMessage) (string, error) {
+// Intake is the agent service's structured extraction of the conversation so
+// far — what the visitor wants to host and how to reach them. Every field may
+// be empty until the conversation gets there; Complete flips on the recap turn.
+type Intake struct {
+	Format       string `json:"format"`
+	Timing       string `json:"timing"`
+	AudienceSize string `json:"audience_size"`
+	Goal         string `json:"goal"`
+	Name         string `json:"name"`
+	Email        string `json:"email"`
+	Complete     bool   `json:"complete"`
+}
+
+// Chat forwards a conversation to the agent service and returns its reply
+// plus the extracted intake state.
+func (c *AgentClient) Chat(ctx context.Context, lang string, messages []ChatMessage) (string, Intake, error) {
 	payload, err := json.Marshal(map[string]any{"lang": lang, "messages": messages})
 	if err != nil {
-		return "", fmt.Errorf("encode request: %w", err)
+		return "", Intake{}, fmt.Errorf("encode request: %w", err)
 	}
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodPost, c.baseURL+"/chat", bytes.NewReader(payload))
 	if err != nil {
-		return "", fmt.Errorf("build request: %w", err)
+		return "", Intake{}, fmt.Errorf("build request: %w", err)
 	}
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-Internal-Key", c.secretKey)
 
 	resp, err := c.http.Do(req)
 	if err != nil {
-		return "", fmt.Errorf("call agent service: %w", err)
+		return "", Intake{}, fmt.Errorf("call agent service: %w", err)
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
 		body, _ := io.ReadAll(io.LimitReader(resp.Body, 4<<10))
-		return "", fmt.Errorf("agent service returned %d: %s", resp.StatusCode, body)
+		return "", Intake{}, fmt.Errorf("agent service returned %d: %s", resp.StatusCode, body)
 	}
 
 	var out struct {
-		Reply string `json:"reply"`
+		Reply  string `json:"reply"`
+		Intake Intake `json:"intake"`
 	}
 	if err := json.NewDecoder(resp.Body).Decode(&out); err != nil {
-		return "", fmt.Errorf("decode response: %w", err)
+		return "", Intake{}, fmt.Errorf("decode response: %w", err)
 	}
-	return out.Reply, nil
+	return out.Reply, out.Intake, nil
 }

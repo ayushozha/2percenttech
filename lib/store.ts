@@ -194,7 +194,10 @@ export function averageScore(s: Submission): string | null {
 
 export type ConciergeMessage = { role: 'user' | 'assistant'; content: string };
 
-export async function conciergeChat(lang: 'en' | 'zh', messages: ConciergeMessage[]): Promise<string> {
-  const { reply } = await api<{ reply: string }>('/api/concierge/chat', { method: 'POST', body: { lang, messages } });
+export async function conciergeChat(lang: 'en' | 'zh', messages: ConciergeMessage[], conversationId?: string): Promise<string> {
+  const { reply } = await api<{ reply: string }>('/api/concierge/chat', {
+    method: 'POST',
+    body: { lang, messages, conversation_id: conversationId },
+  });
   return reply;
 }

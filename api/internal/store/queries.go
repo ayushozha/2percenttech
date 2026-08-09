@@ -72,6 +72,51 @@ func (s *Store) ListUsers(ctx context.Context) ([]User, error) {
 	return out, rows.Err()
 }
 
+/* ---- concierge intakes --------------------------------------------------- */
+
+// UpsertConciergeIntake records the latest state of one chat conversation and
+// returns the row id plus the already-linked lead id (empty when none yet).
+// Extracted fields only ever grow: a turn where the model drops a value it
+// had previously found cannot blank a stored one.
+func (s *Store) UpsertConciergeIntake(ctx context.Context, in *ConciergeIntake) (id string, leadID string, err error) {
+	const q = `
+        INSERT INTO concierge_intakes (conversation_id, lang, transcript,
+                event_format, timing, audience_size, goal, contact_name, email, complete)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
+        ON CONFLICT (conversation_id) DO UPDATE SET
+            transcript    = EXCLUDED.transcript,
+            event_format  = CASE WHEN EXCLUDED.event_format  <> '' THEN EXCLUDED.event_format  ELSE concierge_intakes.event_format  END,
+            timing        = CASE WHEN EXCLUDED.timing        <> '' THEN EXCLUDED.timing        ELSE concierge_intakes.timing        END,
+            audience_size = CASE WHEN EXCLUDED.audience_size <> '' THEN EXCLUDED.audience_size ELSE concierge_intakes.audience_size END,
+            goal          = CASE WHEN EXCLUDED.goal          <> '' THEN EXCLUDED.goal          ELSE concierge_intakes.goal          END,
+            contact_name  = CASE WHEN EXCLUDED.contact_name  <> '' THEN EXCLUDED.contact_name  ELSE concierge_intakes.contact_name  END,
+            email         = CASE WHEN EXCLUDED.email         <> '' THEN EXCLUDED.email         ELSE concierge_intakes.email         END,
+            complete      = concierge_intakes.complete OR EXCLUDED.complete,
+            updated_at    = now()
+        RETURNING id, COALESCE(lead_id::text, '')`
+	err = s.pool.QueryRow(ctx, q,
+		in.ConversationID, in.Lang, in.Transcript,
+		in.EventFormat, in.Timing, in.AudienceSize, in.Goal,
+		in.ContactName, strings.ToLower(strings.TrimSpace(in.Email)), in.Complete,
+	).Scan(&id, &leadID)
+	if err != nil {
+		return "", "", fmt.Errorf("upsert concierge intake: %w", err)
+	}
+	return id, leadID, nil
+}
+
+// LinkConciergeLead attaches a created lead to an intake row, but only if no
+// other turn got there first — the boolean says whether this call won.
+func (s *Store) LinkConciergeLead(ctx context.Context, intakeID, leadID string) (bool, error) {
+	tag, err := s.pool.Exec(ctx,
+		`UPDATE concierge_intakes SET lead_id = $2, updated_at = now()
+          WHERE id = $1 AND lead_id IS NULL`, intakeID, leadID)
+	if err != nil {
+		return false, fmt.Errorf("link concierge lead: %w", err)
+	}
+	return tag.RowsAffected() == 1, nil
+}
+
 /* ---- leads -------------------------------------------------------------- */
 
 func (s *Store) CreateLead(ctx context.Context, l *Lead) (*Lead, error) {

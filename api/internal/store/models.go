@@ -56,6 +56,22 @@ type Lead struct {
 	Message  string   `json:"message,omitempty"`
 }
 
+// ConciergeIntake is one chat conversation with the landing page's AI
+// concierge, upserted turn by turn. Field values come from the agent
+// service's structured extraction, the transcript from the browser's request.
+type ConciergeIntake struct {
+	ConversationID string
+	Lang           string
+	Transcript     []byte // JSON array of {role, content}
+	EventFormat    string
+	Timing         string
+	AudienceSize   string
+	Goal           string
+	ContactName    string
+	Email          string
+	Complete       bool
+}
+
 // Submission carries its scores keyed by judge email, which is what the
 // dashboard renders and what averageScore() in the frontend reduces over.
 type Submission struct {

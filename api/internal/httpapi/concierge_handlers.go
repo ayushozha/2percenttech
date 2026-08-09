@@ -1,10 +1,14 @@
 package httpapi
 
 import (
+	"context"
+	"encoding/json"
+	"log"
 	"net/http"
 	"strings"
 	"time"
 
+	"github.com/ayushozha/2percenttech/api/internal/store"
 	"github.com/ayushozha/2percenttech/api/internal/upstream"
 )
 
@@ -23,8 +27,13 @@ const (
 )
 
 type conciergeChatRequest struct {
-	Lang     string                 `json:"lang"`
-	Messages []upstream.ChatMessage `json:"messages"`
+	// ConversationID is minted by the widget (crypto.randomUUID) when a chat
+	// opens and resent on every turn, so the turns of one conversation land
+	// on one concierge_intakes row. Optional: without it the chat still
+	// works, it just isn't persisted.
+	ConversationID string                 `json:"conversation_id"`
+	Lang           string                 `json:"lang"`
+	Messages       []upstream.ChatMessage `json:"messages"`
 }
 
 // handleConciergeChat backs the bright-theme landing page's chat widget.
@@ -73,11 +82,80 @@ func (s *Server) handleConciergeChat(w http.ResponseWriter, r *http.Request) {
 		req.Messages[i].Content = content
 	}
 
-	reply, err := s.agent.Chat(r.Context(), req.Lang, req.Messages)
+	reply, intake, err := s.agent.Chat(r.Context(), req.Lang, req.Messages)
 	if err != nil {
 		writeError(w, http.StatusBadGateway, "concierge_error", "could not reach the concierge")
 		return
 	}
 
+	// Persistence rides behind the reply and never blocks or fails it: the
+	// visitor already has their answer, and losing one turn of storage is
+	// strictly better than turning a working chat into an error. The full
+	// transcript is resent every turn, so the next turn heals any gap.
+	if convID := strings.TrimSpace(req.ConversationID); convID != "" && len(convID) <= 64 {
+		transcript := append(req.Messages, upstream.ChatMessage{Role: "assistant", Content: reply})
+		go s.persistConciergeTurn(convID, req.Lang, transcript, intake)
+	}
+
 	writeJSON(w, http.StatusOK, map[string]string{"reply": reply})
+}
+
+// persistConciergeTurn upserts the conversation's row and, the first time an
+// intake is complete with a usable email, files it as a real host lead — the
+// same pipeline the request form feeds, so the dashboard and the two-working-
+// days promise the bot makes both actually mean something.
+func (s *Server) persistConciergeTurn(convID, lang string, transcript []upstream.ChatMessage, intake upstream.Intake) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	raw, err := json.Marshal(transcript)
+	if err != nil {
+		log.Printf("concierge intake %s: encode transcript: %v", convID, err)
+		return
+	}
+
+	intakeID, leadID, err := s.store.UpsertConciergeIntake(ctx, &store.ConciergeIntake{
+		ConversationID: convID,
+		Lang:           lang,
+		Transcript:     raw,
+		EventFormat:    intake.Format,
+		Timing:         intake.Timing,
+		AudienceSize:   intake.AudienceSize,
+		Goal:           intake.Goal,
+		ContactName:    intake.Name,
+		Email:          intake.Email,
+		Complete:       intake.Complete,
+	})
+	if err != nil {
+		log.Printf("concierge intake %s: %v", convID, err)
+		return
+	}
+
+	email := strings.ToLower(strings.TrimSpace(intake.Email))
+	if !intake.Complete || leadID != "" || !validEmail(email) {
+		return
+	}
+
+	picks := []string{}
+	if f := strings.ToLower(strings.TrimSpace(intake.Format)); f != "" {
+		picks = append(picks, f)
+	}
+	lead, err := s.store.CreateLead(ctx, &store.Lead{
+		Kind:       "host",
+		Email:      email,
+		Contact:    strings.TrimSpace(intake.Name),
+		Dates:      strings.TrimSpace(intake.Timing),
+		Attendance: strings.TrimSpace(intake.AudienceSize),
+		Message:    "Via concierge chat. Goal: " + strings.TrimSpace(intake.Goal),
+		Picks:      picks,
+	})
+	if err != nil {
+		log.Printf("concierge intake %s: create lead: %v", convID, err)
+		return
+	}
+	if won, err := s.store.LinkConciergeLead(ctx, intakeID, lead.ID); err != nil {
+		log.Printf("concierge intake %s: %v", convID, err)
+	} else if won {
+		log.Printf("concierge intake %s: filed host lead %s", convID, lead.ID)
+	}
 }

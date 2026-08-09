@@ -9,6 +9,7 @@ browser, and never in the app API either, which just proxies the browser's
 request one hop further in.
 """
 
+import json
 import os
 from typing import Literal
 
@@ -56,6 +57,34 @@ class ChatRequest(BaseModel):
     messages: list[ChatMessage] = Field(min_length=1, max_length=MAX_MESSAGES)
 
 
+# Structured output contract with OpenAI. `strict` means the model cannot
+# return anything but this shape, so the app API can persist `intake` without
+# guessing at what the model felt like emitting — the prerequisite the
+# original commit named for turning a finished chat into a Lead row.
+INTAKE_FIELDS = ["format", "timing", "audience_size", "goal", "name", "email"]
+INTAKE_SCHEMA = {
+    "name": "concierge_turn",
+    "strict": True,
+    "schema": {
+        "type": "object",
+        "additionalProperties": False,
+        "required": ["reply", "intake"],
+        "properties": {
+            "reply": {"type": "string"},
+            "intake": {
+                "type": "object",
+                "additionalProperties": False,
+                "required": INTAKE_FIELDS + ["complete"],
+                "properties": {
+                    **{f: {"type": "string"} for f in INTAKE_FIELDS},
+                    "complete": {"type": "boolean"},
+                },
+            },
+        },
+    },
+}
+
+
 @app.get("/health")
 async def health():
     return {"status": "ok"}
@@ -73,7 +102,11 @@ async def chat(req: ChatRequest, x_internal_key: str = Header(default="")):
     try:
         completion = await client.chat.completions.create(
             model=OPENAI_MODEL,
-            max_tokens=400,
+            # The JSON envelope and intake fields ride along with the reply,
+            # so this is higher than the old plain-text 400 for the same
+            # <50-word replies — a truncated JSON body fails the whole turn.
+            max_tokens=700,
+            response_format={"type": "json_schema", "json_schema": INTAKE_SCHEMA},
             messages=[
                 {"role": "system", "content": system_prompt(req.lang)},
                 *[{"role": m.role, "content": m.content} for m in req.messages],
@@ -85,8 +118,24 @@ async def chat(req: ChatRequest, x_internal_key: str = Header(default="")):
         # Coolify, not for the browser to ever see.
         raise HTTPException(status_code=502, detail=f"upstream error: {exc}") from exc
 
-    reply = (completion.choices[0].message.content or "").strip()
-    if not reply:
+    content = (completion.choices[0].message.content or "").strip()
+    if not content:
         raise HTTPException(status_code=502, detail="empty completion")
 
-    return {"reply": reply}
+    # Strict structured output makes non-JSON content near-impossible, but a
+    # refusal or a max_tokens truncation can still produce one — treat it as
+    # an upstream failure rather than handing the browser a JSON blob.
+    try:
+        parsed = json.loads(content)
+        reply = str(parsed["reply"]).strip()
+        intake = {
+            **{f: str(parsed["intake"].get(f, "")).strip() for f in INTAKE_FIELDS},
+            "complete": bool(parsed["intake"].get("complete", False)),
+        }
+    except (json.JSONDecodeError, KeyError, TypeError, AttributeError) as exc:
+        raise HTTPException(status_code=502, detail=f"malformed completion: {exc}") from exc
+
+    if not reply:
+        raise HTTPException(status_code=502, detail="empty reply in completion")
+
+    return {"reply": reply, "intake": intake}

@@ -76,7 +76,21 @@ TONE = (
 )
 
 
+# The response is structured (see INTAKE_SCHEMA in main.py): the visitor only
+# ever sees `reply`; `intake` is what the app API persists so a finished
+# conversation becomes a lead instead of evaporating with the browser tab.
+EXTRACTION = (
+    "Alongside every reply, fill the intake object with everything learned so "
+    "far across the whole conversation: format (one of hackathon, workshop, "
+    "panel, keynote, dinner, social — or the visitor's own words if none "
+    "fit), timing, audience_size, goal, name (person or company), and email. "
+    "Use an empty string for anything not yet known; never invent a value. "
+    "Set complete to true only on the turn where you give the final recap — "
+    "the intake fields still carry whatever was collected either way."
+)
+
+
 def system_prompt(lang: str) -> str:
     """Build the concierge intake prompt without loading runtime secrets."""
     language_line = "Reply in Simplified Chinese." if lang == "zh" else "Reply in English."
-    return " ".join([IDENTITY, FORMATS_DETAIL, TASK, PRICING_GUARDRAIL, SCOPE_GUARDRAIL, TONE, language_line])
+    return " ".join([IDENTITY, FORMATS_DETAIL, TASK, PRICING_GUARDRAIL, SCOPE_GUARDRAIL, TONE, EXTRACTION, language_line])

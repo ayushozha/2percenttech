@@ -38,6 +38,10 @@ export default function BrightConcierge() {
   const [input, setInput] = useState('');
   const [busy, setBusy] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  // Groups this chat's turns onto one concierge_intakes row server-side.
+  // Re-minted whenever the conversation resets (see the effect below), so a
+  // fresh chat never appends onto an old one's record.
+  const conversationIdRef = useRef('');
 
   const fallback = () =>
     zh
@@ -46,6 +50,7 @@ export default function BrightConcierge() {
 
   useEffect(() => {
     if (!open) return;
+    conversationIdRef.current = typeof crypto !== 'undefined' && 'randomUUID' in crypto ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
     const isGenericOpening = openingText.startsWith('Hi!') || openingText.startsWith('你好！');
     setMsgs([
       {
@@ -75,6 +80,7 @@ export default function BrightConcierge() {
       const reply = await conciergeChat(
         lang,
         next.map((m) => ({ role: m.role, content: m.text })),
+        conversationIdRef.current,
       );
       setMsgs((m) => [...m, { role: 'assistant', text: reply }]);
     } catch {

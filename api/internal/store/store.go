@@ -78,6 +78,29 @@ CREATE TABLE IF NOT EXISTS leads (
 );
 CREATE INDEX IF NOT EXISTS leads_created_at_idx ON leads (created_at DESC);
 
+-- One row per concierge chat conversation, upserted on every turn. This is
+-- the raw capture ("store it somewhere so it can be wired properly later"):
+-- the full transcript plus the model's structured extraction of the intake
+-- fields. When an intake completes with an email, a row in leads is created
+-- and linked via lead_id so the two pipelines meet in the dashboard.
+CREATE TABLE IF NOT EXISTS concierge_intakes (
+    id               UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    conversation_id  TEXT NOT NULL UNIQUE,
+    lang             TEXT NOT NULL DEFAULT 'en',
+    transcript       JSONB NOT NULL DEFAULT '[]',
+    event_format     TEXT NOT NULL DEFAULT '',
+    timing           TEXT NOT NULL DEFAULT '',
+    audience_size    TEXT NOT NULL DEFAULT '',
+    goal             TEXT NOT NULL DEFAULT '',
+    contact_name     TEXT NOT NULL DEFAULT '',
+    email            TEXT NOT NULL DEFAULT '',
+    complete         BOOLEAN NOT NULL DEFAULT FALSE,
+    lead_id          UUID REFERENCES leads(id) ON DELETE SET NULL,
+    created_at       TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at       TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS concierge_intakes_created_at_idx ON concierge_intakes (created_at DESC);
+
 CREATE TABLE IF NOT EXISTS submissions (
     id             UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     owner_user_id  UUID REFERENCES users(id) ON DELETE SET NULL,
