@@ -17,8 +17,7 @@ export const LUMA_PROFILE = 'https://luma.com/user/usr-imLXdlHS1TlvX7X';
 
 export const CONTACT = {
   email: 'team@2percenttech.com',
-  // Still unconfirmed — rendered with .tbd until they're settled.
-  wechat: { zh: '待补', en: 'TBC' },
+  discord: 'Discord',
   calendar: 'calendly / luma —',
 };
 

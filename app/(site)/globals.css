@@ -1155,17 +1155,33 @@ details.more[open] > summary::before {
   transform: rotate(-2deg);
 }
 
-/* Saved-seat marks are real brand wordmarks, normalized to the same optical
-   height so long and compact logos feel balanced in the existing card grid. */
+/* Real brand marks + localized wordmarks, normalized to a consistent optical
+   height so the lockups stay balanced in the existing card grid. */
 .saved-seat-card {
   overflow: hidden;
 }
-.saved-seat-logo {
+.saved-seat-logo-lockup {
+  width: 100%;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.saved-seat-mark,
+.saved-seat-wordmark {
   display: block;
-  width: auto;
-  height: 26px;
-  max-width: min(145px, 92%);
+  flex: 0 1 auto;
   object-fit: contain;
+}
+.saved-seat-mark {
+  width: 27px;
+  height: 27px;
+}
+.saved-seat-wordmark {
+  width: auto;
+  height: 23px;
+  max-width: 105px;
 }
 
 /* chat concierge — FAB + panel. UI only: see components/BrightConcierge.tsx

@@ -312,14 +312,14 @@ export default function Landing() {
                 }}
               >
                 <span className="mono-label" style={{ fontSize: 10, letterSpacing: '.2em' }}><B zh="预留" en="Reserved" /></span>
-                <img
-                  className="saved-seat-logo"
-                  src={seat.logo}
-                  alt={seat.logoAlt}
-                  title={seat.en}
-                  loading="lazy"
-                  decoding="async"
-                />
+                <span className="saved-seat-logo-lockup en" title={seat.en}>
+                  <img className="saved-seat-mark" src={seat.mark} alt="" loading="lazy" decoding="async" />
+                  <img className="saved-seat-wordmark" src={seat.wordmark.en} alt={seat.logoAlt.en} loading="lazy" decoding="async" />
+                </span>
+                <span className="saved-seat-logo-lockup zh" title={seat.zh}>
+                  <img className="saved-seat-mark" src={seat.mark} alt="" loading="lazy" decoding="async" />
+                  <img className="saved-seat-wordmark" src={seat.wordmark.zh} alt={seat.logoAlt.zh} loading="lazy" decoding="async" />
+                </span>
               </div>
             ))}
 
@@ -399,8 +399,7 @@ export default function Landing() {
               <a href={`mailto:${CONTACT.email}`} style={{ fontWeight: 600 }}>{CONTACT.email}</a>
             </span>
             <span>
-              <span className="mono-label" style={{ fontSize: 11, letterSpacing: '.14em', color: 'var(--accent-ink)' }}>WeChat</span>{' '}
-              <span className="tbd"><B zh={CONTACT.wechat.zh} en={CONTACT.wechat.en} /></span>
+              <span className="mono-label" style={{ fontSize: 11, letterSpacing: '.14em', color: 'var(--accent-ink)' }}>{CONTACT.discord}</span>
             </span>
             <span>
               <span className="mono-label" style={{ fontSize: 11, letterSpacing: '.14em', color: 'var(--accent-ink)' }}>Luma</span>{' '}
