@@ -1,8 +1,7 @@
 # 2% Tech concierge agent
 
-The AI backend for the bright-theme landing page's (`/bright`) chat widget
-(`components/BrightConcierge.tsx`). A small FastAPI service that holds the
-OpenAI key and nothing else.
+The AI backend for the homepage's chat widget (`components/BrightConcierge.tsx`).
+A small FastAPI service that holds the OpenAI key and nothing else.
 
 ## Why this is a separate service, not a route on the Go API
 

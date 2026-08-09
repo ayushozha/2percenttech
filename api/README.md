@@ -72,7 +72,7 @@ Each mirrors a function in the site's `lib/store.ts`.
 | `GET` | `/api/submissions` | any signed-in account |
 | `POST` | `/api/submissions` | participant |
 | `PUT` | `/api/submissions/{id}/score` | judge |
-| `POST` | `/api/concierge/chat` | **public**, rate-limited 12 msgs / 10 min per IP — the `/bright` landing page's chat widget, proxied to `../agent` |
+| `POST` | `/api/concierge/chat` | **public**, rate-limited 12 msgs / 10 min per IP — the homepage's chat widget, proxied to `../agent` |
 
 ## Two things worth knowing
 

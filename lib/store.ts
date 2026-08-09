@@ -184,7 +184,7 @@ export function averageScore(s: Submission): string | null {
 }
 
 /* ---- concierge chat ------------------------------------------------------
-   The bright-theme landing page's chat widget. This call goes to the app API,
+   The homepage's chat widget. This call goes to the app API,
    which proxies to an internal AI microservice (see /agent) — the browser
    never talks to OpenAI, and never sees that key.
 

@@ -976,14 +976,16 @@ details.more[open] > summary::before {
   }
 }
 
-/* ---- bright theme (preview) ---------------------------------------------
-   Scoped token override for the /bright preview route (see the "Bright mode
-   minimal landing page" Claude Design import). Every shared component class
-   above (.nav, .btn, .chip, .glass, .tl-row, .marquee-*, .pillbar, ...) reads
-   its colours from the :root custom properties, so re-pointing those inside
-   .page-bright reskins the whole component set without forking any of them.
-   A few states (chip.on, eyebrow) get an explicit yellow accent on top since
-   the base tokens don't carry a dedicated accent colour. */
+/* ---- bright theme (homepage) ---------------------------------------------
+   Scoped token override for the homepage (originally the "Bright mode
+   minimal landing page" Claude Design import, shipped after a preview period
+   at /bright). Every other route (/host, /sponsor, /dashboard, auth) stays
+   on the :root palette above. Every shared component class (.nav, .btn,
+   .chip, .glass, .tl-row, .marquee-*, .pillbar, ...) reads its colours from
+   those :root custom properties, so re-pointing them inside .page-bright
+   reskins the whole component set without forking any of them. A few states
+   (chip.on, eyebrow) get an explicit yellow accent on top since the base
+   tokens don't carry a dedicated accent colour. */
 
 .page-bright {
   --paper: #fffef9;

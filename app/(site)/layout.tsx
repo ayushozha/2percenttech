@@ -32,9 +32,10 @@ const plexMono = IBM_Plex_Mono({
   display: 'swap',
 });
 
-// Only used by the /bright theme scope (see .page-bright in globals.css) —
-// the rest of the site stays on Figtree. Self-hosted like the others so the
-// preview route doesn't add a runtime request to Google either.
+// Only used by the homepage's bright theme scope (see .page-bright in
+// globals.css) — every other route (/host, /sponsor, /dashboard, auth)
+// stays on Figtree. Self-hosted like the others so the homepage doesn't add
+// a runtime request to Google either.
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],

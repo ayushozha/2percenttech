@@ -1,4 +1,3 @@
-import type { Metadata } from 'next';
 import B from '@/components/B';
 import SiteNav from '@/components/SiteNav';
 import SiteFooter from '@/components/SiteFooter';
@@ -19,14 +18,11 @@ import {
   UPCOMING,
 } from '@/lib/data';
 
-// Preview route for the "Bright mode minimal landing page" design import —
-// not linked from the live nav, kept out of search results until (if) it
-// replaces app/page.tsx.
-export const metadata: Metadata = {
-  title: '2%Tech · Bright preview',
-  robots: { index: false, follow: false },
-};
-
+// The homepage. Originally "Bright mode minimal landing page" from Claude
+// Design, shipped here after a preview period at /bright — see git history
+// for that route if the old v4 (neo-brutalist) homepage or its /bright
+// preview banner are ever worth referencing again. Metadata is inherited
+// from the (site) root layout rather than overridden here.
 const STAT_BORDER = ['#14141A', '#FFD100', '#14141A'];
 
 // The stats+photos trio the design features — different frames than the
@@ -37,19 +33,9 @@ const STAT_PHOTOS: { src: string; alt: string; caption: { zh: string; en: string
   { src: PHOTOS[7], alt: 'Hackathon judging', caption: { zh: '评审 Demo · Bay Builders Hackathon', en: 'Judged demos · Bay Builders Hackathon' } },
 ];
 
-export default function BrightLanding() {
+export default function Landing() {
   return (
     <div className="page-bright" id="top">
-      <div className="no-print" style={{ background: 'var(--flag-bg)', color: 'var(--flag-ink)', borderBottom: '1px solid var(--flag-rule)' }}>
-        <div className="wrap" style={{ padding: '10px 28px', fontSize: 13, fontWeight: 600 }}>
-          Design preview — imported from Claude Design, not linked from the live site. See{' '}
-          <a href="/" style={{ color: 'inherit', textDecoration: 'underline' }}>
-            the live homepage
-          </a>{' '}
-          for what&apos;s actually shipped.
-        </div>
-      </div>
-
       <SiteNav />
 
       {/* ---- hero ---- */}
