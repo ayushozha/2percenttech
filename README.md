@@ -4,13 +4,14 @@ A Next.js app, bilingual (中文 / EN) throughout, exported to static files.
 
 | Route | What it is |
 |---|---|
-| `/` | The "Bright" homepage — hero with the host-request form, company wall, "what we host" formats, stats + photos, calendar, saved seats, sponsor CTA. Its chat concierge talks to `agent/` — see that service's README. Landed here after a preview period at `/bright`; a different (neo-brutalist "v4") design was the homepage before this — see git history if that's ever worth revisiting. |
+| `/` | The "Bright" homepage — hero with the host-request form, company wall, "what we host" formats, stats + photos, calendar, saved seats, sponsor CTA. Its chat concierge talks to `agent/` — see that service's README. |
 | `/host/[type]` | One page per event product: `hackathon`, `workshop`, `panel`, `keynote`. Ideal customer, objectives, scope, run of show, past cases. |
 | `/host/apply` | The event brief. Accepts `?type=<id>` to arrive pre-ticked. |
 | `/sponsor` | Sponsorship prospectus for the one-day hackathon at Stanford (August 2026). Print-friendly. |
 | `/sponsor/apply` | The sponsorship request form — package, goals, budget band. Accepts `?package=<id>` to arrive pre-ticked. |
 | `/signin`, `/signup` | Backstage account — demo auth, see [Auth](#auth-is-a-demo). |
 | `/dashboard` | Backstage — enquiries, users, events, judging queue, hackathon entry. Role-driven. |
+| `/v4` | The previous (neo-brutalist) homepage, archived and noindexed rather than deleted when Bright took over `/`. `app/(landing)/`, `components/landing/`, `lib/landing-data.ts`. |
 
 **Status: draft.** Several fields are unconfirmed and marked in the page with a
 yellow highlight (`.tbd`). See [Unfinished](#unfinished) before sending it anywhere.

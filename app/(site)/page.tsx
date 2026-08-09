@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import B from '@/components/B';
 import SiteNav from '@/components/SiteNav';
 import SiteFooter from '@/components/SiteFooter';
@@ -19,10 +20,22 @@ import {
 } from '@/lib/data';
 
 // The homepage. Originally "Bright mode minimal landing page" from Claude
-// Design, shipped here after a preview period at /bright — see git history
-// for that route if the old v4 (neo-brutalist) homepage or its /bright
-// preview banner are ever worth referencing again. Metadata is inherited
-// from the (site) root layout rather than overridden here.
+// Design, promoted here after a preview period at /bright. The previous
+// neo-brutalist landing is archived at /v4 (noindexed) rather than deleted,
+// in case it's ever worth switching back to.
+export const metadata: Metadata = {
+  title: '2% Tech — Host an Event in Silicon Valley',
+  description:
+    'The operating platform for the AI ecosystem — where AI companies, builders, investors, experts, and communities connect through high-impact events in Silicon Valley, distributed globally.',
+  openGraph: {
+    type: 'website',
+    title: '2% Tech — Host an Event in Silicon Valley',
+    description:
+      'Where AI companies, builders, investors, experts, and communities connect through high-impact events.',
+    images: ['/photos/02.webp'],
+  },
+};
+
 const STAT_BORDER = ['#14141A', '#FFD100', '#14141A'];
 
 // The stats+photos trio the design features — different frames than the

@@ -4,7 +4,7 @@ import type { EventRow } from '@/lib/data';
 /** One line in the landing calendar's upcoming/past lists. The Stanford
     hackathon (`highlight: true`) — still undated, still unsold — gets pulled
     out into its own callout instead of sitting as one line among many.
-    Shared by the live landing page and the /bright preview so both read
+    Shared by the Bright homepage and the archived /v4 landing so both read
     from the same calendar rendering. */
 export default function Row({ e }: { e: EventRow }) {
   if (e.highlight) {
