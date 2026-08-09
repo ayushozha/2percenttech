@@ -19,12 +19,20 @@ import {
   UPCOMING,
 } from '@/lib/data';
 
-// Preview route for the "Bright mode minimal landing page" design import —
-// not linked from the live nav, kept out of search results until (if) it
-// replaces app/page.tsx.
+// The "Bright mode minimal landing page" design, promoted from the /bright
+// preview to the homepage. The previous neo-brutalist landing is archived at
+// /v4 (noindexed) in case we switch back.
 export const metadata: Metadata = {
-  title: '2%Tech · Bright preview',
-  robots: { index: false, follow: false },
+  title: '2% Tech — Host an Event in Silicon Valley',
+  description:
+    'The operating platform for the AI ecosystem — where AI companies, builders, investors, experts, and communities connect through high-impact events in Silicon Valley, distributed globally.',
+  openGraph: {
+    type: 'website',
+    title: '2% Tech — Host an Event in Silicon Valley',
+    description:
+      'Where AI companies, builders, investors, experts, and communities connect through high-impact events.',
+    images: ['/photos/02.webp'],
+  },
 };
 
 const STAT_BORDER = ['#14141A', '#FFD100', '#14141A'];
@@ -40,16 +48,6 @@ const STAT_PHOTOS: { src: string; alt: string; caption: { zh: string; en: string
 export default function BrightLanding() {
   return (
     <div className="page-bright" id="top">
-      <div className="no-print" style={{ background: 'var(--flag-bg)', color: 'var(--flag-ink)', borderBottom: '1px solid var(--flag-rule)' }}>
-        <div className="wrap" style={{ padding: '10px 28px', fontSize: 13, fontWeight: 600 }}>
-          Design preview — imported from Claude Design, not linked from the live site. See{' '}
-          <a href="/" style={{ color: 'inherit', textDecoration: 'underline' }}>
-            the live homepage
-          </a>{' '}
-          for what&apos;s actually shipped.
-        </div>
-      </div>
-
       <SiteNav />
 
       {/* ---- hero ---- */}
