@@ -1,10 +1,11 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import B from '@/components/B';
 import SiteNav from '@/components/SiteNav';
 import SiteFooter from '@/components/SiteFooter';
 import LogoMarquee from '@/components/LogoMarquee';
 import HostRequestForm from '@/components/HostRequestForm';
-import BrightConcierge from '@/components/BrightConcierge';
+import PlanEventButton from '@/components/PlanEventButton';
 import Row from '@/components/EventRow';
 import {
   BRIGHT_EVENT_TYPES,
@@ -18,6 +19,7 @@ import {
   STATS,
   UPCOMING,
 } from '@/lib/data';
+import { ATTENDEE_NETWORK_DISPLAY, EVENT_COUNT_DISPLAY, MONTHLY_EVENT_PLAN_DISPLAY } from '@/lib/site-metrics';
 
 // The homepage. Originally "Bright mode minimal landing page" from Claude
 // Design, promoted here after a preview period at /bright. The previous
@@ -54,6 +56,7 @@ export default function Landing() {
       {/* ---- hero ---- */}
       <section style={{ padding: '72px 28px 76px' }}>
         <div
+          className="hero-grid"
           style={{
             maxWidth: 'var(--wrap)',
             margin: '0 auto',
@@ -101,8 +104,8 @@ export default function Landing() {
 
             <p style={{ margin: '22px 0 0', fontSize: 17, lineHeight: 1.65, color: 'var(--ink-3)', maxWidth: '47ch' }}>
               <B
-                zh="我们把湾区的创始人、Builder 与投资人放进同一个房间。自 2025 年 1 月以来 25 场活动、6,300+ 报名。你带主题来，房间、内容与后续传播我们来。"
-                en="We put the Bay Area's founders, builders and investors in one room. 25 events and 6,300+ registrations since January 2025. Bring the subject; we bring the room, the content and everything that runs after it."
+                zh={`自 2025 年 1 月以来已办 ${EVENT_COUNT_DISPLAY} 场活动，连接 ${ATTENDEE_NETWORK_DISPLAY} 到场者网络。你带想法来，我们把房间与流程搭起来。`}
+                en={`${EVENT_COUNT_DISPLAY} events since Jan 2025. A ${ATTENDEE_NETWORK_DISPLAY} attendee network of founders, builders and investors. You bring the idea; we build the room and the run of show.`}
               />
             </p>
 
@@ -124,14 +127,14 @@ export default function Landing() {
                 </div>
               </div>
               <p style={{ margin: '52px 4px 0', fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ink-5)' }}>
-                <B zh="Agentic AI Hackathon — SF · 1,144 人报名" en="Agentic AI Hackathon — SF · 1,144 registered" />
+                <B zh={`自 2025 年 1 月以来 · ${EVENT_COUNT_DISPLAY} 场活动`} en={`${EVENT_COUNT_DISPLAY} events since Jan 2025`} />
               </p>
             </div>
             <div className="floaty" style={{ top: 26, right: 2, background: 'var(--accent)', borderColor: 'var(--accent-ink)' }}>
-              6,300+ <span style={{ fontWeight: 500 }}><B zh="报名人次" en="registrations" /></span>
+              {ATTENDEE_NETWORK_DISPLAY} <span style={{ fontWeight: 500 }}><B zh="到场者网络" en="attendee network" /></span>
             </div>
             <div className="floaty" style={{ bottom: 34, right: '10%', animationDelay: '-3s', animationDuration: '8s' }}>
-              25 <span style={{ fontWeight: 500, color: 'var(--ink-4)' }}><B zh="场活动 · 自 2025.1" en="events since Jan 2025" /></span>
+              {MONTHLY_EVENT_PLAN_DISPLAY} <span style={{ fontWeight: 500, color: 'var(--ink-4)' }}><B zh="每月计划活动" en="events planned monthly" /></span>
             </div>
           </div>
         </div>
@@ -163,7 +166,7 @@ export default function Landing() {
       </section>
 
       {/* ---- what we host ---- */}
-      <section className="section">
+      <section className="section" id="products">
         <div className="wrap" style={{ padding: 0 }}>
           <p className="eyebrow"><B zh="我们承办的形式" en="What we host" /></p>
           <h2 className="h-sec" style={{ marginBottom: 26 }}><B zh="从黑客松到私享晚宴" en="From hackathons to private dinners" /></h2>
@@ -174,8 +177,28 @@ export default function Landing() {
                 <span className="format-card-n">{String(i + 1).padStart(2, '0')}</span>
                 <h3><B zh={f.zh} en={f.en} /></h3>
                 <p><B zh={f.desc.zh} en={f.desc.en} /></p>
+                <Link href={`/host/${f.id}`} className="format-card-link">
+                  <B zh="查看详情 →" en="View details →" />
+                </Link>
               </div>
             ))}
+          </div>
+
+          <div className="custom-event-cta">
+            <div>
+              <p className="eyebrow"><B zh="不止这六种" en="Beyond the list" /></p>
+              <h3><B zh="没看到你的活动？把想法带来，我们来设计这个房间。" en="Not seeing your event? Bring us the idea—we’ll design the room." /></h3>
+            </div>
+            <div className="custom-event-actions">
+              <PlanEventButton
+                custom
+                className="btn btn-dark"
+                label={{ zh: '规划自定义活动', en: 'Plan a custom event' }}
+              />
+              <Link href="/host/apply" className="btn btn-ghost">
+                <B zh="填写完整简报" en="Start the full brief" />
+              </Link>
+            </div>
           </div>
         </div>
       </section>
@@ -198,12 +221,12 @@ export default function Landing() {
 
           <p className="fine" style={{ marginTop: 18, fontSize: 12.5 }}>
             <span className="en">
-              Since January 2025, pulled from our public{' '}
-              <a href={LUMA_PROFILE} target="_blank" rel="noopener noreferrer">Luma profile</a>, click through and check.
+              Operating figures since January 2025. Browse the public event archive on our{' '}
+              <a href={LUMA_PROFILE} target="_blank" rel="noopener noreferrer">Luma profile</a>.
             </span>
             <span className="zh">
-              自 2025 年 1 月起，数据来自公开{' '}
-              <a href={LUMA_PROFILE} target="_blank" rel="noopener noreferrer">Luma 主页</a>，欢迎点进去核验。
+              自 2025 年 1 月以来的运营数据。活动记录可在公开{' '}
+              <a href={LUMA_PROFILE} target="_blank" rel="noopener noreferrer">Luma 主页</a>查看。
             </span>
           </p>
 
@@ -248,10 +271,10 @@ export default function Landing() {
 
           <p className="fine" style={{ marginTop: 22, fontSize: 12.5 }}>
             <span className="en">
-              All 25 events are on our <a href={LUMA_PROFILE} target="_blank" rel="noopener noreferrer">Luma profile</a>.
+              Browse our public event archive on <a href={LUMA_PROFILE} target="_blank" rel="noopener noreferrer">Luma</a>.
             </span>
             <span className="zh">
-              全部 25 场记录都在 <a href={LUMA_PROFILE} target="_blank" rel="noopener noreferrer">Luma 主页</a>。
+              在 <a href={LUMA_PROFILE} target="_blank" rel="noopener noreferrer">Luma 主页</a>查看公开活动记录。
             </span>
           </p>
         </div>
@@ -347,8 +370,8 @@ export default function Landing() {
 
           <p style={{ margin: '16px auto 0', maxWidth: '58ch', fontSize: 15.5, lineHeight: 1.65, color: 'var(--ink-2)' }}>
             <B
-              zh="冠名、评审席、独立赛道与 Demo 展位——覆盖黑客松、工作坊、圆桌与私享晚宴。自 2025 年 1 月以来 25 场活动、6,300+ 报名。下一场：8 月底斯坦福的单日黑客松，冠名席还空着。"
-              en="Title slots, judge chairs, tracks and demo tables — across hackathons, workshops, panels and private dinners. 25 events and 6,300+ registrations since January 2025. Next up: a one-day hackathon at Stanford in late August, title seat still open."
+              zh={`冠名、评审席、独立赛道与 Demo 展位——覆盖黑客松、工作坊、圆桌与私享晚宴。自 2025 年 1 月以来已办 ${EVENT_COUNT_DISPLAY} 场活动，并连接 ${ATTENDEE_NETWORK_DISPLAY} 到场者网络。`}
+              en={`Title slots, judge chairs, tracks and demo tables across hackathons, workshops, panels and private dinners. Since January 2025: ${EVENT_COUNT_DISPLAY} events and a ${ATTENDEE_NETWORK_DISPLAY} attendee network.`}
             />
           </p>
 
@@ -384,7 +407,6 @@ export default function Landing() {
       </section>
 
       <SiteFooter />
-      <BrightConcierge />
     </div>
   );
 }

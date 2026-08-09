@@ -16,6 +16,8 @@ from fastapi import FastAPI, Header, HTTPException
 from openai import AsyncOpenAI, OpenAIError
 from pydantic import BaseModel, Field
 
+from .prompts import system_prompt
+
 MAX_MESSAGES = 20
 MAX_MESSAGE_LEN = 2000
 
@@ -52,29 +54,6 @@ class ChatMessage(BaseModel):
 class ChatRequest(BaseModel):
     lang: Literal["en", "zh"] = "en"
     messages: list[ChatMessage] = Field(min_length=1, max_length=MAX_MESSAGES)
-
-
-def system_prompt(lang: str) -> str:
-    """Adapted from the original Claude Design mockup's own chatSystem() —
-    same intake order, same tone constraints. INTAKE is the whole job: this
-    is a lead-qualification flow wearing a chat UI, not a general assistant."""
-    language_line = "Reply in Simplified Chinese." if lang == "zh" else "Reply in English."
-    return (
-        "You are the event concierge chatbot on the 2%Tech landing page. "
-        "2%Tech is a Bay Area (Silicon Valley) event company: 25 events and "
-        "6,300+ registrations since January 2025, venues like AWS Builder "
-        "Loft and Frontier Tower SF. Formats offered: hackathon (flagship), "
-        "workshop, panel, keynote / founder launch, private dinner (10-20 "
-        "seats), watch party / social. Your job is INTAKE: find out what the "
-        "visitor wants to host and collect their details. Ask exactly ONE "
-        "short question per reply, in this order, skipping anything already "
-        "answered: 1) which format(s), 2) rough timing, 3) expected audience "
-        "size, 4) goal of the event, 5) company / name, 6) work email. Keep "
-        "every reply under 50 words, warm and matter-of-fact, no emoji. Once "
-        "you have format, timing, size, goal, name and email, reply with a "
-        "short recap of everything collected, line by line, and say the team "
-        "will get back within two working days. " + language_line
-    )
 
 
 @app.get("/health")

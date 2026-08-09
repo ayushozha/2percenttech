@@ -5,6 +5,8 @@ import B from './B';
 import { useLang } from './LangProvider';
 import { EVENT_TYPES, type EventType } from '@/lib/data';
 import { createHostRequest } from '@/lib/store';
+import { runHostRequestFlow, validateHostRequest } from '@/lib/host-planning';
+import { usePlanningConcierge } from './PlanningConciergeProvider';
 
 /** "What do you want to host?" — the landing page's primary conversion.
 
@@ -14,11 +16,18 @@ import { createHostRequest } from '@/lib/store';
     `eventTypes` defaults to the live page's four-item EVENT_TYPES; pages that
     want the fuller six-item list (e.g. the bright-theme preview) can pass
     BRIGHT_EVENT_TYPES instead without forking this component. */
-export default function HostRequestForm({ eventTypes = EVENT_TYPES }: { eventTypes?: EventType[] }) {
+export default function HostRequestForm({
+  eventTypes = EVENT_TYPES,
+  initialPicks = [],
+}: {
+  eventTypes?: EventType[];
+  initialPicks?: string[];
+}) {
   const { lang } = useLang();
+  const { openPlanner } = usePlanningConcierge();
   const zh = lang === 'zh';
 
-  const [picks, setPicks] = useState<string[]>([]);
+  const [picks, setPicks] = useState<string[]>(initialPicks);
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [done, setDone] = useState(false);
@@ -32,17 +41,19 @@ export default function HostRequestForm({ eventTypes = EVENT_TYPES }: { eventTyp
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     const em = email.trim();
-    if (!picks.length) {
+    const validationError = validateHostRequest(picks, em);
+    if (validationError === 'picks') {
       setError(zh ? '请先选择至少一种活动类型。' : 'Pick at least one event type first.');
       return;
     }
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)) {
+    if (validationError === 'email') {
       setError(zh ? '请输入有效邮箱。' : 'Please enter a valid email.');
       return;
     }
     setBusy(true);
     try {
-      await createHostRequest({ email: em, picks });
+      const formatLabels = eventTypes.filter((type) => picks.includes(type.id)).map((type) => (zh ? type.zh : type.en));
+      await runHostRequestFlow({ email: em, picks }, formatLabels, createHostRequest, openPlanner);
       setDone(true);
       setError('');
     } catch {
@@ -97,7 +108,7 @@ export default function HostRequestForm({ eventTypes = EVENT_TYPES }: { eventTyp
             style={{ marginTop: 4 }}
             onClick={() => {
               setDone(false);
-              setPicks([]);
+              setPicks(initialPicks);
               setEmail('');
             }}
           >
@@ -109,7 +120,7 @@ export default function HostRequestForm({ eventTypes = EVENT_TYPES }: { eventTyp
   }
 
   return (
-    <form className="glass" style={{ marginTop: 30 }} onSubmit={onSubmit}>
+    <form className="glass hero-host-form" style={{ marginTop: 24 }} onSubmit={onSubmit} noValidate>
       <p className="eyebrow eyebrow-muted" style={{ margin: '0 0 12px', letterSpacing: '.18em' }}>
         <B zh="你想办什么活动？" en="What do you want to host?" />
       </p>
@@ -132,7 +143,7 @@ export default function HostRequestForm({ eventTypes = EVENT_TYPES }: { eventTyp
         })}
       </div>
 
-      <div style={{ display: 'flex', gap: 10, marginTop: 16, flexWrap: 'wrap' }}>
+      <div className="hero-host-form-row">
         <input
           type="email"
           className="input input-pill"
@@ -144,14 +155,20 @@ export default function HostRequestForm({ eventTypes = EVENT_TYPES }: { eventTyp
           }}
           placeholder={zh ? '你的工作邮箱' : 'Your work email'}
           aria-label={zh ? '你的工作邮箱' : 'Your work email'}
+          aria-describedby={error ? 'host-request-error' : undefined}
         />
-        <button type="submit" className="btn btn-dark" style={{ flex: '0 0 auto' }} disabled={busy}>
+        <button
+          type="submit"
+          className="btn btn-dark"
+          style={{ flex: '0 0 auto' }}
+          disabled={busy || !email.trim()}
+        >
           <B zh="提交申请 →" en="Request to host →" />
         </button>
       </div>
 
       {error && (
-        <p className="err" style={{ marginTop: 10 }} role="alert">
+        <p id="host-request-error" className="err" style={{ marginTop: 10 }} role="alert">
           {error}
         </p>
       )}

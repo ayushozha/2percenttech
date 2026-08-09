@@ -9,6 +9,7 @@
    background colour sampled from each mark — regenerated together with
    public/logos/ by `npm run prepare-assets`. */
 import logoAssets from './logo-assets.json';
+import { HEADLINE_STATS } from './site-metrics';
 
 export type Bi = { zh: string; en: string };
 
@@ -149,14 +150,9 @@ export const SEATS: Seat[] = [
 export const COHOSTS =
   'AWS Builder Loft · Frontier Tower SF · FinChip.AI · Crewbase Collective · Devnovate · AI House · Bay AI Circle · Startup Universe';
 
-/* ---- headline figures --------------------------------------------------
-   Cumulative since January 2025, quoted from the Luma profile. */
+/* ---- headline figures -------------------------------------------------- */
 
-export const STATS: { display: string; zh: string; en: string }[] = [
-  { display: '25', zh: '已办活动', en: 'Events run' },
-  { display: '6,300+', zh: '累计报名', en: 'Registrations' },
-  { display: '5', zh: '已排期场次', en: 'More scheduled' },
-];
+export const STATS: readonly { display: string; zh: string; en: string }[] = HEADLINE_STATS;
 
 /* ---- events ------------------------------------------------------------ */
 
@@ -194,7 +190,7 @@ export const UPCOMING: EventRow[] = [
   },
 ];
 
-/** All 25 events run so far, by registrations. 2026 unless the date says
+/** The 25 past events currently included in this local archive, by registrations. 2026 unless the date says
     otherwise — 1/30/25 is the one 2025 entry. */
 export const PAST: EventRow[] = [
   { date: '6/5', name: 'Agentic AI Hackathon — SF', url: 'https://luma.com/zemh10km', registered: 1144 },
@@ -303,7 +299,7 @@ export const FEATURED_PHOTOS: { src: string; alt: string; caption: Bi }[] = [
 
 export type EventType = { id: string; zh: string; en: string };
 
-/** The four standardised products, in the blueprint's own order and naming.
+/** The six standardised products, in the blueprint's own order and naming.
     Hackathons lead because they build the deepest builder relationships and
     are the most scalable thing we run. */
 export const EVENT_TYPES: EventType[] = [
@@ -311,6 +307,8 @@ export const EVENT_TYPES: EventType[] = [
   { id: 'workshop', en: 'Workshop', zh: '工作坊' },
   { id: 'panel', en: 'Panel', zh: '圆桌论坛' },
   { id: 'keynote', en: 'Keynote / Founder Launch', zh: '主题演讲 / 新品发布' },
+  { id: 'private-dinner', en: 'Private dinner', zh: '私享晚宴' },
+  { id: 'watch-party', en: 'Watch party / social', zh: '观赛派对 / 社交' },
 ];
 
 /* ---- formats ("What we host") -------------------------------------------
@@ -360,7 +358,7 @@ export const FORMATS: Format[] = [
     },
   },
   {
-    id: 'dinner',
+    id: 'private-dinner',
     zh: '私享晚宴',
     en: 'Private dinner',
     desc: {
@@ -369,7 +367,7 @@ export const FORMATS: Format[] = [
     },
   },
   {
-    id: 'social',
+    id: 'watch-party',
     zh: '观赛派对 / 社交',
     en: 'Watch party / social',
     desc: {
@@ -379,8 +377,6 @@ export const FORMATS: Format[] = [
   },
 ];
 
-/** All six formats as pickable chips — a superset of EVENT_TYPES (adds
-    private dinner and watch party/social). Used by the bright-theme landing
-    page's request form; the live page keeps the narrower EVENT_TYPES so this
-    doesn't change what's already shipped. */
+/** All six formats as pickable chips, with the richer homepage descriptions
+    stripped away for the compact request form. */
 export const BRIGHT_EVENT_TYPES: EventType[] = FORMATS.map(({ id, zh, en }) => ({ id, zh, en }));

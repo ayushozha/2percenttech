@@ -11,6 +11,7 @@
       registration counts. No case study is invented. */
 
 import { PAST, PHOTOS, UPCOMING, type Bi, type EventRow } from './data';
+import type { HostProductId } from './event-product-ids';
 
 /* ---- §1 vision --------------------------------------------------------- */
 
@@ -53,7 +54,7 @@ export const AUDIENCES: { key: string; h: Bi; p: Bi }[] = [
    page, which resolves them rather than restating numbers here. */
 
 export type EventProduct = {
-  id: string;
+  id: HostProductId;
   name: Bi;
   tagline: Bi;
   /** Ideal customer */
@@ -246,6 +247,93 @@ export const EVENT_PRODUCTS: EventProduct[] = [
       shot(12, 'A founder presenting to a seated room'),
       shot(15, 'Keynote under way in a tiered auditorium'),
       shot(8, 'Full lecture theatre watching a talk'),
+    ],
+  },
+  {
+    id: 'private-dinner',
+    name: { zh: '私享晚宴', en: 'Private Dinner' },
+    tagline: {
+      zh: '10–20 位真正需要认识彼此的人，同桌一晚。',
+      en: 'Ten to twenty people who genuinely need to meet, around one table for one evening.',
+    },
+    forWho: {
+      zh: '需要与少数高价值创始人、Builder、客户或投资人建立深度关系的团队。',
+      en: 'Teams that need depth with a small group of high-value founders, builders, customers or investors.',
+    },
+    objectives: [
+      { zh: '让高价值关系在安静、可信的环境里发生', en: 'Create high-value relationships in a quiet, trusted setting' },
+      { zh: '围绕一个明确主题进行真正深入的交流', en: 'Hold a genuinely deep conversation around one clear subject' },
+      { zh: '离场时带走明确的后续连接', en: 'Leave with specific follow-up connections' },
+    ],
+    included: [
+      { zh: '主题与宾客画像设计', en: 'Theme and guest-profile design' },
+      { zh: '10–20 人定向邀约与确认', en: 'Targeted outreach and confirmation for 10–20 guests' },
+      { zh: '餐厅或私密场地协调', en: 'Restaurant or private-venue coordination' },
+      { zh: '座次、开场与对话引导', en: 'Seating, opening and conversation facilitation' },
+      { zh: '会后介绍与跟进清单', en: 'Post-dinner introductions and follow-up list' },
+    ],
+    workflow: [
+      { t: { zh: 'T-3 周', en: 'T-3 weeks' }, d: { zh: '确认目标、主题与理想宾客名单', en: 'Lock the objective, theme and ideal guest list' } },
+      { t: { zh: 'T-2 周', en: 'T-2 weeks' }, d: { zh: '一对一邀约，确认场地与餐饮', en: 'Personal invitations, venue and menu confirmed' } },
+      { t: { zh: '当天', en: 'Event day' }, d: { zh: '欢迎、引导式晚餐与自然交流', en: 'Welcome, guided dinner and unhurried conversation' } },
+      { t: { zh: '赛后', en: 'After' }, d: { zh: '经同意后完成重点介绍与跟进', en: 'Make the agreed introductions and follow-ups' } },
+    ],
+    addons: [
+      { zh: '创始人圆桌简报', en: 'Founder roundtable brief' },
+      { zh: '会前一对一访谈', en: 'Pre-dinner one-on-one interviews' },
+      { zh: '私密产品体验', en: 'Private product experience' },
+    ],
+    caseNames: [],
+    shots: [
+      shot(5, 'Small-group conversation at a 2%Tech gathering'),
+      shot(10, 'Founders talking together after a program'),
+      shot(13, 'Guests connecting in an intimate event setting'),
+    ],
+  },
+  {
+    id: 'watch-party',
+    name: { zh: '观赛派对 / 社交', en: 'Watch Party / Social' },
+    tagline: {
+      zh: '用一个所有人都愿意聊的话题，把陌生人变成社区。',
+      en: 'Turn strangers into a community around something everyone already wants to talk about.',
+    },
+    forWho: {
+      zh: '希望用轻松、可重复的活动扩大社区覆盖并建立新连接的品牌与社区。',
+      en: 'Brands and communities that want a relaxed, repeatable way to grow reach and create new connections.',
+    },
+    objectives: [
+      { zh: '降低第一次参加社区活动的门槛', en: 'Lower the barrier to joining the community for the first time' },
+      { zh: '创造大量自然、非推销式的对话', en: 'Create lots of natural, non-salesy conversations' },
+      { zh: '建立可持续复用的社区活动节奏', en: 'Establish a repeatable community-event rhythm' },
+    ],
+    included: [
+      { zh: '主题、互动机制与现场流程', en: 'Theme, interaction mechanic and run of show' },
+      { zh: '活动页、报名与社区分发', en: 'Event page, registration and community distribution' },
+      { zh: '场地、屏幕、音响与餐饮协调', en: 'Venue, screens, sound and food coordination' },
+      { zh: '主持、破冰与现场社区运营', en: 'Hosting, icebreakers and onsite community management' },
+      { zh: '赛后回顾与下一场转化', en: 'Post-event recap and conversion into the next gathering' },
+    ],
+    workflow: [
+      { t: { zh: 'T-3 周', en: 'T-3 weeks' }, d: { zh: '确认主题、场地容量与互动形式', en: 'Lock the theme, venue capacity and interaction format' } },
+      { t: { zh: 'T-2 周', en: 'T-2 weeks' }, d: { zh: '页面上线，社区伙伴同步分发', en: 'Launch the page and activate community distribution' } },
+      { t: { zh: '当天', en: 'Event day' }, d: { zh: '签到、破冰、主体活动与自由社交', en: 'Check-in, icebreaker, main moment and open networking' } },
+      { t: { zh: '赛后', en: 'After' }, d: { zh: '照片、回顾与下一场优先邀请', en: 'Photos, recap and priority invitation to the next event' } },
+    ],
+    addons: [
+      { zh: '品牌主题互动区', en: 'Branded interaction zone' },
+      { zh: '摄影与即时社媒内容', en: 'Photography and same-night social content' },
+      { zh: '多城市同步观赛', en: 'Multi-city synchronized watch parties' },
+    ],
+    caseNames: [
+      'USA WorldCup Knockout Watch Party',
+      'WorldCup USA vs Turkey Watch Party',
+      'Speed Dating',
+      'Silicon Valley World Cup Semi-Finals Watch Party',
+    ],
+    shots: [
+      shot(7, 'A social-format 2%Tech event with the room engaged'),
+      shot(6, 'Small groups meeting at a community gathering'),
+      shot(11, 'A full room during a 2%Tech social program'),
     ],
   },
 ];

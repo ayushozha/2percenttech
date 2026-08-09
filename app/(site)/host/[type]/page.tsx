@@ -4,6 +4,8 @@ import Link from 'next/link';
 import B from '@/components/B';
 import SiteNav from '@/components/SiteNav';
 import SiteFooter from '@/components/SiteFooter';
+import PlanEventButton from '@/components/PlanEventButton';
+import HostRequestForm from '@/components/HostRequestForm';
 import { CONTACT, LUMA_PROFILE } from '@/lib/data';
 import { EVENT_PRODUCTS, casesFor, productById, type EventProduct } from '@/lib/blueprint';
 
@@ -155,7 +157,7 @@ export default async function HostProduct({ params }: { params: Promise<Params> 
         />
 
         <div
-          className="wrap"
+          className="wrap host-product-hero-grid"
           style={{
             position: 'relative',
             zIndex: 1,
@@ -188,6 +190,7 @@ export default async function HostProduct({ params }: { params: Promise<Params> 
               <Link href={brief} className="btn btn-dark">
                 <B zh={`申请办一场${p.name.zh} →`} en={`Brief us on a ${p.name.en.toLowerCase()} →`} />
               </Link>
+              <PlanEventButton format={p.name} className="btn btn-ghost" />
               <a href={`mailto:${CONTACT.email}`} className="btn btn-ghost">
                 <B zh="直接发邮件" en="Email us instead" />
               </a>
@@ -358,14 +361,14 @@ export default async function HostProduct({ params }: { params: Promise<Params> 
 
           <p className="fine" style={{ marginTop: 18, fontSize: 12.5 }}>
             <span className="en">
-              All 25 events are on our{' '}
+              Browse our public event archive on{' '}
               <a href={LUMA_PROFILE} target="_blank" rel="noopener noreferrer">
                 Luma profile
               </a>
               .
             </span>
             <span className="zh">
-              全部 25 场记录都在{' '}
+              在公开活动档案中查看更多记录：{' '}
               <a href={LUMA_PROFILE} target="_blank" rel="noopener noreferrer">
                 Luma 主页
               </a>
@@ -449,6 +452,10 @@ export default async function HostProduct({ params }: { params: Promise<Params> 
             <Link href="/sponsor" className="btn btn-ghost">
               <B zh="我想赞助，不是主办" en="I'd rather sponsor one" />
             </Link>
+            <PlanEventButton format={p.name} className="btn btn-ghost" />
+          </div>
+          <div style={{ maxWidth: 700, margin: '28px auto 0', textAlign: 'left' }}>
+            <HostRequestForm initialPicks={[p.id]} />
           </div>
         </div>
       </section>

@@ -501,7 +501,7 @@ export default function Sponsor() {
             <B zh="我们的办活动节奏" en="We run these constantly" />
           </h2>
           <p className="body prose" style={{ margin: '10px 0 24px' }}>
-            <B zh="共 31 场：6 场即将举行，25 场已结束。" en="31 events in total: 6 upcoming, 25 already run." />
+            <B zh="本页档案列出 31 场：6 场即将举行，25 场已结束。" en="This page's archive lists 31 events: 6 upcoming and 25 already run." />
           </p>
 
           <p className="tl-head">
@@ -533,7 +533,7 @@ export default function Sponsor() {
           </div>
 
           <p className="tl-head" style={{ marginTop: 30 }}>
-            <B zh="已结束 · 25 场 · 按报名人数排序" en="Already run · 25 · by registrations" />
+            <B zh="本页已列出 · 25 场过往活动 · 按报名人数排序" en="Listed here · 25 past events · by registrations" />
           </p>
           <div>
             {PAST_HEAD.map((e) => (

@@ -2,6 +2,9 @@ import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import { Figtree, Instrument_Serif, IBM_Plex_Mono, Noto_Sans_SC, Noto_Serif_SC, Space_Grotesk } from 'next/font/google';
 import LangProvider from '@/components/LangProvider';
+import PlanningConciergeProvider from '@/components/PlanningConciergeProvider';
+import BrightConcierge from '@/components/BrightConcierge';
+import { ATTENDEE_NETWORK_DISPLAY, EVENT_COUNT_DISPLAY, MONTHLY_EVENT_PLAN_DISPLAY } from '@/lib/site-metrics';
 import './globals.css';
 
 /* The design specifies these five faces. next/font downloads and self-hosts
@@ -67,10 +70,10 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://2percenttech.com'),
   title: '2%Tech · Bay Area AI Hackathons & Developer Community · 湾区 AI 黑客松',
   description:
-    '2%Tech runs high-signal AI hackathons, workshops and demo days across the SF Bay Area. 25 events, 6,300+ registrations since January 2025. 湾区高质量 AI 黑客松与开发者社区。',
+    `2%Tech runs high-signal AI hackathons, workshops and demo days across the SF Bay Area. ${EVENT_COUNT_DISPLAY} events and a ${ATTENDEE_NETWORK_DISPLAY} attendee network since January 2025. 湾区高质量 AI 黑客松与开发者社区。`,
   openGraph: {
     title: '2%Tech · Bay Area AI Hackathons 湾区 AI 黑客松',
-    description: '25 events · 6,300+ registrations since Jan 2025. Next stop: Hackathon @ Stanford.',
+    description: `${EVENT_COUNT_DISPLAY} events · ${ATTENDEE_NETWORK_DISPLAY} attendee network · ${MONTHLY_EVENT_PLAN_DISPLAY} events planned monthly.`,
     type: 'website',
   },
   icons: { icon: '/mark.svg' },
@@ -81,7 +84,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className={fonts}>
       <body>
-        <LangProvider>{children}</LangProvider>
+        <LangProvider>
+          <PlanningConciergeProvider>
+            {children}
+            <BrightConcierge />
+          </PlanningConciergeProvider>
+        </LangProvider>
         {/* Pageview tracking on the project's own Pulse instance. The ingest
             key is publishable by design — it can only write, and only for this
             project. `defer` keeps it off the critical path. */}

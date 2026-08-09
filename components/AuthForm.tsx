@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import B from './B';
+import { ATTENDEE_NETWORK_DISPLAY, EVENT_COUNT_DISPLAY } from '@/lib/site-metrics';
 import { LangToggle } from './SiteNav';
 import { PHOTOS } from '@/lib/data';
 import { signIn, signUp, type AuthResult } from '@/lib/store';
@@ -128,7 +129,10 @@ export default function AuthForm({ mode }: { mode: 'signin' | 'signup' }) {
         </div>
 
         <p className="mono-label" style={{ position: 'relative', fontSize: 11, letterSpacing: '.16em', color: 'var(--ink-4)' }}>
-          <B zh="25 场活动 · 6,300+ 报名 · 旧金山湾区" en="25 events · 6,300+ registrations · SF Bay Area" />
+          <B
+            zh={`${EVENT_COUNT_DISPLAY} 场活动 · ${ATTENDEE_NETWORK_DISPLAY} 到场者网络 · 旧金山湾区`}
+            en={`${EVENT_COUNT_DISPLAY} events · ${ATTENDEE_NETWORK_DISPLAY} attendee network · SF Bay Area`}
+          />
         </p>
       </div>
 

@@ -66,7 +66,7 @@ export default function HostApply() {
           <p className="small" style={{ marginTop: 12 }}>
             <B zh="还没决定办哪种？" en="Not sure which format yet? " />
             <Link href="/#products" style={{ fontWeight: 600 }}>
-              <B zh="先看四种形式 →" en="Compare the four →" />
+              <B zh="先看六种形式 →" en="Compare the six →" />
             </Link>
           </p>
         </div>
@@ -87,7 +87,7 @@ export default function HostApply() {
           </Suspense>
 
           <aside className="apply-aside">
-            {/* The four products in full, so the selector on the left can stay
+            {/* The six products in full, so the selector on the left can stay
                 compact and still be an informed choice. */}
             {EVENT_PRODUCTS.map((p) => (
               <div key={p.id} className="card" style={{ borderRadius: 22 }}>
