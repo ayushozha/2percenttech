@@ -15,10 +15,10 @@ import {
   LUMA_PROFILE,
   PAST_HIGHLIGHTS,
   PHOTOS,
-  SEATS,
   STATS,
   UPCOMING,
 } from '@/lib/data';
+import { SAVED_SEATS } from '@/lib/saved-seats';
 import { ATTENDEE_NETWORK_DISPLAY, EVENT_COUNT_DISPLAY, MONTHLY_EVENT_PLAN_DISPLAY } from '@/lib/site-metrics';
 
 // The homepage. Originally "Bright mode minimal landing page" from Claude
@@ -293,9 +293,10 @@ export default function Landing() {
           </p>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(170px,1fr))', gap: 12 }}>
-            {SEATS.map((s, i) => (
+            {SAVED_SEATS.map((seat) => (
               <div
-                key={i}
+                key={seat.id}
+                className="saved-seat-card"
                 style={{
                   border: '1.5px dashed var(--line-5)',
                   borderRadius: 16,
@@ -311,9 +312,14 @@ export default function Landing() {
                 }}
               >
                 <span className="mono-label" style={{ fontSize: 10, letterSpacing: '.2em' }}><B zh="预留" en="Reserved" /></span>
-                <span style={{ fontWeight: 700, fontSize: 15.5, letterSpacing: '-.01em' }}>
-                  {'name' in s ? s.name : <B zh={s.zh} en={s.en} />}
-                </span>
+                <img
+                  className="saved-seat-logo"
+                  src={seat.logo}
+                  alt={seat.logoAlt}
+                  title={seat.en}
+                  loading="lazy"
+                  decoding="async"
+                />
               </div>
             ))}
 

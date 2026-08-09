@@ -130,23 +130,6 @@ export const LOGOS: Record<string, { src: string; tile: string }> = logoAssets;
 
 export const logoOf = (id: string) => LOGOS[id] ?? { src: '', tile: '#ffffff' };
 
-/* ---- saved seats -------------------------------------------------------
-   A target list, clearly disclaimed on the page. None of these have any
-   existing relationship with 2%Tech — do not reword that disclaimer. */
-
-export type Seat = { name: string } | Bi;
-
-export const SEATS: Seat[] = [
-  { zh: '阿里云', en: 'Alibaba Cloud' },
-  { zh: '腾讯云', en: 'Tencent Cloud' },
-  { name: 'TRAE · ByteDance' },
-  { name: 'DeepSeek' },
-  { zh: '月之暗面', en: 'Moonshot AI' },
-  { zh: '智谱 AI', en: 'Zhipu AI' },
-  { name: 'MiniMax' },
-  { name: 'Anthropic' },
-];
-
 export const COHOSTS =
   'AWS Builder Loft · Frontier Tower SF · FinChip.AI · Crewbase Collective · Devnovate · AI House · Bay AI Circle · Startup Universe';
 

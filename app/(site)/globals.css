@@ -1155,6 +1155,19 @@ details.more[open] > summary::before {
   transform: rotate(-2deg);
 }
 
+/* Saved-seat marks are real brand wordmarks, normalized to the same optical
+   height so long and compact logos feel balanced in the existing card grid. */
+.saved-seat-card {
+  overflow: hidden;
+}
+.saved-seat-logo {
+  display: block;
+  width: auto;
+  height: 26px;
+  max-width: min(145px, 92%);
+  object-fit: contain;
+}
+
 /* chat concierge — FAB + panel. UI only: see components/BrightConcierge.tsx
    for why it never calls out to a real backend. */
 .concierge {
