@@ -6,7 +6,7 @@ import SiteFooter from '@/components/SiteFooter';
 import Gallery from '@/components/Gallery';
 import DraftBanner from '@/components/DraftBanner';
 import SponsorPrint from '@/components/SponsorPrint';
-import { COMPANIES, CONTACT, LUMA_PROFILE, PAST, PHOTOS, UPCOMING, logoOf, type Bi } from '@/lib/data';
+import { COMPANIES, CONTACT, LUMA_PROFILE, PAST, PHOTOS, STANFORD_DATE, UPCOMING, logoOf, type Bi } from '@/lib/data';
 import { CAMPAIGN, CAMPAIGN_ARGUMENT, CAMPAIGN_HEADLINE } from '@/lib/blueprint';
 import {
   DELIVERABLES,
@@ -25,7 +25,7 @@ import {
 export const metadata: Metadata = {
   title: 'Sponsorship · Hackathon @ Stanford — 2%Tech',
   description:
-    'One day. One room. Sponsorship packages for the 2%Tech one-day hackathon at Stanford, August 2026. 斯坦福单日黑客松赞助方案。',
+    'One day. One room. Sponsorship packages for the 2%Tech one-day hackathon at Stanford, 2026. 斯坦福单日黑客松赞助方案。',
 };
 
 const bi = (v: Bi | string) => (typeof v === 'string' ? v : <B zh={v.zh} en={v.en} />);
@@ -89,7 +89,7 @@ export default function Sponsor() {
             </em>
           </h1>
           <p className="mono-label" style={{ marginTop: 12 }}>
-            2%Tech · August 2026
+            2%Tech · 2026
           </p>
 
           <div className="grid-auto" style={{ marginTop: 30 }}>
@@ -505,7 +505,7 @@ export default function Sponsor() {
           </p>
 
           <p className="tl-head">
-            <B zh="即将举行 · 6 场 · 由近及远" en="Upcoming · 6 · soonest first" />
+            <B zh={`即将举行 · ${UPCOMING.length} 场 · 由近及远`} en={`Upcoming · ${UPCOMING.length} · soonest first`} />
           </p>
           <div>
             {UPCOMING.map((e) =>
@@ -513,7 +513,7 @@ export default function Sponsor() {
                 <div key={e.name} className="tl-hi">
                   <div style={{ display: 'grid', gridTemplateColumns: '76px 1fr', gap: 12, alignItems: 'start' }}>
                     <span className="tbd" style={{ fontFamily: 'var(--font-mono)', fontSize: 11 }}>
-                      <B zh="8月底" en="Late Aug" />
+                      <B zh={STANFORD_DATE.zh} en={STANFORD_DATE.en} />
                     </span>
                     <span style={{ fontSize: 14.5, lineHeight: 1.5 }}>
                       <strong>

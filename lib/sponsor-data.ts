@@ -8,7 +8,7 @@
 import type { Bi } from './data';
 
 export const EVENT_META: { label: Bi; value: Bi | string; tbd?: boolean }[] = [
-  { label: { zh: '日期', en: 'Date' }, value: { zh: '8月底 · 待定', en: 'Late Aug · TBC' }, tbd: true },
+  { label: { zh: '日期', en: 'Date' }, value: { zh: '待定', en: 'TBC' }, tbd: true },
   { label: { zh: '时间', en: 'Time' }, value: '09:00 – 18:30' },
   { label: { zh: '地点', en: 'Venue' }, value: 'Stanford University' },
   { label: { zh: '形式', en: 'Format' }, value: { zh: '单日黑客松', en: 'One-day hackathon' } },

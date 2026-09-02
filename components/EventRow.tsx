@@ -1,5 +1,5 @@
 import B from './B';
-import type { EventRow } from '@/lib/data';
+import { STANFORD_DATE, type EventRow } from '@/lib/data';
 
 /** One line in the landing calendar's upcoming/past lists. The Stanford
     hackathon (`highlight: true`) — still undated, still unsold — gets pulled
@@ -12,7 +12,7 @@ export default function Row({ e }: { e: EventRow }) {
       <div className="tl-hi">
         <div style={{ display: 'grid', gridTemplateColumns: '76px 1fr', gap: 12, alignItems: 'start' }}>
           <span className="tbd" style={{ fontFamily: 'var(--font-mono)', fontSize: 11 }}>
-            <B zh="8月底" en="LATE AUG" />
+            <B zh={STANFORD_DATE.zh} en={STANFORD_DATE.en} />
           </span>
           <span style={{ fontSize: 14.5, lineHeight: 1.5 }}>
             <strong>{e.name}</strong>

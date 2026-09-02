@@ -1,8 +1,8 @@
 /* Site content shared by the landing page and the prospectus.
 
    Bilingual strings carry zh + en; language-neutral strings (event names,
-   URLs, dates) are plain. Event data is pulled from the public Luma profile,
-   August 2026 — keep the counts here and the headline figures in STATS in
+   URLs, dates) are plain. Event data is pulled from the public Luma profiles,
+   September 2026 — keep the counts here and the headline figures in STATS in
    step, they are quoted against each other on the page.
 
    Logo art comes from lib/logo-assets.json — the public path plus the
@@ -148,35 +148,46 @@ export type EventRow = {
   highlight?: boolean;
 };
 
+/** The one label every page prints for the Stanford hackathon's date. Change
+    it here once the date is confirmed and the calendar, the prospectus and the
+    dashboard all follow. */
+export const STANFORD_DATE: Bi = { zh: '日期待定', en: 'DATE TBC' };
+
 export const UPCOMING: EventRow[] = [
+  { date: '9/10', name: 'BuildFest: Challenges and Workshops', url: 'https://luma.com/5agzmgqu', registered: 92 },
+  { date: '9/11', name: 'AI Security Hackathon', url: 'https://luma.com/7a4iutvp', registered: 113 },
+  { date: '9/26', name: 'Build Your AI Co-Founder Hackathon', url: 'https://luma.com/zr87gmkt' },
   {
-    date: '8/10',
-    name: 'Frontier Signals #01: Infrastructure Behind Physical AI',
-    url: 'https://luma.com/ckpqzfae',
-    note: { zh: '· 已 280+ 人报名', en: '· 280+ registered' },
-  },
-  { date: '8/13', name: 'The Agentic World #2', url: 'https://luma.com/wlw3or8l' },
-  {
-    date: 'LATE AUG',
+    date: STANFORD_DATE.en,
     name: 'Hackathon @ Stanford',
     note: { zh: '赞助洽谈中，冠名席还空着。', en: 'Sponsorship open. The title seat is still open.' },
     highlight: true,
   },
-  { date: '8/31', name: 'Beyond RAG: Skill Function', url: 'https://luma.com/9yyasy4z' },
-  { date: '10/19', name: 'Universal Celebration Hackathon', url: 'https://luma.com/m9h5vo7a' },
+  { date: '10/1', name: 'Frontier Signals #02: What Will AI Learn Next?', url: 'https://luma.com/kce3d5nr' },
+  { date: '10/10', name: 'AI-Native Startup Hackathon', url: 'https://luma.com/j34m6r1z' },
+  { date: '10/19', name: 'Universal Celebration Hackathon', url: 'https://luma.com/m9h5vo7a', registered: 56 },
   {
-    date: '11/7',
-    name: "Festiverse 2026: The World's Biggest Festival Hackathon",
+    date: '11/23',
+    name: 'Festiverse 2026: Diwali Hackathon',
     url: 'https://luma.com/lsa8mrp7',
+    registered: 116,
     note: { zh: '· $300K+ 奖金池', en: '· $300K+ in prizes' },
   },
+  { date: '12/18', name: 'WinterHack 2026: Christmas and New Year Hackathon', url: 'https://luma.com/b4qr61m0' },
 ];
 
-/** The 25 past events currently included in this local archive, by registrations. 2026 unless the date says
+/** The 29 past events currently included in this local archive, by registrations. 2026 unless the date says
     otherwise — 1/30/25 is the one 2025 entry. */
 export const PAST: EventRow[] = [
   { date: '6/5', name: 'Agentic AI Hackathon — SF', url: 'https://luma.com/zemh10km', registered: 1144 },
+  {
+    date: '8/10',
+    name: 'Frontier Signals #01: Infrastructure Behind Physical AI',
+    url: 'https://luma.com/ckpqzfae',
+    registered: 638,
+  },
   { date: '6/24', name: 'Skills & Agents — YC Founder Night', url: 'https://luma.com/krrq1vw9', registered: 617 },
+  { date: '9/1', name: 'Wasmer: Beyond Containers', url: 'https://luma.com/3ns1f786', registered: 578 },
   { date: '7/13', name: 'Bay Builders Hackathon', url: 'https://luma.com/9zhqvqc7', registered: 535 },
   {
     date: '7/11',
@@ -185,6 +196,7 @@ export const PAST: EventRow[] = [
     registered: 456,
   },
   { date: '6/28', name: 'Wizard Hackathon', url: 'https://luma.com/nyixzul3', registered: 428 },
+  { date: '8/17', name: 'Builders Campfire', url: 'https://luma.com/vsl63ftr', registered: 378 },
   { date: '7/1', name: 'USA WorldCup Knockout Watch Party', url: 'https://luma.com/sf-w4fo', registered: 359 },
   { date: '1/30/25', name: 'AI for Good Pitch Night + Networking', url: 'https://luma.com/u27y941o', registered: 330 },
   {
@@ -236,6 +248,7 @@ export const PAST: EventRow[] = [
   { date: '6/17', name: 'Break My Product', url: 'https://luma.com/94sy18r3', registered: 13 },
   { date: '6/26', name: 'Find Your Co-Founder Meetup', url: 'https://luma.com/78suh3xb', registered: 11 },
   { date: '7/7', name: 'HackwithBay 3.0', url: 'https://luma.com/sv61aqlg' },
+  { date: '8/21', name: 'The Agentic World #2', url: 'https://luma.com/wlw3or8l' },
 ];
 
 /** The nine highest-signal past events, shown on the landing calendar. The

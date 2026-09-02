@@ -7,7 +7,7 @@ A Next.js app, bilingual (中文 / EN) throughout, exported to static files.
 | `/` | The "Bright" homepage — hero with the host-request form, company wall, "what we host" formats, stats + photos, calendar, saved seats, sponsor CTA. Its chat concierge talks to `agent/` — see that service's README. |
 | `/host/[type]` | One page per event product: `hackathon`, `workshop`, `panel`, `keynote`. Ideal customer, objectives, scope, run of show, past cases. |
 | `/host/apply` | The event brief. Accepts `?type=<id>` to arrive pre-ticked. |
-| `/sponsor` | Sponsorship prospectus for the one-day hackathon at Stanford (August 2026). Print-friendly. |
+| `/sponsor` | Sponsorship prospectus for the one-day hackathon at Stanford (2026, date TBC). Print-friendly. |
 | `/sponsor/apply` | The sponsorship request form — package, goals, budget band. Accepts `?package=<id>` to arrive pre-ticked. |
 | `/signin`, `/signup` | Backstage account — demo auth, see [Auth](#auth-is-a-demo). |
 | `/dashboard` | Backstage — enquiries, users, events, judging queue, hackathon entry. Role-driven. |

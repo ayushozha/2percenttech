@@ -6,7 +6,7 @@ import B from './B';
 import { LangToggle } from './SiteNav';
 import { useLang } from './LangProvider';
 import { useSession } from '@/lib/useSession';
-import { UPCOMING, type Bi } from '@/lib/data';
+import { STANFORD_DATE, UPCOMING, type Bi } from '@/lib/data';
 import {
   averageScore,
   cycleQueryStatus,
@@ -587,7 +587,7 @@ function Events({ role }: { role: Role }) {
         {UPCOMING.map((e) => (
           <div key={`${e.date}-${e.name}`} className="row" style={{ gap: 14, padding: '16px 18px' }}>
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12.5, fontWeight: 500, width: 70, flex: '0 0 auto' }}>
-              {e.highlight ? <B zh="8月底" en="Late Aug" /> : e.date}
+              {e.highlight ? <B zh={STANFORD_DATE.zh} en={STANFORD_DATE.en} /> : e.date}
             </span>
             <span style={{ fontWeight: 600, fontSize: 14.5, flex: '1 1 260px' }}>{e.name}</span>
             {e.note && (
@@ -733,7 +733,7 @@ function MyHack({
   return (
     <>
       <h2 className="h-sub" style={{ marginBottom: 14 }}>
-        <B zh="我的黑客松 · 斯坦福，8 月底" en="My hackathon · Stanford, late August" />
+        <B zh="我的黑客松 · 斯坦福，日期待定" en="My hackathon · Stanford, date TBC" />
       </h2>
 
       {mine ? (
