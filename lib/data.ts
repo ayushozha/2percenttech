@@ -154,9 +154,9 @@ export type EventRow = {
 export const STANFORD_DATE: Bi = { zh: '日期待定', en: 'DATE TBC' };
 
 export const UPCOMING: EventRow[] = [
-  { date: '9/10', name: 'BuildFest: Challenges and Workshops', url: 'https://luma.com/5agzmgqu', registered: 92 },
-  { date: '9/11', name: 'AI Security Hackathon', url: 'https://luma.com/7a4iutvp', registered: 113 },
-  { date: '9/26', name: 'Build Your AI Co-Founder Hackathon', url: 'https://luma.com/zr87gmkt' },
+  { date: '9/10', name: 'BuildFest: Demos & Challenges', url: 'https://luma.com/5agzmgqu', registered: 252 },
+  { date: '9/13', name: 'AI Security Hackathon', url: 'https://luma.com/7a4iutvp', registered: 436 },
+  { date: '9/26', name: 'Build Your AI Co-Founder Hackathon', url: 'https://luma.com/zr87gmkt', registered: 122 },
   {
     date: STANFORD_DATE.en,
     name: 'Hackathon @ Stanford',
@@ -164,19 +164,19 @@ export const UPCOMING: EventRow[] = [
     highlight: true,
   },
   { date: '10/1', name: 'Frontier Signals #02: What Will AI Learn Next?', url: 'https://luma.com/kce3d5nr' },
-  { date: '10/10', name: 'AI-Native Startup Hackathon', url: 'https://luma.com/j34m6r1z' },
-  { date: '10/19', name: 'Universal Celebration Hackathon', url: 'https://luma.com/m9h5vo7a', registered: 56 },
+  { date: '10/10', name: 'AI-Native Startup Hackathon', url: 'https://luma.com/j34m6r1z', registered: 102 },
+  { date: '10/19', name: 'Universal Celebration Hackathon', url: 'https://luma.com/m9h5vo7a', registered: 94 },
   {
     date: '11/23',
     name: 'Festiverse 2026: Diwali Hackathon',
     url: 'https://luma.com/lsa8mrp7',
-    registered: 116,
+    registered: 124,
     note: { zh: '· $300K+ 奖金池', en: '· $300K+ in prizes' },
   },
   { date: '12/18', name: 'WinterHack 2026: Christmas and New Year Hackathon', url: 'https://luma.com/b4qr61m0' },
 ];
 
-/** The 29 past events currently included in this local archive, by registrations. 2026 unless the date says
+/** The 30 past events currently included in this local archive, by registrations. 2026 unless the date says
     otherwise — 1/30/25 is the one 2025 entry. */
 export const PAST: EventRow[] = [
   { date: '6/5', name: 'Agentic AI Hackathon — SF', url: 'https://luma.com/zemh10km', registered: 1144 },
@@ -187,7 +187,7 @@ export const PAST: EventRow[] = [
     registered: 638,
   },
   { date: '6/24', name: 'Skills & Agents — YC Founder Night', url: 'https://luma.com/krrq1vw9', registered: 617 },
-  { date: '9/1', name: 'Wasmer: Beyond Containers', url: 'https://luma.com/3ns1f786', registered: 578 },
+  { date: '9/1', name: 'Wasmer: Beyond Containers', url: 'https://luma.com/3ns1f786', registered: 581 },
   { date: '7/13', name: 'Bay Builders Hackathon', url: 'https://luma.com/9zhqvqc7', registered: 535 },
   {
     date: '7/11',
@@ -195,6 +195,7 @@ export const PAST: EventRow[] = [
     url: 'https://luma.com/ai-agents-are-moving-beyond-chat-interfa',
     registered: 456,
   },
+  { date: '6/21', name: 'Agents you Love: Hackathon', url: 'https://luma.com/b7chd233', registered: 459 },
   { date: '6/28', name: 'Wizard Hackathon', url: 'https://luma.com/nyixzul3', registered: 428 },
   { date: '8/17', name: 'Builders Campfire', url: 'https://luma.com/vsl63ftr', registered: 378 },
   { date: '7/1', name: 'USA WorldCup Knockout Watch Party', url: 'https://luma.com/sf-w4fo', registered: 359 },
